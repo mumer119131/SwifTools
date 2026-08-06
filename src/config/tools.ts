@@ -22,6 +22,15 @@ export interface Tool {
   steps?: string[];
   /** Surfaced in the homepage "Popular tools" rail. */
   popular?: boolean;
+  /**
+   * Reachable and indexed, but kept out of the browse surfaces — the category
+   * grid, footer, mega menu and the ⌘K list before you type.
+   *
+   * The unit pair pages use this. All ~64 of them deserve to rank for their own
+   * query, but listing every one would bury the nine tools people actually
+   * browse for behind a wall of near-identical cards.
+   */
+  searchOnly?: boolean;
 }
 
 /* --------------------------------------------------------------------------
@@ -85,6 +94,17 @@ import { sha512HashGenerator } from "@/tools/sha512-hash-generator/meta";
 // Color
 import { colorMixer } from "@/tools/color-mixer/meta";
 import { colorPaletteGenerator } from "@/tools/color-palette-generator/meta";
+
+// Units
+import { areaConverter } from "@/tools/area-converter/meta";
+import { dataConverter } from "@/tools/data-converter/meta";
+import { lengthConverter } from "@/tools/length-converter/meta";
+import { speedConverter } from "@/tools/speed-converter/meta";
+import { temperatureConverter } from "@/tools/temperature-converter/meta";
+import { timeConverter } from "@/tools/time-converter/meta";
+import { unitPairTools } from "@/tools/unit-pairs/meta";
+import { volumeConverter } from "@/tools/volume-converter/meta";
+import { weightConverter } from "@/tools/weight-converter/meta";
 
 // Converter
 import { currencyConverter } from "@/tools/currency-converter/meta";
@@ -189,8 +209,19 @@ export const tools: readonly Tool[] = [
   colorPaletteGenerator,
   colorMixer,
 
-  // Converter
+  // Units — the hub, then one page per measurement type. The ~64 direct
+  // conversion pages are appended after this list; they are search-only.
   unitConverter,
+  lengthConverter,
+  weightConverter,
+  temperatureConverter,
+  volumeConverter,
+  areaConverter,
+  speedConverter,
+  dataConverter,
+  timeConverter,
+
+  // Converter
   currencyConverter,
   timezoneConverter,
   numberBaseConverter,
@@ -232,6 +263,10 @@ export const tools: readonly Tool[] = [
   loremIpsumGenerator,
   pomodoroTimer,
   screenResolutionChecker,
+
+  // Direct conversion pages — generated, and search-only so they stay out of
+  // the browse surfaces while remaining indexed and findable.
+  ...unitPairTools,
 ];
 
 /* --------------------------------------------------------------------------
@@ -241,20 +276,35 @@ export const tools: readonly Tool[] = [
 
 export const publishedTools = tools.filter((tool) => tool.status === "live");
 
+/**
+ * Everything that belongs in a browse surface. Search, the sitemap and
+ * `generateStaticParams` all use the full `tools` list instead — a search-only
+ * tool is hidden from browsing, not from the web.
+ */
+export const browsableTools = tools.filter((tool) => !tool.searchOnly);
+
 const toolByPath = new Map(tools.map((tool) => [`${tool.category}/${tool.slug}`, tool]));
 
 export function getTool(category: string, slug: string): Tool | undefined {
   return toolByPath.get(`${category}/${slug}`);
 }
 
+/** Browsable tools in a category — what category pages and menus show. */
 export function getToolsByCategory(category: ToolCategory): Tool[] {
+  return browsableTools.filter((tool) => tool.category === category);
+}
+
+/** Including search-only entries. Used for counts and internal linking. */
+export function getAllToolsByCategory(category: ToolCategory): Tool[] {
   return tools.filter((tool) => tool.category === category);
 }
 
 /** Tool counts keyed by category — used on the homepage category grid. */
 export const toolCountByCategory = categories.reduce<Record<ToolCategory, number>>(
   (counts, category) => {
-    counts[category.slug] = tools.filter((tool) => tool.category === category.slug).length;
+    counts[category.slug] = browsableTools.filter(
+      (tool) => tool.category === category.slug,
+    ).length;
     return counts;
   },
   {} as Record<ToolCategory, number>,
@@ -262,7 +312,13 @@ export const toolCountByCategory = categories.reduce<Record<ToolCategory, number
 
 export const popularTools = tools.filter((tool) => tool.popular);
 
-/** Same-category siblings, live ones first, for the "related tools" rail. */
+/**
+ * Same-category siblings for the "related tools" rail.
+ *
+ * Always browsable tools, even for a search-only page — someone who landed on
+ * /units/lb-to-kg from a search should be offered the full Weight Converter,
+ * not sixty more pair pages.
+ */
 export function getRelatedTools(tool: Tool, limit = 4): Tool[] {
   return getToolsByCategory(tool.category)
     .filter((candidate) => candidate.slug !== tool.slug)

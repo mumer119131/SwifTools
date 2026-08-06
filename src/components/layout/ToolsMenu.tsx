@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 
 import { categories, type ToolCategory } from "@/config/categories";
-import { getToolsByCategory, toolCountByCategory, toolHref, tools } from "@/config/tools";
+import { browsableTools, getToolsByCategory, toolCountByCategory, toolHref } from "@/config/tools";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -181,7 +181,7 @@ export function ToolsMenu({ pathname }: { pathname: string }) {
             >
               All tools
               <span className="font-mono text-xs text-subtle-foreground" data-numeric>
-                {tools.length}
+                {browsableTools.length}
               </span>
             </Link>
           </NavigationMenuLink>

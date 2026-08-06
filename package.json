@@ -12,6 +12,7 @@
     "check:snapshots": "node --experimental-strip-types scripts/check-snapshot-stability.ts",
     "check:hashes": "node --experimental-strip-types scripts/check-hashes.ts",
     "check:search": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-search.ts",
+    "check:units": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-units.ts",
     "new:tool": "node --experimental-strip-types scripts/new-tool.ts"
   },
   "packageManager": "pnpm@11.10.0",

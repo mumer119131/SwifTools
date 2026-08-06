@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Clock } from "lucide-react";
 
 import { EmptyState } from "@/components/shared/EmptyState";
+import { getPair } from "@/lib/units";
 import { ToolErrorBoundary } from "@/components/shared/ToolErrorBoundary";
 import { Skeleton } from "@/components/ui/misc";
 
@@ -95,6 +96,14 @@ const registry: Record<string, React.ComponentType> = {
 
   // Converter
   "unit-converter": lazyTool(() => import("@/tools/unit-converter/Tool")),
+  "length-converter": lazyTool(() => import("@/tools/length-converter/Tool")),
+  "weight-converter": lazyTool(() => import("@/tools/weight-converter/Tool")),
+  "temperature-converter": lazyTool(() => import("@/tools/temperature-converter/Tool")),
+  "volume-converter": lazyTool(() => import("@/tools/volume-converter/Tool")),
+  "area-converter": lazyTool(() => import("@/tools/area-converter/Tool")),
+  "speed-converter": lazyTool(() => import("@/tools/speed-converter/Tool")),
+  "data-converter": lazyTool(() => import("@/tools/data-converter/Tool")),
+  "time-converter": lazyTool(() => import("@/tools/time-converter/Tool")),
   "currency-converter": lazyTool(() => import("@/tools/currency-converter/Tool")),
   "timezone-converter": lazyTool(() => import("@/tools/timezone-converter/Tool")),
   "number-base-converter": lazyTool(() => import("@/tools/number-base-converter/Tool")),
@@ -148,7 +157,24 @@ const registry: Record<string, React.ComponentType> = {
  * boundary. Keeping the prop surface this narrow makes that impossible to
  * reintroduce by accident.
  */
+/**
+ * All ~64 unit pair routes share one implementation, selected by slug — a
+ * folder each would be sixty copies of the same component.
+ */
+const UnitPairTool = dynamic(() => import("@/tools/unit-pairs/Tool"), {
+  ssr: false,
+  loading: ToolSkeleton,
+});
+
 export function ToolRuntime({ slug, name }: { slug: string; name: string }) {
+  if (getPair(slug)) {
+    return (
+      <ToolErrorBoundary toolName={name}>
+        <UnitPairTool slug={slug} />
+      </ToolErrorBoundary>
+    );
+  }
+
   const Implementation = registry[slug];
 
   if (!Implementation) {

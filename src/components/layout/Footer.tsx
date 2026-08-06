@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { categories } from "@/config/categories";
 import { siteConfig } from "@/config/site";
-import { toolHref, tools } from "@/config/tools";
+import { browsableTools, toolHref } from "@/config/tools";
 import { Logo } from "@/components/layout/Logo";
 import { GitHubIcon, XIcon } from "@/components/layout/BrandIcons";
 
@@ -48,10 +48,12 @@ export function Footer() {
             ) : null}
           </div>
 
-          {/* Every tool is linked from the footer — cheap, permanent crawl paths. */}
+          {/* Every browsable tool is linked here — cheap, permanent crawl paths.
+              Search-only pages reach the crawler through the sitemap and their
+              own parent converter instead of bloating this list. */}
           <nav aria-label="All tools" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {categories.map((category) => {
-              const categoryTools = tools.filter((tool) => tool.category === category.slug);
+              const categoryTools = browsableTools.filter((tool) => tool.category === category.slug);
               return (
                 <div key={category.slug} className="space-y-3">
                   <h2 className="text-xs font-medium tracking-[0.02em] text-foreground">

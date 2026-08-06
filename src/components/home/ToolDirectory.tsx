@@ -4,7 +4,7 @@ import * as React from "react";
 import { SearchX } from "lucide-react";
 
 import { categories, type ToolCategory } from "@/config/categories";
-import { tools } from "@/config/tools";
+import { browsableTools, tools } from "@/config/tools";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Input } from "@/components/ui/input";
@@ -32,7 +32,9 @@ export function ToolDirectory() {
     const inCategory = (tool: (typeof tools)[number]) =>
       filter === "all" || tool.category === filter;
 
-    if (!query.trim()) return tools.filter(inCategory);
+    // Browsing shows the browsable set; searching reaches everything, so a
+    // query like "lb to kg" still finds its dedicated page.
+    if (!query.trim()) return browsableTools.filter(inCategory);
 
     return searchTools(query, tools)
       .map((result) => result.tool)
@@ -62,11 +64,11 @@ export function ToolDirectory() {
           <FilterChip active={filter === "all"} onClick={() => setFilter("all")}>
             All
             <span className="ml-1 text-subtle-foreground" data-numeric>
-              {tools.length}
+              {browsableTools.length}
             </span>
           </FilterChip>
           {categories.map((category) => {
-            const count = tools.filter((tool) => tool.category === category.slug).length;
+            const count = browsableTools.filter((tool) => tool.category === category.slug).length;
             const Icon = category.icon;
             return (
               <FilterChip

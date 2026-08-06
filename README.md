@@ -22,6 +22,7 @@ pnpm dev          # http://localhost:3000
 | `pnpm check:snapshots` | Asserts every `useClientValue` reader is `Object.is`-stable |
 | `pnpm check:hashes` | Verifies all six hash algorithms against published test vectors |
 | `pnpm check:search` | Asserts the ⌘K palette returns the tool each query means |
+| `pnpm check:units` | Verifies conversions against known values and round-trips every pair |
 | `pnpm new:tool` | Scaffold a new tool (see below) |
 
 ---
@@ -197,6 +198,28 @@ same in both places.
 `pnpm check:search` asserts 35 query → expected-tool pairs. Relevance is exactly
 the kind of thing that regresses silently when a new tool arrives with broad
 keywords.
+
+### Search-only pages
+
+`Tool.searchOnly` marks a page that is reachable, indexed and linked, but kept
+out of the browse surfaces — the category grid, footer, mega menu, and the ⌘K
+list before you type.
+
+The unit conversion pages use it. Searching **lb to kg** used to return fuzzy
+junk, because one page carrying every measurement cannot rank for any specific
+conversion. There are now nine browsable converters plus 72 direct pages
+(`/units/lb-to-kg`), each with a live converter, the formula written out and a
+table of common values. All 72 are in the sitemap and linked from their parent
+converter; none of them appear in the footer or category grid, where they would
+bury the nine tools people actually browse for.
+
+`browsableTools` is the list for browse surfaces; `tools` — the full set — is
+what search, the sitemap and `generateStaticParams` use.
+
+Pairs are deliberately not exhaustive. Every permutation would be roughly 400
+pages that compete with each other; these are the conversions people search for,
+expanded in both directions because "kg to lbs" and "lbs to kg" are different
+queries.
 
 ### Canvas mockups
 

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 
 import { categories } from "@/config/categories";
-import { popularTools, toolHref, tools } from "@/config/tools";
+import { browsableTools, popularTools, toolHref, tools } from "@/config/tools";
 import {
   CommandDialog,
   CommandEmpty,
@@ -131,7 +131,7 @@ export function SearchCommandProvider({ children }: { children: React.ReactNode 
               </CommandGroup>
 
               {categories.map((category) => {
-                const categoryTools = tools.filter((tool) => tool.category === category.slug);
+                const categoryTools = browsableTools.filter((tool) => tool.category === category.slug);
                 if (categoryTools.length === 0) return null;
 
                 return (
@@ -234,7 +234,7 @@ export function SearchTrigger({
           isHero ? "text-base sm:text-lg" : "text-sm",
         )}
       >
-        Search {tools.length} tools…
+        Search {browsableTools.length} tools…
       </span>
       <span className="hidden shrink-0 items-center gap-1 sm:flex">
         <Kbd>⌘</Kbd>

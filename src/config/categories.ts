@@ -1,5 +1,6 @@
 import {
   ArrowLeftRight,
+  Ruler,
   AtSign,
   Calculator,
   Code2,
@@ -22,7 +23,8 @@ export type ToolCategory =
   | "seo"
   | "generator"
   | "color"
-  | "social";
+  | "social"
+  | "units";
 
 export interface CategoryMeta {
   slug: ToolCategory;
@@ -111,6 +113,15 @@ export const categories: readonly CategoryMeta[] = [
       "Free online generators for secure passwords, QR codes, fake test data, lorem ipsum placeholder text and more.",
     icon: Sparkles,
     accentVar: "--accent-generator",
+  },
+  {
+    slug: "units",
+    label: "Units",
+    description: "Convert length, weight, temperature and more.",
+    metaDescription:
+      "Free unit converters for length, weight, temperature, volume, area, speed, data and time — plus direct pages for common conversions like lb to kg and cm to inches.",
+    icon: Ruler,
+    accentVar: "--accent-units",
   },
   {
     slug: "social",

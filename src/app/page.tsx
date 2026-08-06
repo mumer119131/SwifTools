@@ -3,7 +3,7 @@ import { ArrowRight, Gauge, Infinity as InfinityIcon, Lock, ShieldCheck, Sparkle
 
 import { categories } from "@/config/categories";
 import { siteConfig } from "@/config/site";
-import { popularTools, publishedTools, toolCountByCategory, tools } from "@/config/tools";
+import { browsableTools, popularTools, publishedTools, toolCountByCategory, tools } from "@/config/tools";
 import { SearchTrigger } from "@/components/layout/SearchCommand";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { ToolDirectory } from "@/components/home/ToolDirectory";
@@ -49,7 +49,7 @@ export default function HomePage() {
         <div className="relative mx-auto w-full max-w-6xl px-5 pb-16 pt-20 text-center sm:px-6 lg:px-8 lg:pb-24 lg:pt-28">
           <Badge variant="outline" className="animate-reveal mb-7">
             <Sparkles className="size-3" strokeWidth={2} aria-hidden="true" />
-            <span data-numeric>{tools.length}</span> tools and counting
+            <span data-numeric>{browsableTools.length}</span> tools and counting
           </Badge>
 
           <h1
@@ -210,7 +210,7 @@ export default function HomePage() {
         <ToolDirectory />
       </section>
 
-      <JsonLdScript data={itemListLd(tools, `All ${siteConfig.name} tools`)} />
+      <JsonLdScript data={itemListLd(browsableTools, `All ${siteConfig.name} tools`)} />
     </>
   );
 }

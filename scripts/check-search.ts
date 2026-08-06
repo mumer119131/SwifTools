@@ -60,6 +60,27 @@ const expectations: [string, string][] = [
 
   // Initials.
   ["wc", "word-counter"],
+
+  // Unit conversions. Every one of these returned fuzzy junk before the unit
+  // converter was split into per-type tools and direct pair pages.
+  ["lb to kg", "lb-to-kg"],
+  ["kg to lb", "kg-to-lb"],
+  ["lbs to kg", "lb-to-kg"],
+  ["pounds to kilograms", "lb-to-kg"],
+  ["cm to inches", "cm-to-inches"],
+  ["inches to cm", "inches-to-cm"],
+  ["km to miles", "km-to-miles"],
+  ["celsius to fahrenheit", "celsius-to-fahrenheit"],
+  ["fahrenheit to celsius", "fahrenheit-to-celsius"],
+  ["mb to gb", "mb-to-gb"],
+  ["m to ft", "m-to-feet"],
+  ["kmh to mph", "kmh-to-mph"],
+
+  // The per-type landing pages still win their own generic queries.
+  ["weight converter", "weight-converter"],
+  ["temperature converter", "temperature-converter"],
+  ["data size converter", "data-converter"],
+  ["unit converter", "unit-converter"],
 ];
 
 /** Queries that must return nothing sensible rather than noise. */
