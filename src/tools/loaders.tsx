@@ -69,6 +69,16 @@ const registry: Record<string, React.ComponentType> = {
   "regex-tester": lazyTool(() => import("@/tools/regex-tester/Tool")),
   "uuid-generator": lazyTool(() => import("@/tools/uuid-generator/Tool")),
   "markdown-to-html": lazyTool(() => import("@/tools/markdown-to-html/Tool")),
+  "html-encode-decode": lazyTool(() => import("@/tools/html-encode-decode/Tool")),
+  "url-slug-generator": lazyTool(() => import("@/tools/url-slug-generator/Tool")),
+  "json-tree-viewer": lazyTool(() => import("@/tools/json-tree-viewer/Tool")),
+  "jwt-decoder": lazyTool(() => import("@/tools/jwt-decoder/Tool")),
+  "md5-hash-generator": lazyTool(() => import("@/tools/md5-hash-generator/Tool")),
+  "sha1-hash-generator": lazyTool(() => import("@/tools/sha1-hash-generator/Tool")),
+  "sha224-hash-generator": lazyTool(() => import("@/tools/sha224-hash-generator/Tool")),
+  "sha256-hash-generator": lazyTool(() => import("@/tools/sha256-hash-generator/Tool")),
+  "sha384-hash-generator": lazyTool(() => import("@/tools/sha384-hash-generator/Tool")),
+  "sha512-hash-generator": lazyTool(() => import("@/tools/sha512-hash-generator/Tool")),
 
   // Color
   "color-picker": lazyTool(() => import("@/tools/color-picker/Tool")),

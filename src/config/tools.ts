@@ -65,6 +65,16 @@ import { markdownToHtml } from "@/tools/markdown-to-html/meta";
 import { regexTester } from "@/tools/regex-tester/meta";
 import { urlEncodeDecode } from "@/tools/url-encode-decode/meta";
 import { uuidGenerator } from "@/tools/uuid-generator/meta";
+import { htmlEncodeDecode } from "@/tools/html-encode-decode/meta";
+import { jsonTreeViewer } from "@/tools/json-tree-viewer/meta";
+import { jwtDecoder } from "@/tools/jwt-decoder/meta";
+import { urlSlugGenerator } from "@/tools/url-slug-generator/meta";
+import { md5HashGenerator } from "@/tools/md5-hash-generator/meta";
+import { sha1HashGenerator } from "@/tools/sha1-hash-generator/meta";
+import { sha224HashGenerator } from "@/tools/sha224-hash-generator/meta";
+import { sha256HashGenerator } from "@/tools/sha256-hash-generator/meta";
+import { sha384HashGenerator } from "@/tools/sha384-hash-generator/meta";
+import { sha512HashGenerator } from "@/tools/sha512-hash-generator/meta";
 
 // Color
 import { colorMixer } from "@/tools/color-mixer/meta";
@@ -135,8 +145,18 @@ export const tools: readonly Tool[] = [
   urlEncodeDecode,
   htmlFormatter,
   regexTester,
+  jsonTreeViewer,
+  jwtDecoder,
   uuidGenerator,
   markdownToHtml,
+  htmlEncodeDecode,
+  urlSlugGenerator,
+  sha256HashGenerator,
+  md5HashGenerator,
+  sha1HashGenerator,
+  sha512HashGenerator,
+  sha384HashGenerator,
+  sha224HashGenerator,
 
   // Color
   colorPicker,
