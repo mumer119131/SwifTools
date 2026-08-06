@@ -21,6 +21,7 @@ pnpm dev          # http://localhost:3000
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm check:snapshots` | Asserts every `useClientValue` reader is `Object.is`-stable |
 | `pnpm check:hashes` | Verifies all six hash algorithms against published test vectors |
+| `pnpm check:search` | Asserts the ⌘K palette returns the tool each query means |
 | `pnpm new:tool` | Scaffold a new tool (see below) |
 
 ---
@@ -163,6 +164,39 @@ Each tool declares which it is in its `processing` field, and its page states it
 
 Heavy work goes into a Web Worker so the UI never freezes — `src/tools/remove-background/worker.ts`
 is the reference example.
+
+### Search ranking
+
+`src/lib/search.ts` scores results explicitly rather than using cmdk's built-in
+filter. That filter is a fuzzy subsequence matcher, which is far too permissive
+for a catalogue this size: searching **bmi** matched *Merge PDF*, because b, m
+and i appear in that order across its keywords — "com**b**ine", "**m**erger",
+"onl**i**ne". It scored low, but it still matched, and because results were
+rendered in per-category groups, that low match sat above the exact one.
+
+The scorer uses widely separated tiers so they can never interleave — an exact
+name beats a name prefix, beats initials, beats an exact keyword, beats a
+description hit. On top of that:
+
+- **Every token must match something.** "png to pdf" cannot return a tool that
+  only matched "to".
+- **Stop words are capped.** "to", "of", "for" and friends carry intent but no
+  discriminating power, so they can contribute at most a token amount and never
+  disqualify a tool on their own.
+- **A whole-query match on a name or keyword adds a large bonus.** Someone
+  typing "png to jpg" wants the tool listing exactly that, not one sharing two
+  of the words.
+- **Fuzzy matching runs only when nothing else matched**, so a typo still finds
+  something without ever outranking a real result.
+- Results carry a **reason** when the match came from a keyword rather than the
+  name, so a result never looks arbitrary.
+
+Both the ⌘K palette and the homepage directory use this, so a query behaves the
+same in both places.
+
+`pnpm check:search` asserts 35 query → expected-tool pairs. Relevance is exactly
+the kind of thing that regresses silently when a new tool arrives with broad
+keywords.
 
 ### Canvas mockups
 

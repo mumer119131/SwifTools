@@ -9,6 +9,7 @@ import { ToolCard } from "@/components/shared/ToolCard";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { searchTools } from "@/lib/search";
 import { cn } from "@/lib/utils";
 
 type Filter = ToolCategory | "all";
@@ -24,17 +25,18 @@ export function ToolDirectory() {
   const [query, setQuery] = React.useState("");
   const [filter, setFilter] = React.useState<Filter>("all");
 
+  // Ranked by the same scorer the ⌘K palette uses, so a query behaves
+  // identically in both places. Without a query the registry order stands,
+  // which groups tools by category the way the page reads.
   const visible = React.useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    return tools.filter((tool) => {
-      if (filter !== "all" && tool.category !== filter) return false;
-      if (!needle) return true;
-      return (
-        tool.name.toLowerCase().includes(needle) ||
-        tool.description.toLowerCase().includes(needle) ||
-        tool.keywords.some((keyword) => keyword.includes(needle))
-      );
-    });
+    const inCategory = (tool: (typeof tools)[number]) =>
+      filter === "all" || tool.category === filter;
+
+    if (!query.trim()) return tools.filter(inCategory);
+
+    return searchTools(query, tools)
+      .map((result) => result.tool)
+      .filter(inCategory);
   }, [query, filter]);
 
   return (
