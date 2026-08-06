@@ -111,6 +111,22 @@ const registry: Record<string, React.ComponentType> = {
   "percentage-calculator": lazyTool(() => import("@/tools/percentage-calculator/Tool")),
   "invoice-generator": lazyTool(() => import("@/tools/invoice-generator/Tool")),
 
+  // Social
+  "tweet-generator": lazyTool(() => import("@/tools/tweet-generator/Tool")),
+  "tweet-to-image": lazyTool(() => import("@/tools/tweet-to-image/Tool")),
+  "instagram-post-generator": lazyTool(() => import("@/tools/instagram-post-generator/Tool")),
+  "instagram-story-generator": lazyTool(() => import("@/tools/instagram-story-generator/Tool")),
+  "instagram-dm-generator": lazyTool(() => import("@/tools/instagram-dm-generator/Tool")),
+  "instagram-filters": lazyTool(() => import("@/tools/instagram-filters/Tool")),
+  "whatsapp-chat-generator": lazyTool(() => import("@/tools/whatsapp-chat-generator/Tool")),
+  "imessage-chat-generator": lazyTool(() => import("@/tools/imessage-chat-generator/Tool")),
+  "youtube-thumbnail-grabber": lazyTool(() => import("@/tools/youtube-thumbnail-grabber/Tool")),
+  "vimeo-thumbnail-grabber": lazyTool(() => import("@/tools/vimeo-thumbnail-grabber/Tool")),
+  "instagram-photo-downloader": lazyTool(() => import("@/tools/instagram-photo-downloader/Tool")),
+  "twitter-ad-revenue-generator": lazyTool(
+    () => import("@/tools/twitter-ad-revenue-generator/Tool"),
+  ),
+
   // SEO
   "meta-tag-generator": lazyTool(() => import("@/tools/meta-tag-generator/Tool")),
   "keyword-density-checker": lazyTool(() => import("@/tools/keyword-density-checker/Tool")),

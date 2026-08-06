@@ -1,7 +1,8 @@
 # SwiftKnife
 
-A fast, free collection of 48 PDF, image, text, developer, converter, calculator, SEO and
-generator tools. 47 of them run entirely in the browser — files are never uploaded.
+A fast, free collection of 78 tools across ten categories — PDF, image, text, developer, colour,
+converter, calculator, SEO, generator and social. All but four run entirely in the browser, so
+your files are never uploaded.
 
 Built with Next.js 16 (App Router, Turbopack), React 19, Tailwind CSS v4, and TypeScript in strict
 mode. Every tool page is statically generated.
@@ -19,6 +20,7 @@ pnpm dev          # http://localhost:3000
 | `pnpm lint` | ESLint |
 | `pnpm typecheck` | `tsc --noEmit` |
 | `pnpm check:snapshots` | Asserts every `useClientValue` reader is `Object.is`-stable |
+| `pnpm check:hashes` | Verifies all six hash algorithms against published test vectors |
 | `pnpm new:tool` | Scaffold a new tool (see below) |
 
 ---
@@ -96,9 +98,11 @@ src/
   app/
     layout.tsx                  root shell: fonts, theme, ⌘K provider, header/footer
     page.tsx                    landing page
-    [category]/page.tsx         category listing        (SSG, 8 pages)
-    [category]/[tool]/page.tsx  tool page               (SSG, 48 pages)
+    [category]/page.tsx         category listing        (SSG, 10 pages)
+    [category]/[tool]/page.tsx  tool page               (SSG, 78 pages)
     api/rates/route.ts          cached ECB exchange-rate proxy
+    api/vimeo/route.ts          Vimeo oEmbed proxy (no CORS upstream)
+    api/og-image/route.ts       reads a public page's og:image, host-allowlisted
     (legal)/privacy, terms
     sitemap.ts robots.ts manifest.ts opengraph-image.tsx icon.tsx apple-icon.tsx
   components/
@@ -136,19 +140,40 @@ fetched when someone opens that tool's page. None of it reaches the homepage bun
 
 ### Client vs. server
 
-**47 of the 48 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
+**74 of the 78 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
 That is the product's main selling point, not just an optimisation: no upload wait, no server cost,
 and files that genuinely never leave the device.
 
-The one exception is the **currency converter**, which needs live exchange rates. Its
-`/api/rates` route proxies the European Central Bank's daily reference rates (via Frankfurter) with
-an hour of caching, so one upstream request is shared by every visitor and the browser never
-contacts a third party directly. It reads no request body and stores nothing.
+Four need a server, each for a stated reason:
+
+- **Currency converter** — `/api/rates` proxies the European Central Bank's daily reference rates
+  via Frankfurter, cached for an hour, so one upstream request is shared by every visitor.
+- **Vimeo thumbnail grabber** — `/api/vimeo` proxies Vimeo's official oEmbed endpoint, which is
+  public and keyless but sends no CORS headers, so a browser cannot call it.
+- **Instagram photo downloader** — `/api/og-image` reads the preview image a public post
+  advertises to link crawlers. Expect it to be unreliable; see the note on that tool's page.
+
+`/api/og-image` uses a **host allowlist, not a blocklist**. Without one it would be an open proxy
+that could be pointed at internal addresses — verified that both an arbitrary host and the
+`169.254.169.254` cloud metadata endpoint are rejected with a 400.
+
+None of these routes read a request body or store anything.
 
 Each tool declares which it is in its `processing` field, and its page states it plainly.
 
 Heavy work goes into a Web Worker so the UI never freezes — `src/tools/remove-background/worker.ts`
 is the reference example.
+
+### Canvas mockups
+
+The social generators paint directly onto a canvas rather than rasterising styled HTML through an
+SVG `foreignObject`. That approach needs every font inlined as a data URI or the text silently
+falls back, and Safari renders it inconsistently. Measuring and painting each element by hand costs
+more code but produces the same image in every browser. `src/lib/mockup.ts` holds the primitives;
+`chat-mockup.ts` and `social-mockup.ts` build the specific layouts.
+
+Each renderer measures its content before sizing the canvas, so output height matches the content
+exactly instead of clipping a long post or leaving dead space under a short one.
 
 ### Client-only values
 
@@ -187,6 +212,10 @@ Build tools by composing these, not by writing bespoke UI:
 | `CategoryBadge`, `Breadcrumbs`, `EmptyState` | Supporting pieces |
 | `ToolErrorBoundary` | Isolates a tool crash from the rest of the page |
 | `CodeOutput` | Read-only monospace output block with copy and download |
+| `CodeTransformShell` | Frame for the formatter/minifier tools: input, options, result, savings |
+| `HashToolShell` | Shared body for the six hash generators |
+| `ChatMockupShell` | Shared editor for the WhatsApp, iMessage and Instagram DM mockups |
+| `TweetEditor` | Shared post-composition form for the three tweet-shaped tools |
 
 ### Header navigation
 

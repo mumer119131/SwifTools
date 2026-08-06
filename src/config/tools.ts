@@ -102,6 +102,20 @@ import { loanCalculator } from "@/tools/loan-calculator/meta";
 import { percentageCalculator } from "@/tools/percentage-calculator/meta";
 import { taxCalculator } from "@/tools/tax-calculator/meta";
 
+// Social
+import { imessageChatGenerator } from "@/tools/imessage-chat-generator/meta";
+import { instagramDmGenerator } from "@/tools/instagram-dm-generator/meta";
+import { instagramFilters } from "@/tools/instagram-filters/meta";
+import { instagramPhotoDownloader } from "@/tools/instagram-photo-downloader/meta";
+import { instagramPostGenerator } from "@/tools/instagram-post-generator/meta";
+import { instagramStoryGenerator } from "@/tools/instagram-story-generator/meta";
+import { tweetGenerator } from "@/tools/tweet-generator/meta";
+import { tweetToImage } from "@/tools/tweet-to-image/meta";
+import { twitterAdRevenueGenerator } from "@/tools/twitter-ad-revenue-generator/meta";
+import { vimeoThumbnailGrabber } from "@/tools/vimeo-thumbnail-grabber/meta";
+import { whatsappChatGenerator } from "@/tools/whatsapp-chat-generator/meta";
+import { youtubeThumbnailGrabber } from "@/tools/youtube-thumbnail-grabber/meta";
+
 // SEO
 import { keywordDensityChecker } from "@/tools/keyword-density-checker/meta";
 import { metaTagGenerator } from "@/tools/meta-tag-generator/meta";
@@ -190,6 +204,20 @@ export const tools: readonly Tool[] = [
   ageCalculator,
   percentageCalculator,
   invoiceGenerator,
+
+  // Social
+  tweetGenerator,
+  tweetToImage,
+  instagramPostGenerator,
+  instagramStoryGenerator,
+  instagramDmGenerator,
+  instagramFilters,
+  whatsappChatGenerator,
+  imessageChatGenerator,
+  youtubeThumbnailGrabber,
+  vimeoThumbnailGrabber,
+  instagramPhotoDownloader,
+  twitterAdRevenueGenerator,
 
   // SEO
   metaTagGenerator,

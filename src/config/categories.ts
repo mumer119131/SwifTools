@@ -1,5 +1,6 @@
 import {
   ArrowLeftRight,
+  AtSign,
   Calculator,
   Code2,
   FileText,
@@ -110,6 +111,15 @@ export const categories: readonly CategoryMeta[] = [
       "Free online generators for secure passwords, QR codes, fake test data, lorem ipsum placeholder text and more.",
     icon: Sparkles,
     accentVar: "--accent-generator",
+  },
+  {
+    slug: "social",
+    label: "Social",
+    description: "Mockups, chat generators and thumbnail grabbers.",
+    metaDescription:
+      "Free social media tools. Generate Instagram, tweet and chat mockups, apply filters, and grab video thumbnails from YouTube and Vimeo.",
+    icon: AtSign,
+    accentVar: "--accent-social",
   },
   {
     slug: "color",
