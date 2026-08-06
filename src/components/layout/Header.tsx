@@ -1,19 +1,15 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 
-import { categories } from "@/config/categories";
 import { Logo } from "@/components/layout/Logo";
+import { MobileNav } from "@/components/layout/MobileNav";
 import { SearchTrigger } from "@/components/layout/SearchCommand";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { ToolsMenu } from "@/components/layout/ToolsMenu";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-
-/** Categories are the primary navigation; the rest live in the ⌘K palette. */
-const primaryNav = categories.slice(0, 5);
 
 export function Header() {
   const pathname = usePathname();
@@ -33,28 +29,11 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-5 sm:px-6 lg:px-8">
         <Logo />
 
-        <nav aria-label="Categories" className="hidden lg:block">
-          <ul className="flex items-center gap-1">
-            {primaryNav.map((category) => {
-              const isActive = pathname.startsWith(`/${category.slug}`);
-              return (
-                <li key={category.slug}>
-                  <Link
-                    href={`/${category.slug}`}
-                    aria-current={isActive ? "page" : undefined}
-                    className={cn(
-                      "inline-flex h-9 items-center rounded-md px-3 text-sm",
-                      "transition-colors duration-[180ms] ease-out-expo hover:bg-surface-hover hover:text-foreground",
-                      isActive ? "bg-surface-hover text-foreground" : "text-muted-foreground",
-                    )}
-                  >
-                    {category.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        {/* One entry point instead of five flat links — the mega menu carries
+            the full catalogue without crowding the bar. */}
+        <div className="hidden lg:block">
+          <ToolsMenu pathname={pathname} />
+        </div>
 
         <div className="ml-auto flex items-center gap-2">
           <SearchTrigger className="hidden md:flex" />
@@ -78,34 +57,11 @@ export function Header() {
       {mobileOpen ? (
         <div
           id="mobile-nav"
-          className="animate-reveal border-t border-border bg-background lg:hidden"
+          className="animate-reveal max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain border-t border-border bg-background lg:hidden"
         >
           <div className="mx-auto max-w-6xl space-y-4 px-5 py-4 sm:px-6">
             <SearchTrigger className="md:hidden" />
-            <nav aria-label="All categories">
-              <ul className="grid grid-cols-2 gap-1">
-                {categories.map((category) => {
-                  const Icon = category.icon;
-                  const isActive = pathname.startsWith(`/${category.slug}`);
-                  return (
-                    <li key={category.slug} className={`accent-${category.slug}`}>
-                      <Link
-                        href={`/${category.slug}`}
-                        aria-current={isActive ? "page" : undefined}
-                        className={cn(
-                          "flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm",
-                          "transition-colors duration-[120ms] hover:bg-surface-hover",
-                          isActive ? "bg-surface-hover text-foreground" : "text-muted-foreground",
-                        )}
-                      >
-                        <Icon className="text-accent size-4" strokeWidth={1.75} />
-                        {category.label}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
+            <MobileNav pathname={pathname} />
             <div className="sm:hidden">
               <ThemeToggle />
             </div>

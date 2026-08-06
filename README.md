@@ -102,7 +102,8 @@ src/
     (legal)/privacy, terms
     sitemap.ts robots.ts manifest.ts opengraph-image.tsx icon.tsx apple-icon.tsx
   components/
-    layout/     Header, Footer, Logo, ThemeToggle, SearchCommand (⌘K)
+    layout/     Header, Footer, Logo, ThemeToggle, SearchCommand (⌘K),
+                ToolsMenu (desktop mega menu), MobileNav
     shared/     ToolShell, FileDropzone, ResultPanel, ToolCard, Breadcrumbs, …
     ui/         button, input, select, slider, switch, tabs, dialog, command, …
     home/       ToolDirectory (filterable grid)
@@ -186,6 +187,27 @@ Build tools by composing these, not by writing bespoke UI:
 | `CategoryBadge`, `Breadcrumbs`, `EmptyState` | Supporting pieces |
 | `ToolErrorBoundary` | Isolates a tool crash from the rest of the page |
 | `CodeOutput` | Read-only monospace output block with copy and download |
+
+### Header navigation
+
+The header carries a single **Tools** entry rather than a row of category
+links. It opens a two-column mega menu — categories on the left, the hovered
+category's tools on the right — built on Radix `NavigationMenu`, which supplies
+the open delay, the pointer "safe triangle", and full keyboard operation.
+
+Two columns rather than a nested flyout: nested submenus are fragile to hit
+with a mouse and awkward to operate with a keyboard, whereas one panel keeps
+every tool a single pointer-move away and every row in one tab sequence. The
+active category follows **focus as well as hover**, so keyboard users get the
+same reveal.
+
+Hover doesn't exist on touch, so `MobileNav` renders the same structure as
+disclosures: tapping a category name navigates, tapping its chevron expands its
+tools.
+
+The menu's contents are client-mounted on open, so they are not in the
+server-rendered HTML — this costs nothing for crawling, because the footer
+already links every category and all 48 tools on every page.
 
 ---
 
