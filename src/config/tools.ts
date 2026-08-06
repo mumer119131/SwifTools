@@ -69,6 +69,12 @@ import { htmlEncodeDecode } from "@/tools/html-encode-decode/meta";
 import { jsonTreeViewer } from "@/tools/json-tree-viewer/meta";
 import { jwtDecoder } from "@/tools/jwt-decoder/meta";
 import { urlSlugGenerator } from "@/tools/url-slug-generator/meta";
+import { codeToImage } from "@/tools/code-to-image/meta";
+import { cssFormatter } from "@/tools/css-formatter/meta";
+import { cssMinifier } from "@/tools/css-minifier/meta";
+import { jsFormatter } from "@/tools/js-formatter/meta";
+import { jsMinifier } from "@/tools/js-minifier/meta";
+import { reactNativeShadowGenerator } from "@/tools/react-native-shadow-generator/meta";
 import { md5HashGenerator } from "@/tools/md5-hash-generator/meta";
 import { sha1HashGenerator } from "@/tools/sha1-hash-generator/meta";
 import { sha224HashGenerator } from "@/tools/sha224-hash-generator/meta";
@@ -151,6 +157,12 @@ export const tools: readonly Tool[] = [
   markdownToHtml,
   htmlEncodeDecode,
   urlSlugGenerator,
+  codeToImage,
+  jsFormatter,
+  jsMinifier,
+  cssFormatter,
+  cssMinifier,
+  reactNativeShadowGenerator,
   sha256HashGenerator,
   md5HashGenerator,
   sha1HashGenerator,
