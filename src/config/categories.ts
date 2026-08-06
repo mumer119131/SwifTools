@@ -4,6 +4,7 @@ import {
   Code2,
   FileText,
   Image as ImageIcon,
+  Palette,
   Search,
   Sparkles,
   Type,
@@ -18,7 +19,9 @@ export type ToolCategory =
   | "converter"
   | "calculator"
   | "seo"
-  | "generator";
+  | "generator"
+  | "color"
+  | "social";
 
 export interface CategoryMeta {
   slug: ToolCategory;
@@ -107,6 +110,15 @@ export const categories: readonly CategoryMeta[] = [
       "Free online generators for secure passwords, QR codes, fake test data, lorem ipsum placeholder text and more.",
     icon: Sparkles,
     accentVar: "--accent-generator",
+  },
+  {
+    slug: "color",
+    label: "Color",
+    description: "Pick, convert, mix and build colour palettes.",
+    metaDescription:
+      "Free colour tools. Convert between HEX, RGB, HSL and OKLCH, generate harmonious palettes, mix two colours and check contrast.",
+    icon: Palette,
+    accentVar: "--accent-color",
   },
 ] as const;
 

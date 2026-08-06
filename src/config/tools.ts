@@ -66,6 +66,10 @@ import { regexTester } from "@/tools/regex-tester/meta";
 import { urlEncodeDecode } from "@/tools/url-encode-decode/meta";
 import { uuidGenerator } from "@/tools/uuid-generator/meta";
 
+// Color
+import { colorMixer } from "@/tools/color-mixer/meta";
+import { colorPaletteGenerator } from "@/tools/color-palette-generator/meta";
+
 // Converter
 import { currencyConverter } from "@/tools/currency-converter/meta";
 import { numberBaseConverter } from "@/tools/number-base-converter/meta";
@@ -131,9 +135,13 @@ export const tools: readonly Tool[] = [
   urlEncodeDecode,
   htmlFormatter,
   regexTester,
-  colorPicker,
   uuidGenerator,
   markdownToHtml,
+
+  // Color
+  colorPicker,
+  colorPaletteGenerator,
+  colorMixer,
 
   // Converter
   unitConverter,

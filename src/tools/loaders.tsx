@@ -67,9 +67,13 @@ const registry: Record<string, React.ComponentType> = {
   "url-encode-decode": lazyTool(() => import("@/tools/url-encode-decode/Tool")),
   "html-formatter": lazyTool(() => import("@/tools/html-formatter/Tool")),
   "regex-tester": lazyTool(() => import("@/tools/regex-tester/Tool")),
-  "color-picker": lazyTool(() => import("@/tools/color-picker/Tool")),
   "uuid-generator": lazyTool(() => import("@/tools/uuid-generator/Tool")),
   "markdown-to-html": lazyTool(() => import("@/tools/markdown-to-html/Tool")),
+
+  // Color
+  "color-picker": lazyTool(() => import("@/tools/color-picker/Tool")),
+  "color-palette-generator": lazyTool(() => import("@/tools/color-palette-generator/Tool")),
+  "color-mixer": lazyTool(() => import("@/tools/color-mixer/Tool")),
 
   // Converter
   "unit-converter": lazyTool(() => import("@/tools/unit-converter/Tool")),
