@@ -20,7 +20,8 @@ import {
   commonZones,
   dayKeyIn,
   detectZone,
-  nowFields,
+  nowDate,
+  nowTime,
   isWorkingHour,
   readZone,
   zoneLabel,
@@ -33,7 +34,8 @@ export default function TimezoneConverterTool() {
   // Read on the client so the statically rendered HTML never bakes in a
   // build-time "now" or the server's timezone.
   const detectedZone = useClientValue(detectZone, "UTC");
-  const now = useClientValue(nowFields, { date: "", time: "" });
+  const currentDate = useClientValue(nowDate, "");
+  const currentTime = useClientValue(nowTime, "");
 
   const [baseOverride, setBaseOverride] = React.useState<string | null>(null);
   const [extraZones, setExtraZones] = React.useState<string[]>(DEFAULT_ZONES);
@@ -43,9 +45,9 @@ export default function TimezoneConverterTool() {
 
   const baseZone = baseOverride ?? detectedZone;
   const setBaseZone = setBaseOverride;
-  const date = dateOverride ?? now.date;
+  const date = dateOverride ?? currentDate;
   const setDate = setDateOverride;
-  const time = timeOverride ?? now.time;
+  const time = timeOverride ?? currentTime;
   const setTime = setTimeOverride;
 
   // The detected zone always leads the list without being stored separately.

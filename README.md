@@ -18,6 +18,7 @@ pnpm dev          # http://localhost:3000
 | `pnpm start` | Serve the production build |
 | `pnpm lint` | ESLint |
 | `pnpm typecheck` | `tsc --noEmit` |
+| `pnpm check:snapshots` | Asserts every `useClientValue` reader is `Object.is`-stable |
 | `pnpm new:tool` | Scaffold a new tool (see below) |
 
 ---
@@ -155,6 +156,18 @@ password. `src/lib/use-client-value.ts` provides `useClientValue` and `useHydrat
 `useSyncExternalStore`. Seeding that state with `useEffect(() => setState(read()), [])` costs an
 extra render pass and trips React's `set-state-in-effect` rule; `useSyncExternalStore` returns the
 server snapshot during SSR and the client one after hydration, in a single pass.
+
+**The reader must return a stable primitive.** `useSyncExternalStore` compares successive snapshots
+with `Object.is`, so a reader that builds a fresh object each call — `() => ({ date, time })` —
+never settles and React throws *Maximum update depth exceeded*. Two guards enforce this:
+
+- `useClientValue` is typed to accept primitives only, so an object reader is a compile error.
+- `pnpm check:snapshots` calls every registered reader twice and asserts the results are
+  `Object.is`-equal.
+
+If you genuinely need an object snapshot, cache it at module scope and invalidate it from the
+`subscribe` callback — `screen-resolution-checker` does this for its resize listener — and call
+`useSyncExternalStore` directly.
 
 ---
 

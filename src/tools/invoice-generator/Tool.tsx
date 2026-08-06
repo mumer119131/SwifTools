@@ -22,23 +22,15 @@ import {
   buildInvoicePdf,
   calculateTotals,
   formatMoney,
+  readDueDate,
+  readIssueDate,
   type Invoice,
   type LineItem,
 } from "./logic";
 
-function todayInput(offsetDays = 0): string {
-  const date = new Date();
-  date.setDate(date.getDate() + offsetDays);
-  const pad = (value: number) => String(value).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
-}
-
-/** Issue and due dates, read on the client so SSR output stays deterministic. */
-const readDates = () => ({ issueDate: todayInput(), dueDate: todayInput(30) });
-const SERVER_DATES = { issueDate: "", dueDate: "" };
-
 export default function InvoiceGeneratorTool() {
-  const dates = useClientValue(readDates, SERVER_DATES);
+  const defaultIssueDate = useClientValue(readIssueDate, "");
+  const defaultDueDate = useClientValue(readDueDate, "");
   const [draft, setDraft] = React.useState<Omit<Invoice, "issueDate" | "dueDate"> & {
     issueDate: string | null;
     dueDate: string | null;
@@ -60,8 +52,8 @@ export default function InvoiceGeneratorTool() {
   // Today's dates fill in until the user picks their own.
   const invoice: Invoice = {
     ...draft,
-    issueDate: draft.issueDate ?? dates.issueDate,
-    dueDate: draft.dueDate ?? dates.dueDate,
+    issueDate: draft.issueDate ?? defaultIssueDate,
+    dueDate: draft.dueDate ?? defaultDueDate,
   };
 
   const totals = calculateTotals(invoice);

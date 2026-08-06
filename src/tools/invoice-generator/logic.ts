@@ -261,6 +261,25 @@ function wrap(text: string, font: PDFFont, size: number, maxWidth: number): stri
  */
 let nextItemId = 0;
 
+/** A date `offsetDays` from today, as a `<input type="date">` value. */
+export function todayInput(offsetDays = 0): string {
+  const date = new Date();
+  date.setDate(date.getDate() + offsetDays);
+  const pad = (value: number) => String(value).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+}
+
+/**
+ * Default issue and due dates, read on the client so SSR output stays
+ * deterministic.
+ *
+ * Two readers returning strings rather than one returning an object: these feed
+ * `useClientValue`, which compares snapshots with `Object.is`, and rebuilding
+ * an object on every call would re-render forever.
+ */
+export const readIssueDate = (): string => todayInput();
+export const readDueDate = (): string => todayInput(30);
+
 export function blankItem(): LineItem {
   return {
     id: `item-${(nextItemId += 1)}`,

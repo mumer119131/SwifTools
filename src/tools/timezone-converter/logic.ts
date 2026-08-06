@@ -34,14 +34,22 @@ export const commonZones = [
   "Pacific/Auckland",
 ] as const;
 
-/** Today's date and the current hour, as `<input>`-ready strings. */
-export function nowFields(): { date: string; time: string } {
+const pad = (value: number) => String(value).padStart(2, "0");
+
+/**
+ * Today's date and the current hour, as `<input>`-ready strings.
+ *
+ * Two separate readers returning strings rather than one returning
+ * `{ date, time }`: these feed `useClientValue`, which compares snapshots with
+ * `Object.is`, and a fresh object each call would re-render forever.
+ */
+export function nowDate(): string {
   const now = new Date();
-  const pad = (value: number) => String(value).padStart(2, "0");
-  return {
-    date: `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`,
-    time: `${pad(now.getHours())}:00`,
-  };
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+}
+
+export function nowTime(): string {
+  return `${pad(new Date().getHours())}:00`;
 }
 
 export function detectZone(): string {

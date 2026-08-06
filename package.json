@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
+    "check:snapshots": "node --experimental-strip-types scripts/check-snapshot-stability.ts",
     "new:tool": "node --experimental-strip-types scripts/new-tool.ts"
   },
   "packageManager": "pnpm@11.10.0",
