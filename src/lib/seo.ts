@@ -27,16 +27,24 @@ function socialCard(title: string, description: string, path: string): Metadata 
   };
 }
 
+/**
+ * Page titles are returned as the bare segment, because the root layout's
+ * `title.template` already appends "| <site name>". Building the full string
+ * here as well would render it twice.
+ *
+ * Social cards do need the complete title — they are read out of context, with
+ * no template applied — so `pageTitle` is used for those only.
+ */
 export function buildToolMetadata(tool: Tool): Metadata {
   const category = getCategory(tool.category);
-  const title = pageTitle(`${tool.name} — Free Online ${category?.label ?? ""} Tool`.trim());
+  const segment = `${tool.name} — Free Online ${category?.label ?? ""} Tool`.replace(/\s+/g, " ").trim();
   const description = tool.description;
 
   return {
-    title,
+    title: segment,
     description,
     keywords: [...tool.keywords, tool.name.toLowerCase(), "free", "online", "no signup"],
-    ...socialCard(title, description, toolHref(tool)),
+    ...socialCard(pageTitle(segment), description, toolHref(tool)),
   };
 }
 
@@ -44,16 +52,16 @@ export function buildCategoryMetadata(slug: string): Metadata | undefined {
   const category = getCategory(slug);
   if (!category) return undefined;
 
-  const title = pageTitle(`${category.label} Tools`);
+  const segment = `${category.label} Tools`;
   return {
-    title,
+    title: segment,
     description: category.metaDescription,
     keywords: [
       `${category.label.toLowerCase()} tools`,
       `free online ${category.label.toLowerCase()} tools`,
       `${category.label.toLowerCase()} converter`,
     ],
-    ...socialCard(title, category.metaDescription, `/${category.slug}`),
+    ...socialCard(pageTitle(segment), category.metaDescription, `/${category.slug}`),
   };
 }
 

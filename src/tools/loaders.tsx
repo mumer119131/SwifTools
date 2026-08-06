@@ -12,13 +12,13 @@ import { Skeleton } from "@/components/ui/misc";
  * Maps a tool slug to a lazily-loaded implementation.
  *
  * The imports are static expressions so the bundler can split each tool into
- * its own chunk — a tool's code (and its heavy deps: pdf-lib, pdfjs, mammoth)
- * is only fetched when someone actually opens that tool's page. Nothing here
- * reaches the homepage bundle.
+ * its own chunk — a tool's code (and its heavy deps: pdf-lib, pdfjs, mammoth,
+ * qrcode, marked) is only fetched when someone actually opens that tool's page.
+ * Nothing here reaches the homepage bundle.
  *
- * `ssr: false` because every Phase 1 tool needs Canvas, File or Worker APIs
- * that only exist in the browser. The surrounding page is still statically
- * rendered, so the SEO content ships in the HTML either way.
+ * `ssr: false` because these tools need Canvas, File, Worker, Web Audio or
+ * `crypto` APIs that only exist in the browser. The surrounding page is still
+ * statically rendered, so the SEO content ships in the HTML either way.
  */
 function lazyTool(loader: () => Promise<{ default: React.ComponentType }>) {
   return dynamic(loader, { ssr: false, loading: ToolSkeleton });
@@ -60,6 +60,48 @@ const registry: Record<string, React.ComponentType> = {
   "case-converter": lazyTool(() => import("@/tools/case-converter/Tool")),
   "remove-duplicate-lines": lazyTool(() => import("@/tools/remove-duplicate-lines/Tool")),
   "text-diff": lazyTool(() => import("@/tools/text-diff/Tool")),
+
+  // Developer
+  "json-formatter": lazyTool(() => import("@/tools/json-formatter/Tool")),
+  "base64-encode-decode": lazyTool(() => import("@/tools/base64-encode-decode/Tool")),
+  "url-encode-decode": lazyTool(() => import("@/tools/url-encode-decode/Tool")),
+  "html-formatter": lazyTool(() => import("@/tools/html-formatter/Tool")),
+  "regex-tester": lazyTool(() => import("@/tools/regex-tester/Tool")),
+  "color-picker": lazyTool(() => import("@/tools/color-picker/Tool")),
+  "uuid-generator": lazyTool(() => import("@/tools/uuid-generator/Tool")),
+  "markdown-to-html": lazyTool(() => import("@/tools/markdown-to-html/Tool")),
+
+  // Converter
+  "unit-converter": lazyTool(() => import("@/tools/unit-converter/Tool")),
+  "currency-converter": lazyTool(() => import("@/tools/currency-converter/Tool")),
+  "timezone-converter": lazyTool(() => import("@/tools/timezone-converter/Tool")),
+  "number-base-converter": lazyTool(() => import("@/tools/number-base-converter/Tool")),
+
+  // Calculator
+  "loan-calculator": lazyTool(() => import("@/tools/loan-calculator/Tool")),
+  "compound-interest-calculator": lazyTool(
+    () => import("@/tools/compound-interest-calculator/Tool"),
+  ),
+  "tax-calculator": lazyTool(() => import("@/tools/tax-calculator/Tool")),
+  "bmi-calculator": lazyTool(() => import("@/tools/bmi-calculator/Tool")),
+  "calorie-calculator": lazyTool(() => import("@/tools/calorie-calculator/Tool")),
+  "age-calculator": lazyTool(() => import("@/tools/age-calculator/Tool")),
+  "percentage-calculator": lazyTool(() => import("@/tools/percentage-calculator/Tool")),
+  "invoice-generator": lazyTool(() => import("@/tools/invoice-generator/Tool")),
+
+  // SEO
+  "meta-tag-generator": lazyTool(() => import("@/tools/meta-tag-generator/Tool")),
+  "keyword-density-checker": lazyTool(() => import("@/tools/keyword-density-checker/Tool")),
+  "robots-txt-generator": lazyTool(() => import("@/tools/robots-txt-generator/Tool")),
+  "sitemap-generator": lazyTool(() => import("@/tools/sitemap-generator/Tool")),
+
+  // Generator
+  "password-generator": lazyTool(() => import("@/tools/password-generator/Tool")),
+  "qr-code-generator": lazyTool(() => import("@/tools/qr-code-generator/Tool")),
+  "fake-data-generator": lazyTool(() => import("@/tools/fake-data-generator/Tool")),
+  "lorem-ipsum-generator": lazyTool(() => import("@/tools/lorem-ipsum-generator/Tool")),
+  "pomodoro-timer": lazyTool(() => import("@/tools/pomodoro-timer/Tool")),
+  "screen-resolution-checker": lazyTool(() => import("@/tools/screen-resolution-checker/Tool")),
 };
 
 /**

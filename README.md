@@ -1,7 +1,7 @@
 # SwiftKnife
 
-A fast, free collection of PDF, image, text, developer and converter tools. Almost everything runs
-in the browser — files are never uploaded.
+A fast, free collection of 48 PDF, image, text, developer, converter, calculator, SEO and
+generator tools. 47 of them run entirely in the browser — files are never uploaded.
 
 Built with Next.js 16 (App Router, Turbopack), React 19, Tailwind CSS v4, and TypeScript in strict
 mode. Every tool page is statically generated.
@@ -80,12 +80,11 @@ the footer, the sitemap and the related-tools rail — and gets its own statical
 2. Write the real work in `logic.ts` — keep it free of React so it stays testable.
 3. Build the UI in `Tool.tsx` from the shared components below.
 
-### Planned tools
+### Tools not yet built
 
-Tools not built yet live in the `plannedTools` array in `src/config/tools.ts` with
-`status: "soon"`. They get a real, crawlable page showing a coming-soon state, and are excluded from
-search indexing until they go live. Running `pnpm new:tool` with a planned tool's slug promotes it —
-delete its `plannedTools` entry afterwards.
+Every registered tool is currently live. A tool can be registered before it is implemented by
+setting `status: "soon"` in its `meta.ts` — it gets a real, crawlable page showing a coming-soon
+state, and is excluded from search indexing until the status flips to `"live"`.
 
 ---
 
@@ -97,7 +96,8 @@ src/
     layout.tsx                  root shell: fonts, theme, ⌘K provider, header/footer
     page.tsx                    landing page
     [category]/page.tsx         category listing        (SSG, 8 pages)
-    [category]/[tool]/page.tsx  tool page               (SSG, one per registry entry)
+    [category]/[tool]/page.tsx  tool page               (SSG, 48 pages)
+    api/rates/route.ts          cached ECB exchange-rate proxy
     (legal)/privacy, terms
     sitemap.ts robots.ts manifest.ts opengraph-image.tsx icon.tsx apple-icon.tsx
   components/
@@ -129,18 +129,32 @@ second list to keep in sync.
 ### Code splitting
 
 `src/tools/loaders.tsx` maps each slug to a `next/dynamic` import. A tool's code — and its heavy
-dependencies (`pdf-lib`, `pdfjs-dist`, `mammoth`, `docx`, `jszip`) — is only fetched when someone
-opens that tool's page. None of it reaches the homepage bundle.
+dependencies (`pdf-lib`, `pdfjs-dist`, `mammoth`, `docx`, `jszip`, `qrcode`, `marked`) — is only
+fetched when someone opens that tool's page. None of it reaches the homepage bundle.
 
 ### Client vs. server
 
-Every Phase 1 tool runs **entirely in the browser** via Canvas, the File API and WASM. That is the
-product's main selling point, not just an optimisation: no upload wait, no server cost, and files
-that genuinely never leave the device. Each tool declares this in its `processing` field, and the
-page states it plainly.
+**47 of the 48 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
+That is the product's main selling point, not just an optimisation: no upload wait, no server cost,
+and files that genuinely never leave the device.
+
+The one exception is the **currency converter**, which needs live exchange rates. Its
+`/api/rates` route proxies the European Central Bank's daily reference rates (via Frankfurter) with
+an hour of caching, so one upstream request is shared by every visitor and the browser never
+contacts a third party directly. It reads no request body and stores nothing.
+
+Each tool declares which it is in its `processing` field, and its page states it plainly.
 
 Heavy work goes into a Web Worker so the UI never freezes — `src/tools/remove-background/worker.ts`
 is the reference example.
+
+### Client-only values
+
+Several tools need something the server cannot know — today's date, the user's timezone, a random
+password. `src/lib/use-client-value.ts` provides `useClientValue` and `useHydrated`, both built on
+`useSyncExternalStore`. Seeding that state with `useEffect(() => setState(read()), [])` costs an
+extra render pass and trips React's `set-state-in-effect` rule; `useSyncExternalStore` returns the
+server snapshot during SSR and the client one after hydration, in a single pass.
 
 ---
 
@@ -158,6 +172,7 @@ Build tools by composing these, not by writing bespoke UI:
 | `ToolCard` | Used by homepage, category pages, search and related rails |
 | `CategoryBadge`, `Breadcrumbs`, `EmptyState` | Supporting pieces |
 | `ToolErrorBoundary` | Isolates a tool crash from the rest of the page |
+| `CodeOutput` | Read-only monospace output block with copy and download |
 
 ---
 
@@ -190,7 +205,9 @@ explainer, and a band below the result. They render nothing and make no network 
 
 ## SEO
 
-- Every tool and category page is statically generated with its own title, description and keywords.
+- All 48 tool pages and 8 category pages are statically generated with their own title, description
+  and keywords. Titles come from the layout's `title.template`, so `buildToolMetadata` returns the
+  bare segment — building the full string in both places would render the brand twice.
 - `SoftwareApplication`, `HowTo` and `BreadcrumbList` JSON-LD on tool pages; `ItemList` on listings;
   `WebSite` site-wide.
 - `sitemap.xml` and `robots.txt` are generated from the registry by Next's native metadata routes.

@@ -1,0 +1,20 @@
+import { QrCode } from "lucide-react";
+
+import type { Tool } from "@/config/tools";
+
+export const qrCodeGenerator: Tool = {
+  slug: "qr-code-generator",
+  name: "QR Code Generator",
+  category: "generator",
+  description: "Create QR codes for links, text, Wi-Fi and contacts, then download as PNG or SVG.",
+  keywords: ["qr code generator", "free qr code", "wifi qr code", "qr code png"],
+  icon: QrCode,
+  processing: "client",
+  status: "live",
+  popular: true,
+  steps: [
+    "Pick what the code should contain — a URL, plain text, Wi-Fi credentials or a contact card.",
+    "Adjust size, colours and error-correction level. The preview redraws as you type.",
+    "Download a PNG for print or an SVG that stays sharp at any size.",
+  ],
+};
