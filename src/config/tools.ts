@@ -106,6 +106,23 @@ import { unitPairTools } from "@/tools/unit-pairs/meta";
 import { volumeConverter } from "@/tools/volume-converter/meta";
 import { weightConverter } from "@/tools/weight-converter/meta";
 
+// Science & engineering
+import { capacitorCalculator } from "@/tools/capacitor-calculator/meta";
+import { densityCalculator } from "@/tools/density-calculator/meta";
+import { forceCalculator } from "@/tools/force-calculator/meta";
+import { frequencyCalculator } from "@/tools/frequency-calculator/meta";
+import { halfLifeCalculator } from "@/tools/half-life-calculator/meta";
+import { kineticEnergyCalculator } from "@/tools/kinetic-energy-calculator/meta";
+import { ledResistorCalculator } from "@/tools/led-resistor-calculator/meta";
+import { molecularWeightCalculator } from "@/tools/molecular-weight-calculator/meta";
+import { ohmsLawCalculator } from "@/tools/ohms-law-calculator/meta";
+import { phCalculator } from "@/tools/ph-calculator/meta";
+import { pressureCalculator } from "@/tools/pressure-calculator/meta";
+import { resistorColorCodeCalculator } from "@/tools/resistor-color-code-calculator/meta";
+import { significantFiguresCalculator } from "@/tools/significant-figures-calculator/meta";
+import { stoichiometryCalculator } from "@/tools/stoichiometry-calculator/meta";
+import { voltageDividerCalculator } from "@/tools/voltage-divider-calculator/meta";
+
 // Converter
 import { currencyConverter } from "@/tools/currency-converter/meta";
 import { numberBaseConverter } from "@/tools/number-base-converter/meta";
@@ -264,6 +281,23 @@ export const tools: readonly Tool[] = [
   pomodoroTimer,
   screenResolutionChecker,
 
+  // Science & engineering
+  ohmsLawCalculator,
+  voltageDividerCalculator,
+  ledResistorCalculator,
+  resistorColorCodeCalculator,
+  capacitorCalculator,
+  frequencyCalculator,
+  forceCalculator,
+  kineticEnergyCalculator,
+  densityCalculator,
+  pressureCalculator,
+  molecularWeightCalculator,
+  stoichiometryCalculator,
+  phCalculator,
+  halfLifeCalculator,
+  significantFiguresCalculator,
+
   // Direct conversion pages — generated, and search-only so they stay out of
   // the browse surfaces while remaining indexed and findable.
   ...unitPairTools,
@@ -282,6 +316,19 @@ export const publishedTools = tools.filter((tool) => tool.status === "live");
  * tool is hidden from browsing, not from the web.
  */
 export const browsableTools = tools.filter((tool) => !tool.searchOnly);
+
+/**
+ * Categories that actually hold something.
+ *
+ * A category is declared in `categories.ts` before its tools are written, so
+ * without this filter an empty shelf ships to production — a nav entry, a
+ * sitemap URL and a category page with nothing on it. Every browse surface
+ * reads this instead of the raw `categories` list, so a category appears the
+ * moment its first tool is registered and not before.
+ */
+export const populatedCategories = categories.filter((category) =>
+  browsableTools.some((tool) => tool.category === category.slug),
+);
 
 const toolByPath = new Map(tools.map((tool) => [`${tool.category}/${tool.slug}`, tool]));
 

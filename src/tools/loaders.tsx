@@ -120,6 +120,31 @@ const registry: Record<string, React.ComponentType> = {
   "percentage-calculator": lazyTool(() => import("@/tools/percentage-calculator/Tool")),
   "invoice-generator": lazyTool(() => import("@/tools/invoice-generator/Tool")),
 
+  // Science & engineering
+  "ohms-law-calculator": lazyTool(() => import("@/tools/ohms-law-calculator/Tool")),
+  "voltage-divider-calculator": lazyTool(
+    () => import("@/tools/voltage-divider-calculator/Tool"),
+  ),
+  "led-resistor-calculator": lazyTool(() => import("@/tools/led-resistor-calculator/Tool")),
+  "resistor-color-code-calculator": lazyTool(
+    () => import("@/tools/resistor-color-code-calculator/Tool"),
+  ),
+  "capacitor-calculator": lazyTool(() => import("@/tools/capacitor-calculator/Tool")),
+  "frequency-calculator": lazyTool(() => import("@/tools/frequency-calculator/Tool")),
+  "force-calculator": lazyTool(() => import("@/tools/force-calculator/Tool")),
+  "kinetic-energy-calculator": lazyTool(() => import("@/tools/kinetic-energy-calculator/Tool")),
+  "density-calculator": lazyTool(() => import("@/tools/density-calculator/Tool")),
+  "pressure-calculator": lazyTool(() => import("@/tools/pressure-calculator/Tool")),
+  "molecular-weight-calculator": lazyTool(
+    () => import("@/tools/molecular-weight-calculator/Tool"),
+  ),
+  "stoichiometry-calculator": lazyTool(() => import("@/tools/stoichiometry-calculator/Tool")),
+  "ph-calculator": lazyTool(() => import("@/tools/ph-calculator/Tool")),
+  "half-life-calculator": lazyTool(() => import("@/tools/half-life-calculator/Tool")),
+  "significant-figures-calculator": lazyTool(
+    () => import("@/tools/significant-figures-calculator/Tool"),
+  ),
+
   // Social
   "tweet-generator": lazyTool(() => import("@/tools/tweet-generator/Tool")),
   "tweet-to-image": lazyTool(() => import("@/tools/tweet-to-image/Tool")),

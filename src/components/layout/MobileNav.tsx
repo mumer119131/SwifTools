@@ -4,8 +4,12 @@ import * as React from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 
-import { categories } from "@/config/categories";
-import { getToolsByCategory, toolCountByCategory, toolHref } from "@/config/tools";
+import {
+  getToolsByCategory,
+  populatedCategories,
+  toolCountByCategory,
+  toolHref,
+} from "@/config/tools";
 import { cn } from "@/lib/utils";
 
 /**
@@ -17,7 +21,7 @@ import { cn } from "@/lib/utils";
  * short enough to scan without a lot of scrolling.
  */
 export function MobileNav({ pathname }: { pathname: string }) {
-  const openByDefault = categories.find((category) =>
+  const openByDefault = populatedCategories.find((category) =>
     pathname.startsWith(`/${category.slug}`),
   )?.slug;
 
@@ -26,7 +30,7 @@ export function MobileNav({ pathname }: { pathname: string }) {
   return (
     <nav aria-label="All tools">
       <ul className="space-y-0.5">
-        {categories.map((category) => {
+        {populatedCategories.map((category) => {
           const Icon = category.icon;
           const isOpen = expanded === category.slug;
           const isActive = pathname.startsWith(`/${category.slug}`);

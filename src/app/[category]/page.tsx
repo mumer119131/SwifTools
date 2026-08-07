@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { categories, getCategory } from "@/config/categories";
-import { getToolsByCategory } from "@/config/tools";
+import { getCategory } from "@/config/categories";
+import { getToolsByCategory, populatedCategories } from "@/config/tools";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { JsonLdScript } from "@/components/shared/JsonLd";
@@ -14,7 +14,7 @@ interface PageProps {
 }
 
 export function generateStaticParams() {
-  return categories.map((category) => ({ category: category.slug }));
+  return populatedCategories.map((category) => ({ category: category.slug }));
 }
 
 export const dynamicParams = false;

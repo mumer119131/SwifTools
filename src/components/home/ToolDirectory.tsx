@@ -3,8 +3,8 @@
 import * as React from "react";
 import { SearchX } from "lucide-react";
 
-import { categories, type ToolCategory } from "@/config/categories";
-import { browsableTools, tools } from "@/config/tools";
+import type { ToolCategory } from "@/config/categories";
+import { browsableTools, populatedCategories, tools } from "@/config/tools";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Input } from "@/components/ui/input";
@@ -67,7 +67,7 @@ export function ToolDirectory() {
               {browsableTools.length}
             </span>
           </FilterChip>
-          {categories.map((category) => {
+          {populatedCategories.map((category) => {
             const count = browsableTools.filter((tool) => tool.category === category.slug).length;
             const Icon = category.icon;
             return (

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 
 import { categories } from "@/config/categories";
-import { browsableTools, popularTools, toolHref, tools } from "@/config/tools";
+import { browsableTools, populatedCategories, popularTools, toolHref, tools } from "@/config/tools";
 import {
   CommandDialog,
   CommandEmpty,
@@ -130,7 +130,7 @@ export function SearchCommandProvider({ children }: { children: React.ReactNode 
                 ))}
               </CommandGroup>
 
-              {categories.map((category) => {
+              {populatedCategories.map((category) => {
                 const categoryTools = browsableTools.filter((tool) => tool.category === category.slug);
                 if (categoryTools.length === 0) return null;
 

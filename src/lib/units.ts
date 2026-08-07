@@ -147,6 +147,25 @@ export const categories: readonly UnitCategory[] = [
     ],
   },
   {
+    id: "pressure",
+    label: "Pressure",
+    slug: "pressure",
+    baseSymbol: "Pa",
+    description: "Pascals, bar, psi, atmospheres and millimetres of mercury.",
+    units: [
+      unit("pa", "Pascal", "Pa", 1, "pa", "Pascals", ["pa", "pascal", "pascals"]),
+      unit("kpa", "Kilopascal", "kPa", 1000, "kpa", "Kilopascals", ["kpa", "kilopascal"]),
+      unit("mpa", "Megapascal", "MPa", 1e6, "mpa", "Megapascals", ["mpa", "megapascal"]),
+      unit("bar", "Bar", "bar", 100000, "bar", "Bar", ["bar", "bars"]),
+      unit("mbar", "Millibar", "mbar", 100, "mbar", "Millibar", ["mbar", "millibar"]),
+      unit("psi", "Pound per square inch", "psi", 6894.757293168, "psi", "PSI", ["psi", "pounds per square inch"]),
+      unit("atm", "Atmosphere", "atm", 101325, "atm", "Atmospheres", ["atm", "atmosphere", "atmospheres"]),
+      unit("torr", "Torr", "Torr", 133.32236842105263, "torr", "Torr", ["torr"]),
+      unit("mmhg", "Millimetre of mercury", "mmHg", 133.322387415, "mmhg", "mmHg", ["mmhg", "millimetres of mercury"]),
+      unit("inhg", "Inch of mercury", "inHg", 3386.389, "inhg", "inHg", ["inhg", "inches of mercury"]),
+    ],
+  },
+  {
     id: "time",
     label: "Time",
     slug: "time",
@@ -281,6 +300,12 @@ const POPULAR: [string, string, string][] = [
   ["area", "m2", "ft2"],
   ["area", "acre", "ha"],
   ["area", "km2", "mi2"],
+
+  ["pressure", "psi", "bar"],
+  ["pressure", "bar", "kpa"],
+  ["pressure", "psi", "kpa"],
+  ["pressure", "atm", "psi"],
+  ["pressure", "mmhg", "kpa"],
 
   ["time", "min", "s"],
   ["time", "h", "min"],

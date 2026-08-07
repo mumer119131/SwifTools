@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import { categories } from "@/config/categories";
 import { Button } from "@/components/ui/button";
+import { populatedCategories } from "@/config/tools";
 
 export default function NotFound() {
   return (
@@ -31,7 +31,7 @@ export default function NotFound() {
         </Button>
 
         <nav aria-label="Categories" className="mt-10 flex flex-wrap justify-center gap-2">
-          {categories.map((category) => (
+          {populatedCategories.map((category) => (
             <Link
               key={category.slug}
               href={`/${category.slug}`}

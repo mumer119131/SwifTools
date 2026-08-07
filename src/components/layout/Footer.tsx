@@ -1,7 +1,6 @@
 import Link from "next/link";
-import { categories } from "@/config/categories";
 import { siteConfig } from "@/config/site";
-import { browsableTools, toolHref } from "@/config/tools";
+import { browsableTools, populatedCategories, toolHref } from "@/config/tools";
 import { Logo } from "@/components/layout/Logo";
 import { GitHubIcon, XIcon } from "@/components/layout/BrandIcons";
 
@@ -52,7 +51,7 @@ export function Footer() {
               Search-only pages reach the crawler through the sitemap and their
               own parent converter instead of bloating this list. */}
           <nav aria-label="All tools" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {categories.map((category) => {
+            {populatedCategories.map((category) => {
               const categoryTools = browsableTools.filter((tool) => tool.category === category.slug);
               return (
                 <div key={category.slug} className="space-y-3">

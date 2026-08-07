@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, Gauge, Infinity as InfinityIcon, Lock, ShieldCheck, Sparkles } from "lucide-react";
 
-import { categories } from "@/config/categories";
 import { siteConfig } from "@/config/site";
-import { browsableTools, popularTools, publishedTools, toolCountByCategory, tools } from "@/config/tools";
+import {
+  browsableTools,
+  populatedCategories,
+  popularTools,
+  publishedTools,
+  toolCountByCategory,
+} from "@/config/tools";
 import { SearchTrigger } from "@/components/layout/SearchCommand";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { ToolDirectory } from "@/components/home/ToolDirectory";
@@ -106,7 +111,7 @@ export default function HomePage() {
         </header>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((category, index) => {
+          {populatedCategories.map((category, index) => {
             const Icon = category.icon;
             return (
               <Link

@@ -4,8 +4,14 @@ import * as React from "react";
 import Link from "next/link";
 import { ArrowRight, ChevronRight } from "lucide-react";
 
-import { categories, type ToolCategory } from "@/config/categories";
-import { browsableTools, getToolsByCategory, toolCountByCategory, toolHref } from "@/config/tools";
+import type { ToolCategory } from "@/config/categories";
+import {
+  browsableTools,
+  getToolsByCategory,
+  populatedCategories,
+  toolCountByCategory,
+  toolHref,
+} from "@/config/tools";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -28,10 +34,10 @@ import { cn } from "@/lib/utils";
  * same reveal that pointer users do.
  */
 export function ToolsMenu({ pathname }: { pathname: string }) {
-  const [activeCategory, setActiveCategory] = React.useState<ToolCategory>(categories[0].slug);
+  const [activeCategory, setActiveCategory] = React.useState<ToolCategory>(populatedCategories[0].slug);
 
   // Opening the menu on a category page should start on that category.
-  const categoryInPath = categories.find((category) =>
+  const categoryInPath = populatedCategories.find((category) =>
     pathname.startsWith(`/${category.slug}`),
   )?.slug;
 
@@ -41,7 +47,8 @@ export function ToolsMenu({ pathname }: { pathname: string }) {
     if (categoryInPath) setActiveCategory(categoryInPath);
   }
 
-  const active = categories.find((category) => category.slug === activeCategory) ?? categories[0];
+  const active =
+    populatedCategories.find((category) => category.slug === activeCategory) ?? populatedCategories[0];
   const activeTools = getToolsByCategory(active.slug);
 
   return (
@@ -62,7 +69,7 @@ export function ToolsMenu({ pathname }: { pathname: string }) {
                   Categories
                 </p>
                 <ul>
-                  {categories.map((category) => {
+                  {populatedCategories.map((category) => {
                     const Icon = category.icon;
                     const isActive = category.slug === active.slug;
                     return (

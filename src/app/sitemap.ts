@@ -1,8 +1,7 @@
 import type { MetadataRoute } from "next";
 
-import { categories } from "@/config/categories";
 import { absoluteUrl } from "@/config/site";
-import { toolHref, tools } from "@/config/tools";
+import { populatedCategories, toolHref, tools } from "@/config/tools";
 
 /**
  * Generated straight from the registry, so a new tool is in the sitemap the
@@ -18,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
-    ...categories.map((category) => ({
+    ...populatedCategories.map((category) => ({
       url: absoluteUrl(`/${category.slug}`),
       lastModified,
       changeFrequency: "weekly" as const,

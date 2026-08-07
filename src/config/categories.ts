@@ -1,5 +1,8 @@
 import {
   ArrowLeftRight,
+  Atom,
+  Gamepad2,
+  House,
   Ruler,
   AtSign,
   Calculator,
@@ -24,7 +27,10 @@ export type ToolCategory =
   | "generator"
   | "color"
   | "social"
-  | "units";
+  | "units"
+  | "science"
+  | "home"
+  | "fun";
 
 export interface CategoryMeta {
   slug: ToolCategory;
@@ -113,6 +119,33 @@ export const categories: readonly CategoryMeta[] = [
       "Free online generators for secure passwords, QR codes, fake test data, lorem ipsum placeholder text and more.",
     icon: Sparkles,
     accentVar: "--accent-generator",
+  },
+  {
+    slug: "science",
+    label: "Science",
+    description: "Physics, electronics and chemistry calculators.",
+    metaDescription:
+      "Free science and engineering calculators — Ohm's law, resistor colour codes, molecular weight, pH, kinetic energy, half-life and significant figures. All run in your browser.",
+    icon: Atom,
+    accentVar: "--accent-science",
+  },
+  {
+    slug: "home",
+    label: "Home",
+    description: "Renovation, cooking and household cost calculators.",
+    metaDescription:
+      "Free home and lifestyle calculators — paint, tile, flooring and concrete quantities, electricity and water costs, recipe scaling and cooking conversions.",
+    icon: House,
+    accentVar: "--accent-home",
+  },
+  {
+    slug: "fun",
+    label: "Fun",
+    description: "Randomisers, games, notes and everyday utilities.",
+    metaDescription:
+      "Free random generators, games and productivity utilities — coin flip, dice roller, wheel spinner, typing test, notepad, to-do list, habit tracker and more.",
+    icon: Gamepad2,
+    accentVar: "--accent-fun",
   },
   {
     slug: "units",

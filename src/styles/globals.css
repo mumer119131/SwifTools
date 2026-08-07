@@ -44,6 +44,9 @@
   --accent-color: oklch(0.5087 0.1121 194.8);
   --accent-social: oklch(0.5432 0.1806 12.6);
   --accent-units: oklch(0.5183 0.1372 258.4);
+  --accent-science: oklch(0.5044 0.1213 183.2);
+  --accent-home: oklch(0.5361 0.1146 131.7);
+  --accent-fun: oklch(0.5628 0.1918 0.4);
 
   /* Ambient hero wash */
   --wash-opacity: 0.05;
@@ -99,6 +102,9 @@
   --accent-color: oklch(0.7854 0.1153 194.2);
   --accent-social: oklch(0.7128 0.1533 13.4);
   --accent-units: oklch(0.7364 0.1088 254.9);
+  --accent-science: oklch(0.7809 0.1077 184.6);
+  --accent-home: oklch(0.7952 0.1418 132.4);
+  --accent-fun: oklch(0.7433 0.1521 358.2);
 
   --wash-opacity: 0.1;
   --grid-line: oklch(1 0 0 / 0.035);
@@ -142,6 +148,9 @@
   --color-accent-color: var(--accent-color);
   --color-accent-social: var(--accent-social);
   --color-accent-units: var(--accent-units);
+  --color-accent-science: var(--accent-science);
+  --color-accent-home: var(--accent-home);
+  --color-accent-fun: var(--accent-fun);
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
@@ -315,6 +324,15 @@
   }
   .accent-units {
     --accent: var(--accent-units);
+  }
+  .accent-science {
+    --accent: var(--accent-science);
+  }
+  .accent-home {
+    --accent: var(--accent-home);
+  }
+  .accent-fun {
+    --accent: var(--accent-fun);
   }
 
   .text-accent {

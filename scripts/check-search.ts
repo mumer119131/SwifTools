@@ -76,6 +76,30 @@ const expectations: [string, string][] = [
   ["m to ft", "m-to-feet"],
   ["kmh to mph", "kmh-to-mph"],
 
+  // Science and engineering.
+  ["ohms law", "ohms-law-calculator"],
+  ["limiting reagent", "stoichiometry-calculator"],
+  ["theoretical yield", "stoichiometry-calculator"],
+  ["molar mass", "molecular-weight-calculator"],
+  ["carbon dating", "half-life-calculator"],
+  ["sig figs", "significant-figures-calculator"],
+  ["led resistor", "led-resistor-calculator"],
+  ["voltage divider", "voltage-divider-calculator"],
+  ["resistor color", "resistor-color-code-calculator"],
+
+  // Whole questions, typed the way people actually type them. Each of these
+  // contains at least one word no tool in the registry uses, so they only work
+  // because an unmatched token is penalised rather than disqualifying.
+  ["ph of a solution", "ph-calculator"],
+  ["what is the molar mass of caffeine", "molecular-weight-calculator"],
+  ["how many sig figs in 0.004520", "significant-figures-calculator"],
+  ["4.7k resistor color", "resistor-color-code-calculator"],
+  ["how to compress an image", "compress-image"],
+  ["what is my bmi", "bmi-calculator"],
+  // "what" is a near-perfect prefix of WhatsApp — the question word must not
+  // be allowed to decide the result.
+  ["what is 15 percent of 200", "percentage-calculator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
