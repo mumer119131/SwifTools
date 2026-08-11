@@ -100,6 +100,20 @@ const expectations: [string, string][] = [
   // be allowed to decide the result.
   ["what is 15 percent of 200", "percentage-calculator"],
 
+  // Home and lifestyle.
+  ["square footage", "square-footage-calculator"],
+  ["how much paint do i need", "paint-calculator"],
+  ["how many tiles", "tile-calculator"],
+  ["cubic yards of concrete", "concrete-calculator"],
+  ["cups to grams", "cooking-measurement-converter"],
+  ["scale a recipe", "recipe-scaler"],
+  ["moving checklist", "moving-checklist"],
+  ["grocery list", "grocery-list"],
+  ["price per unit", "unit-price-calculator"],
+  ["cost to run a space heater", "electricity-cost-calculator"],
+  ["solar payback", "solar-savings-calculator"],
+  ["fence posts", "fence-calculator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

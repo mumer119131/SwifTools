@@ -120,6 +120,30 @@ const registry: Record<string, React.ComponentType> = {
   "percentage-calculator": lazyTool(() => import("@/tools/percentage-calculator/Tool")),
   "invoice-generator": lazyTool(() => import("@/tools/invoice-generator/Tool")),
 
+  // Home & lifestyle
+  "square-footage-calculator": lazyTool(() => import("@/tools/square-footage-calculator/Tool")),
+  "room-size-calculator": lazyTool(() => import("@/tools/room-size-calculator/Tool")),
+  "paint-calculator": lazyTool(() => import("@/tools/paint-calculator/Tool")),
+  "flooring-calculator": lazyTool(() => import("@/tools/flooring-calculator/Tool")),
+  "tile-calculator": lazyTool(() => import("@/tools/tile-calculator/Tool")),
+  "wallpaper-calculator": lazyTool(() => import("@/tools/wallpaper-calculator/Tool")),
+  "concrete-calculator": lazyTool(() => import("@/tools/concrete-calculator/Tool")),
+  "fence-calculator": lazyTool(() => import("@/tools/fence-calculator/Tool")),
+  "electricity-cost-calculator": lazyTool(
+    () => import("@/tools/electricity-cost-calculator/Tool"),
+  ),
+  "water-bill-calculator": lazyTool(() => import("@/tools/water-bill-calculator/Tool")),
+  "solar-savings-calculator": lazyTool(() => import("@/tools/solar-savings-calculator/Tool")),
+  "unit-price-calculator": lazyTool(() => import("@/tools/unit-price-calculator/Tool")),
+  "cooking-measurement-converter": lazyTool(
+    () => import("@/tools/cooking-measurement-converter/Tool"),
+  ),
+  "recipe-scaler": lazyTool(() => import("@/tools/recipe-scaler/Tool")),
+  "moving-checklist": lazyTool(() => import("@/tools/moving-checklist/Tool")),
+  "grocery-list": lazyTool(() => import("@/tools/grocery-list/Tool")),
+  "meal-planner": lazyTool(() => import("@/tools/meal-planner/Tool")),
+  "calorie-tracker": lazyTool(() => import("@/tools/calorie-tracker/Tool")),
+
   // Science & engineering
   "ohms-law-calculator": lazyTool(() => import("@/tools/ohms-law-calculator/Tool")),
   "voltage-divider-calculator": lazyTool(

@@ -106,6 +106,26 @@ import { unitPairTools } from "@/tools/unit-pairs/meta";
 import { volumeConverter } from "@/tools/volume-converter/meta";
 import { weightConverter } from "@/tools/weight-converter/meta";
 
+// Home & lifestyle
+import { calorieTracker } from "@/tools/calorie-tracker/meta";
+import { concreteCalculator } from "@/tools/concrete-calculator/meta";
+import { cookingMeasurementConverter } from "@/tools/cooking-measurement-converter/meta";
+import { electricityCostCalculator } from "@/tools/electricity-cost-calculator/meta";
+import { fenceCalculator } from "@/tools/fence-calculator/meta";
+import { flooringCalculator } from "@/tools/flooring-calculator/meta";
+import { groceryList } from "@/tools/grocery-list/meta";
+import { mealPlanner } from "@/tools/meal-planner/meta";
+import { movingChecklist } from "@/tools/moving-checklist/meta";
+import { paintCalculator } from "@/tools/paint-calculator/meta";
+import { recipeScaler } from "@/tools/recipe-scaler/meta";
+import { roomSizeCalculator } from "@/tools/room-size-calculator/meta";
+import { solarSavingsCalculator } from "@/tools/solar-savings-calculator/meta";
+import { squareFootageCalculator } from "@/tools/square-footage-calculator/meta";
+import { tileCalculator } from "@/tools/tile-calculator/meta";
+import { unitPriceCalculator } from "@/tools/unit-price-calculator/meta";
+import { wallpaperCalculator } from "@/tools/wallpaper-calculator/meta";
+import { waterBillCalculator } from "@/tools/water-bill-calculator/meta";
+
 // Science & engineering
 import { capacitorCalculator } from "@/tools/capacitor-calculator/meta";
 import { densityCalculator } from "@/tools/density-calculator/meta";
@@ -297,6 +317,26 @@ export const tools: readonly Tool[] = [
   phCalculator,
   halfLifeCalculator,
   significantFiguresCalculator,
+
+  // Home & lifestyle
+  squareFootageCalculator,
+  roomSizeCalculator,
+  paintCalculator,
+  flooringCalculator,
+  tileCalculator,
+  wallpaperCalculator,
+  concreteCalculator,
+  fenceCalculator,
+  electricityCostCalculator,
+  waterBillCalculator,
+  solarSavingsCalculator,
+  unitPriceCalculator,
+  cookingMeasurementConverter,
+  recipeScaler,
+  movingChecklist,
+  groceryList,
+  mealPlanner,
+  calorieTracker,
 
   // Direct conversion pages — generated, and search-only so they stay out of
   // the browse surfaces while remaining indexed and findable.
