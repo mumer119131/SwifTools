@@ -114,6 +114,24 @@ const expectations: [string, string][] = [
   ["solar payback", "solar-savings-calculator"],
   ["fence posts", "fence-calculator"],
 
+  // Fun and utility.
+  ["flip a coin", "coin-flipper"],
+  ["roll dice", "dice-roller"],
+  ["d20", "dice-roller"],
+  ["spin the wheel", "wheel-spinner"],
+  ["random number between 1 and 100", "random-number-generator"],
+  ["shuffle a list", "list-randomizer"],
+  ["sudoku", "sudoku-generator"],
+  ["bingo", "bingo-card"],
+  ["word search", "word-search"],
+  ["crossword", "crossword-maker"],
+  ["meme", "meme-generator"],
+  ["whiteboard", "online-whiteboard"],
+  ["deuteranopia", "color-blindness-simulator"],
+  ["bracket", "tournament-bracket"],
+  ["help me decide", "decision-maker"],
+  ["pick a name", "random-name-picker"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

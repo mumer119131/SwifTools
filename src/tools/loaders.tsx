@@ -120,6 +120,28 @@ const registry: Record<string, React.ComponentType> = {
   "percentage-calculator": lazyTool(() => import("@/tools/percentage-calculator/Tool")),
   "invoice-generator": lazyTool(() => import("@/tools/invoice-generator/Tool")),
 
+  // Fun & utility
+  "wheel-spinner": lazyTool(() => import("@/tools/wheel-spinner/Tool")),
+  "random-name-picker": lazyTool(() => import("@/tools/random-name-picker/Tool")),
+  "random-number-generator": lazyTool(() => import("@/tools/random-number-generator/Tool")),
+  "random-name-generator": lazyTool(() => import("@/tools/random-name-generator/Tool")),
+  "random-color-generator": lazyTool(() => import("@/tools/random-color-generator/Tool")),
+  "coin-flipper": lazyTool(() => import("@/tools/coin-flipper/Tool")),
+  "dice-roller": lazyTool(() => import("@/tools/dice-roller/Tool")),
+  "list-randomizer": lazyTool(() => import("@/tools/list-randomizer/Tool")),
+  "decision-maker": lazyTool(() => import("@/tools/decision-maker/Tool")),
+  "meme-generator": lazyTool(() => import("@/tools/meme-generator/Tool")),
+  "online-whiteboard": lazyTool(() => import("@/tools/online-whiteboard/Tool")),
+  "color-blindness-simulator": lazyTool(
+    () => import("@/tools/color-blindness-simulator/Tool"),
+  ),
+  "memory-game": lazyTool(() => import("@/tools/memory-game/Tool")),
+  "sudoku-generator": lazyTool(() => import("@/tools/sudoku-generator/Tool")),
+  "bingo-card": lazyTool(() => import("@/tools/bingo-card/Tool")),
+  "word-search": lazyTool(() => import("@/tools/word-search/Tool")),
+  "crossword-maker": lazyTool(() => import("@/tools/crossword-maker/Tool")),
+  "tournament-bracket": lazyTool(() => import("@/tools/tournament-bracket/Tool")),
+
   // Home & lifestyle
   "square-footage-calculator": lazyTool(() => import("@/tools/square-footage-calculator/Tool")),
   "room-size-calculator": lazyTool(() => import("@/tools/room-size-calculator/Tool")),

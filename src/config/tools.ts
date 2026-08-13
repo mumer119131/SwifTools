@@ -106,6 +106,26 @@ import { unitPairTools } from "@/tools/unit-pairs/meta";
 import { volumeConverter } from "@/tools/volume-converter/meta";
 import { weightConverter } from "@/tools/weight-converter/meta";
 
+// Fun & utility
+import { bingoCard } from "@/tools/bingo-card/meta";
+import { coinFlipper } from "@/tools/coin-flipper/meta";
+import { colorBlindnessSimulator } from "@/tools/color-blindness-simulator/meta";
+import { crosswordMaker } from "@/tools/crossword-maker/meta";
+import { decisionMaker } from "@/tools/decision-maker/meta";
+import { diceRoller } from "@/tools/dice-roller/meta";
+import { listRandomizer } from "@/tools/list-randomizer/meta";
+import { memeGenerator } from "@/tools/meme-generator/meta";
+import { memoryGame } from "@/tools/memory-game/meta";
+import { onlineWhiteboard } from "@/tools/online-whiteboard/meta";
+import { randomColorGenerator } from "@/tools/random-color-generator/meta";
+import { randomNameGenerator } from "@/tools/random-name-generator/meta";
+import { randomNamePicker } from "@/tools/random-name-picker/meta";
+import { randomNumberGenerator } from "@/tools/random-number-generator/meta";
+import { sudokuGenerator } from "@/tools/sudoku-generator/meta";
+import { tournamentBracket } from "@/tools/tournament-bracket/meta";
+import { wheelSpinner } from "@/tools/wheel-spinner/meta";
+import { wordSearch } from "@/tools/word-search/meta";
+
 // Home & lifestyle
 import { calorieTracker } from "@/tools/calorie-tracker/meta";
 import { concreteCalculator } from "@/tools/concrete-calculator/meta";
@@ -337,6 +357,26 @@ export const tools: readonly Tool[] = [
   groceryList,
   mealPlanner,
   calorieTracker,
+
+  // Fun & utility
+  wheelSpinner,
+  randomNamePicker,
+  randomNumberGenerator,
+  randomNameGenerator,
+  randomColorGenerator,
+  coinFlipper,
+  diceRoller,
+  listRandomizer,
+  decisionMaker,
+  memeGenerator,
+  onlineWhiteboard,
+  colorBlindnessSimulator,
+  memoryGame,
+  sudokuGenerator,
+  bingoCard,
+  wordSearch,
+  crosswordMaker,
+  tournamentBracket,
 
   // Direct conversion pages — generated, and search-only so they stay out of
   // the browse surfaces while remaining indexed and findable.
