@@ -1,0 +1,194 @@
+#!/usr/bin/env node
+/**
+ * Asserts that every tool page carries enough of its own content to rank.
+ *
+ * The failure this guards against is subtle: a page can have a perfect title,
+ * description and JSON-LD and still be a thin page, because the tool body is
+ * loaded with `ssr: false` and a crawler sees none of it. `notes` and `faq` are
+ * the parts that actually reach the HTML, so they are checked rather than
+ * trusted.
+ *
+ * It also catches copied-and-pasted filler, which is worse than no content —
+ * duplicate answers across tools make the whole site look generated.
+ *
+ *   pnpm check:seo
+ */
+
+import process from "node:process";
+
+import { browsableTools, publishedTools, tools } from "@/config/tools";
+import { getCategory } from "@/config/categories";
+
+let failures = 0;
+let warnings = 0;
+
+function fail(message: string): void {
+  failures += 1;
+  console.error(`  FAIL  ${message}`);
+}
+
+function warn(message: string): void {
+  warnings += 1;
+  console.warn(`  warn  ${message}`);
+}
+
+/* ------------------------------------------------------- metadata basics */
+
+const seenTitles = new Map<string, string>();
+const seenDescriptions = new Map<string, string>();
+
+for (const tool of tools) {
+  const category = getCategory(tool.category);
+
+  if (!category) fail(`${tool.slug}: category "${tool.category}" does not exist`);
+
+  // Google truncates around 60 characters of title and 155 of description.
+  const title = `${tool.name} — Free Online ${category?.label ?? ""} Tool | SwiftKnife`;
+  if (title.length > 70) warn(`${tool.slug}: title is ${title.length} chars — "${title}"`);
+
+  if (tool.description.length > 155) {
+    fail(`${tool.slug}: description is ${tool.description.length} chars, over the 155 limit`);
+  }
+  if (tool.description.length < 40) {
+    fail(`${tool.slug}: description is only ${tool.description.length} chars`);
+  }
+
+  // Two pages competing on the same title is two pages splitting one ranking.
+  const previousTitle = seenTitles.get(tool.name.toLowerCase());
+  if (previousTitle && previousTitle !== tool.slug) {
+    fail(`${tool.slug}: shares its name with ${previousTitle}`);
+  }
+  seenTitles.set(tool.name.toLowerCase(), tool.slug);
+
+  const previousDescription = seenDescriptions.get(tool.description);
+  if (previousDescription) {
+    fail(`${tool.slug}: has the same description as ${previousDescription}`);
+  }
+  seenDescriptions.set(tool.description, tool.slug);
+
+  if (tool.keywords.length < 3) fail(`${tool.slug}: only ${tool.keywords.length} keywords`);
+  if (new Set(tool.keywords).size !== tool.keywords.length) {
+    fail(`${tool.slug}: has duplicate keywords`);
+  }
+}
+
+console.log(`  ok    ${tools.length} tools have unique names, titles and descriptions`);
+
+/* --------------------------------------------------- server-rendered body */
+
+/*
+ * Pair pages share one implementation and one body; they are long-tail landing
+ * pages carrying a live converter, a formula and a value table, and they are
+ * deliberately not each given a hand-written essay.
+ */
+const needsContent = browsableTools.filter((tool) => tool.status === "live");
+
+const missingNotes: string[] = [];
+const missingFaq: string[] = [];
+const thinNotes: string[] = [];
+
+for (const tool of needsContent) {
+  if (!tool.notes?.length) missingNotes.push(tool.slug);
+  else {
+    const words = tool.notes.join(" ").split(/\s+/).length;
+    // Under ~90 words is not an explanation, it is a caption.
+    if (words < 90) thinNotes.push(`${tool.slug} (${words} words)`);
+  }
+
+  if (!tool.faq?.length || tool.faq.length < 3) {
+    missingFaq.push(`${tool.slug} (${tool.faq?.length ?? 0})`);
+  }
+}
+
+if (missingNotes.length > 0) {
+  fail(`${missingNotes.length} live tools have no notes: ${missingNotes.slice(0, 8).join(", ")}${missingNotes.length > 8 ? ", …" : ""}`);
+} else {
+  console.log(`  ok    all ${needsContent.length} live tools have server-rendered notes`);
+}
+
+if (thinNotes.length > 0) {
+  fail(`${thinNotes.length} tools have notes under 90 words: ${thinNotes.slice(0, 6).join(", ")}${thinNotes.length > 6 ? ", …" : ""}`);
+} else if (needsContent.every((tool) => tool.notes?.length)) {
+  console.log("  ok    every notes block is substantial");
+}
+
+if (missingFaq.length > 0) {
+  fail(`${missingFaq.length} tools have fewer than 3 FAQ entries: ${missingFaq.slice(0, 8).join(", ")}${missingFaq.length > 8 ? ", …" : ""}`);
+} else {
+  console.log(`  ok    all ${needsContent.length} live tools have at least 3 FAQ entries`);
+}
+
+/* ------------------------------------------------------------ FAQ quality */
+
+const seenQuestions = new Map<string, string>();
+const seenAnswers = new Map<string, string>();
+
+/** Answers that say nothing. Schema padded with these gets the page ignored. */
+const FILLER = [
+  /^yes\.?$/i,
+  /^no\.?$/i,
+  /^yes,? it is\.?$/i,
+  /^it('s| is) free\.?$/i,
+  /^absolutely/i,
+];
+
+for (const tool of needsContent) {
+  for (const entry of tool.faq ?? []) {
+    const question = entry.question.trim();
+    const answer = entry.answer.trim();
+
+    if (!question.endsWith("?")) {
+      fail(`${tool.slug}: FAQ entry is not a question — "${question}"`);
+    }
+
+    // A one-line answer will not earn a rich result and reads as filler.
+    if (answer.split(/\s+/).length < 15) {
+      fail(`${tool.slug}: answer to "${question}" is only ${answer.split(/\s+/).length} words`);
+    }
+
+    if (FILLER.some((pattern) => pattern.test(answer))) {
+      fail(`${tool.slug}: filler answer to "${question}"`);
+    }
+
+    const questionKey = question.toLowerCase();
+    const previousQuestion = seenQuestions.get(questionKey);
+    if (previousQuestion && previousQuestion !== tool.slug) {
+      fail(`duplicate question across tools: "${question}" in ${previousQuestion} and ${tool.slug}`);
+    }
+    seenQuestions.set(questionKey, tool.slug);
+
+    const answerKey = answer.toLowerCase();
+    const previousAnswer = seenAnswers.get(answerKey);
+    if (previousAnswer && previousAnswer !== tool.slug) {
+      fail(`duplicate answer across tools: ${previousAnswer} and ${tool.slug}`);
+    }
+    seenAnswers.set(answerKey, tool.slug);
+  }
+}
+
+const totalQuestions = needsContent.reduce((sum, tool) => sum + (tool.faq?.length ?? 0), 0);
+if (totalQuestions > 0) {
+  console.log(`  ok    ${totalQuestions} FAQ entries, all unique and substantive`);
+}
+
+/* -------------------------------------------------------------- HowTo LD */
+
+const noSteps = publishedTools.filter((tool) => !tool.searchOnly && !tool.steps?.length);
+if (noSteps.length > 0) {
+  fail(`${noSteps.length} live tools have no steps, so emit no HowTo schema: ${noSteps.slice(0, 6).join(", ")}`);
+} else {
+  console.log("  ok    every live tool emits HowTo schema");
+}
+
+const totalNoteWords = needsContent.reduce(
+  (sum, tool) => sum + (tool.notes?.join(" ").split(/\s+/).length ?? 0),
+  0,
+);
+
+console.log(
+  failures === 0
+    ? `\nSEO checks passed — ${totalNoteWords.toLocaleString("en-US")} words of server-rendered copy across ${needsContent.length} tools${warnings > 0 ? `, ${warnings} warnings` : ""}.`
+    : `\n${failures} SEO checks FAILED.`,
+);
+
+process.exit(failures === 0 ? 0 : 1);

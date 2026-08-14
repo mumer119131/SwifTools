@@ -23,10 +23,15 @@ function toTool(pair: UnitPair): Tool {
     name: `${pair.fromSymbol} to ${pair.toSymbol}`,
     category: "units",
     description: `Convert ${pair.title.toLowerCase()} instantly, with the formula and a table of common values.`,
+    // Deduped: pair.keywords already contains the plain "grams to ounces"
+    // phrasing for the primary aliases, and the title is often exactly that.
+    // A keyword listed twice is not worth twice as much, it just looks careless.
     keywords: [
-      ...pair.keywords,
-      pair.title.toLowerCase(),
-      `${categoryLabel.toLowerCase()} converter`,
+      ...new Set([
+        ...pair.keywords,
+        pair.title.toLowerCase(),
+        `${categoryLabel.toLowerCase()} converter`,
+      ]),
     ],
     icon: ArrowRightLeft,
     processing: "client",

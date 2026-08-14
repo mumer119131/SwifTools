@@ -75,6 +75,21 @@ export function ToolShell({ tool, children }: ToolShellProps) {
             {/* Reserved ad region (§10): between the tool and the explainer. */}
             <AdSlotReservation placement="between-steps" />
 
+            {tool.notes?.length ? (
+              <section id="about" className="mt-14 scroll-mt-24">
+                <h2 className="text-xl font-semibold tracking-[-0.02em] text-foreground">
+                  About the {tool.name}
+                </h2>
+                <div className="mt-5 max-w-2xl space-y-4">
+                  {tool.notes.map((note) => (
+                    <p key={note} className="text-[0.9375rem] leading-relaxed text-muted-foreground">
+                      {note}
+                    </p>
+                  ))}
+                </div>
+              </section>
+            ) : null}
+
             {tool.steps?.length ? (
               <section id="how-it-works" className="mt-14 scroll-mt-24">
                 <h2 className="text-xl font-semibold tracking-[-0.02em] text-foreground">
@@ -95,6 +110,31 @@ export function ToolShell({ tool, children }: ToolShellProps) {
                     </li>
                   ))}
                 </ol>
+              </section>
+            ) : null}
+
+            {tool.faq?.length ? (
+              <section id="faq" className="mt-14 scroll-mt-24">
+                <h2 className="text-xl font-semibold tracking-[-0.02em] text-foreground">
+                  Frequently asked questions
+                </h2>
+                {/*
+                  Plain markup rather than an accordion: collapsed content is
+                  weighted lower by search engines, and there is no reason to
+                  hide four short answers behind a click.
+                */}
+                <dl className="mt-5 max-w-2xl space-y-6">
+                  {tool.faq.map((entry) => (
+                    <div key={entry.question}>
+                      <dt className="text-[0.9375rem] font-medium text-foreground">
+                        {entry.question}
+                      </dt>
+                      <dd className="mt-2 text-[0.9375rem] leading-relaxed text-muted-foreground">
+                        {entry.answer}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
               </section>
             ) : null}
 

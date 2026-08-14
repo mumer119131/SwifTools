@@ -4,9 +4,31 @@ import { absoluteUrl, pageTitle, siteConfig } from "@/config/site";
 import { getCategory } from "@/config/categories";
 import { toolHref, type Tool } from "@/config/tools";
 
-/** Shared Open Graph / Twitter block so every page advertises itself the same way. */
-function socialCard(title: string, description: string, path: string): Metadata {
+/**
+ * Shared Open Graph / Twitter block so every page advertises itself the same way.
+ *
+ * `useOwnImage` leaves `images` unset, which lets Next's colocated
+ * `opengraph-image.tsx` supply the card. Setting `images` here would replace
+ * the generated per-tool image with the generic one — the file convention only
+ * applies when metadata does not override it.
+ */
+function socialCard(
+  title: string,
+  description: string,
+  path: string,
+  useOwnImage = false,
+): Metadata {
   const url = absoluteUrl(path);
+
+  const images = useOwnImage
+    ? {}
+    : {
+        openGraph: {
+          images: [{ url: absoluteUrl("/opengraph-image"), width: 1200, height: 630, alt: title }],
+        },
+        twitter: { images: [absoluteUrl("/opengraph-image")] },
+      };
+
   return {
     alternates: { canonical: url },
     openGraph: {
@@ -15,13 +37,13 @@ function socialCard(title: string, description: string, path: string): Metadata 
       siteName: siteConfig.name,
       title,
       description,
-      images: [{ url: absoluteUrl("/opengraph-image"), width: 1200, height: 630, alt: title }],
+      ...(images.openGraph ?? {}),
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: [absoluteUrl("/opengraph-image")],
+      ...(images.twitter ?? {}),
       ...(siteConfig.links.twitter ? { creator: siteConfig.links.twitter } : {}),
     },
   };
@@ -44,7 +66,8 @@ export function buildToolMetadata(tool: Tool): Metadata {
     title: segment,
     description,
     keywords: [...tool.keywords, tool.name.toLowerCase(), "free", "online", "no signup"],
-    ...socialCard(pageTitle(segment), description, toolHref(tool)),
+    // Tool pages generate their own card from opengraph-image.tsx.
+    ...socialCard(pageTitle(segment), description, toolHref(tool), true),
   };
 }
 
@@ -102,6 +125,27 @@ export function howToLd(tool: Tool): JsonLd | null {
       name: `Step ${index + 1}`,
       text,
       url: `${absoluteUrl(toolHref(tool))}#how-it-works`,
+    })),
+  };
+}
+
+/**
+ * FAQPage, emitted only when a tool actually has questions.
+ *
+ * Google will not show FAQ rich results for pages that pad the schema with
+ * questions nobody asked, and an empty or filler FAQPage is worse than none —
+ * so this returns null rather than inventing anything.
+ */
+export function faqLd(tool: Tool): JsonLd | null {
+  if (!tool.faq?.length) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: tool.faq.map((entry) => ({
+      "@type": "Question",
+      name: entry.question,
+      acceptedAnswer: { "@type": "Answer", text: entry.answer },
     })),
   };
 }

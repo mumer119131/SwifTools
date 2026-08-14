@@ -6,7 +6,13 @@ import { getTool, tools } from "@/config/tools";
 import { ToolShell } from "@/components/shared/ToolShell";
 import { JsonLdScript } from "@/components/shared/JsonLd";
 import { ToolRuntime } from "@/tools/loaders";
-import { breadcrumbLd, buildToolMetadata, howToLd, softwareApplicationLd } from "@/lib/seo";
+import {
+  breadcrumbLd,
+  buildToolMetadata,
+  faqLd,
+  howToLd,
+  softwareApplicationLd,
+} from "@/lib/seo";
 
 interface PageProps {
   params: Promise<{ category: string; tool: string }>;
@@ -48,7 +54,12 @@ export default async function ToolPage({ params }: PageProps) {
         <ToolRuntime slug={tool.slug} name={tool.name} />
       </ToolShell>
       <JsonLdScript
-        data={[softwareApplicationLd(tool), howToLd(tool), breadcrumbLd(crumbs)]}
+        data={[
+          softwareApplicationLd(tool),
+          howToLd(tool),
+          faqLd(tool),
+          breadcrumbLd(crumbs),
+        ]}
       />
     </>
   );

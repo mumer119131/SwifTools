@@ -13,10 +13,12 @@
     "check:hashes": "node --experimental-strip-types scripts/check-hashes.ts",
     "check:search": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-search.ts",
     "check:units": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-units.ts",
+    "check:seo": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-seo.ts",
     "check:vault": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-vault.ts",
     "check:fun": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-fun.ts",
     "check:home": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-home.ts",
     "check:science": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-science.ts",
+    "dates": "node --experimental-strip-types scripts/tool-dates.ts",
     "new:tool": "node --experimental-strip-types scripts/new-tool.ts"
   },
   "packageManager": "pnpm@11.10.0",
