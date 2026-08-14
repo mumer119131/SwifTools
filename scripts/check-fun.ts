@@ -24,6 +24,13 @@ import { makeNumberCard, numberPool } from "@/tools/bingo-card/logic";
 import { intoGroups } from "@/tools/list-randomizer/logic";
 import { simulatePixel, hexToRgb, DEFICIENCIES } from "@/tools/color-blindness-simulator/logic";
 import { generate as names } from "@/tools/random-name-generator/logic";
+import { render as asciiArt, wrapAsComment } from "@/tools/ascii-art-generator/logic";
+import { score as typingScore } from "@/tools/typing-speed-test/logic";
+import { summarise as budget } from "@/tools/budget-tracker/logic";
+import { streaks } from "@/tools/habit-tracker/logic";
+import { mark as markQuiz } from "@/tools/quiz-builder/logic";
+import { QUESTIONS as TRIVIA, filter as triviaFilter } from "@/tools/trivia-questions/logic";
+import { CHARSET as PIXEL_CHARSET, resizeGlyph, seedFont } from "@/tools/pixel-font-maker/logic";
 
 let failures = 0;
 
@@ -446,6 +453,136 @@ check("reject 200 dice", parseNotation("200d6"), null);
   check("no duplicates in a batch", new Set(generated).size, 40);
   assert("full names have two parts", generated.every((name) => name.split(" ").length === 2));
   assert("first-only has one part", names("any", "first", 10).every((n) => !n.includes(" ")));
+}
+
+
+/* ------------------------------------------------------- batch 4 utilities */
+
+{
+  // ASCII banners must be rectangular — every line the same height.
+  const banner = asciiArt("ABC", "block", 1);
+  const lines = banner.split("\n");
+  check("block font is five rows", lines.length, 5);
+  assert("banner is non-empty", lines.every((line) => line.length > 0));
+
+  const compact = asciiArt("ABC", "small", 1);
+  check("compact font is three rows", compact.split("\n").length, 3);
+
+  // An unknown character is skipped, not drawn as a box.
+  assert("emoji skipped", asciiArt("A\u{1F600}B", "block", 1).split("\n").length === 5);
+  check("comment wrapping", wrapAsComment("X", "hash"), "# X");
+}
+
+{
+  // Typing speed: a "word" is five characters, so 100 characters in 60 seconds
+  // is exactly 20 WPM.
+  const perfect = typingScore("a".repeat(100), "a".repeat(100), 60);
+  check("gross WPM", Math.round(perfect.grossWpm), 20);
+  check("perfect accuracy", perfect.accuracy, 100);
+  check("no errors", perfect.incorrect, 0);
+  check("net equals gross when perfect", Math.round(perfect.netWpm), 20);
+
+  // Ten wrong characters in a minute deducts two words per minute.
+  const sloppy = typingScore("a".repeat(100), "a".repeat(90) + "b".repeat(10), 60);
+  check("errors counted", sloppy.incorrect, 10);
+  check("accuracy drops", Math.round(sloppy.accuracy), 90);
+  assert("net WPM below gross", sloppy.netWpm < sloppy.grossWpm);
+  check("net WPM penalty", Math.round(sloppy.netWpm), 18);
+}
+
+{
+  // Budget: 50/30/20 shares must be computed against income, not spending.
+  const summary = budget(4000, [
+    { id: "a", label: "Rent", amount: "1600", bucket: "needs" },
+    { id: "b", label: "Fun", amount: "600", bucket: "wants" },
+    { id: "c", label: "Save", amount: "800", bucket: "savings" },
+  ]);
+  check("needs share", summary.shares.needs, 40);
+  check("wants share", summary.shares.wants, 15);
+  check("savings share", summary.shares.savings, 20);
+  check("left over", summary.left, 1000);
+  // Unspent income counts as saved: 800 + 1000 of 4000 is 45%.
+  check("savings rate includes the unspent", summary.savingsRate, 45);
+  // A blank amount must not poison the total with NaN.
+  const withBlank = budget(1000, [{ id: "a", label: "x", amount: "", bucket: "needs" }]);
+  check("blank amount ignored", withBlank.spent, 0);
+}
+
+{
+  // Habit streaks: a run ending yesterday is still alive today.
+  const today = new Date("2026-08-13T12:00:00");
+  const yesterday = ["2026-08-10", "2026-08-11", "2026-08-12"];
+  check("streak survives an unticked today", streaks(yesterday, today, 35).current, 3);
+
+  // Ticking today extends it rather than restarting.
+  check("streak counts today", streaks([...yesterday, "2026-08-13"], today, 35).current, 4);
+
+  // A gap breaks it.
+  check("gap breaks the streak", streaks(["2026-08-01", "2026-08-13"], today, 35).current, 1);
+  check("best streak found", streaks(["2026-08-01","2026-08-02","2026-08-03","2026-08-09"], today, 35).best, 3);
+  check("empty history", streaks([], today, 35).current, 0);
+}
+
+{
+  // Quiz marking: unanswered counts as wrong, not skipped.
+  const quiz = {
+    title: "T",
+    questions: [
+      { id: "a", prompt: "", options: ["1", "2"], correct: 0 },
+      { id: "b", prompt: "", options: ["1", "2"], correct: 1 },
+      { id: "c", prompt: "", options: ["1", "2"], correct: 0 },
+    ],
+  };
+  const marked = markQuiz(quiz, { a: 0, b: 0 });
+  check("one right", marked.score, 1);
+  check("out of three, not two", marked.total, 3);
+  check("percentage", Math.round(marked.percent), 33);
+}
+
+{
+  // Trivia: every question must have a non-empty answer, and the filters must
+  // actually narrow the pool.
+  assert(
+    "every question has an answer",
+    TRIVIA.every((q) => q.question.trim().length > 0 && q.answer.trim().length > 0),
+  );
+  assert("no duplicate questions", new Set(TRIVIA.map((q) => q.question)).size === TRIVIA.length);
+  assert("science filter narrows", triviaFilter("science", "all").length < TRIVIA.length);
+  assert(
+    "science filter is only science",
+    triviaFilter("science", "all").every((q) => q.category === "science"),
+  );
+  assert(
+    "hard science filter compounds",
+    triviaFilter("science", "hard").every((q) => q.category === "science" && q.difficulty === "hard"),
+  );
+  // Every category must have questions at every difficulty, or a selection
+  // silently returns nothing.
+  for (const category of ["general", "science", "history", "geography", "arts", "sport"] as const) {
+    for (const difficulty of ["easy", "medium", "hard"] as const) {
+      assert(
+        `${category}/${difficulty} has questions`,
+        triviaFilter(category, difficulty).length > 0,
+      );
+    }
+  }
+}
+
+{
+  // Pixel font: resizing must keep what fits and never lose the array shape.
+  const glyph = Array.from({ length: 35 }, (_, i) => (i % 2 === 0 ? 1 : 0));
+  const bigger = resizeGlyph(glyph, 5, 7, 8, 10);
+  check("resized length", bigger.length, 80);
+  check("top-left pixel kept", bigger[0], glyph[0]);
+
+  const smaller = resizeGlyph(glyph, 5, 7, 3, 3);
+  check("cropped length", smaller.length, 9);
+  check("cropped keeps the corner", smaller[0], glyph[0]);
+
+  const seeded = seedFont(5, 7);
+  check("charset fully seeded", Object.keys(seeded).length, new Set([...PIXEL_CHARSET]).size);
+  assert("every glyph is the right length", Object.values(seeded).every((g) => g.length === 35));
+  assert("A is drawn in the seed", seeded.A.some((cell) => cell === 1));
 }
 
 console.log(failures === 0 ? "\nAll fun checks passed." : `\n${failures} fun checks FAILED.`);

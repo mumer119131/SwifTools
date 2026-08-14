@@ -132,6 +132,22 @@ const expectations: [string, string][] = [
   ["help me decide", "decision-maker"],
   ["pick a name", "random-name-picker"],
 
+  // Productivity and generators.
+  ["notepad", "online-notepad"],
+  ["todo list", "to-do-list"],
+  ["typing test", "typing-speed-test"],
+  ["wpm", "typing-speed-test"],
+  ["habit tracker", "habit-tracker"],
+  ["budget", "budget-tracker"],
+  ["ascii art", "ascii-art-generator"],
+  ["team names", "team-name-generator"],
+  ["icebreaker", "icebreaker-questions"],
+  ["story ideas", "story-plot-generator"],
+  ["trivia", "trivia-questions"],
+  ["quiz maker", "quiz-builder"],
+  ["screen ruler", "screen-ruler"],
+  ["pixel font", "pixel-font-maker"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

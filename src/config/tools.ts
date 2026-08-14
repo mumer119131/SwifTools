@@ -107,6 +107,24 @@ import { volumeConverter } from "@/tools/volume-converter/meta";
 import { weightConverter } from "@/tools/weight-converter/meta";
 
 // Fun & utility
+import { asciiArtGenerator } from "@/tools/ascii-art-generator/meta";
+import { budgetTracker } from "@/tools/budget-tracker/meta";
+import { complimentGenerator } from "@/tools/compliment-generator/meta";
+import { habitTracker } from "@/tools/habit-tracker/meta";
+import { icebreakerQuestions } from "@/tools/icebreaker-questions/meta";
+import { nicknameGenerator } from "@/tools/nickname-generator/meta";
+import { onlineNotepad } from "@/tools/online-notepad/meta";
+import { passwordManager } from "@/tools/password-manager/meta";
+import { pixelFontMaker } from "@/tools/pixel-font-maker/meta";
+import { quizBuilder } from "@/tools/quiz-builder/meta";
+import { roastGenerator } from "@/tools/roast-generator/meta";
+import { screenRuler } from "@/tools/screen-ruler/meta";
+import { storyPlotGenerator } from "@/tools/story-plot-generator/meta";
+import { teamNameGenerator } from "@/tools/team-name-generator/meta";
+import { thisOrThat } from "@/tools/this-or-that/meta";
+import { toDoList } from "@/tools/to-do-list/meta";
+import { triviaQuestions } from "@/tools/trivia-questions/meta";
+import { typingSpeedTest } from "@/tools/typing-speed-test/meta";
 import { bingoCard } from "@/tools/bingo-card/meta";
 import { coinFlipper } from "@/tools/coin-flipper/meta";
 import { colorBlindnessSimulator } from "@/tools/color-blindness-simulator/meta";
@@ -377,6 +395,25 @@ export const tools: readonly Tool[] = [
   wordSearch,
   crosswordMaker,
   tournamentBracket,
+
+  onlineNotepad,
+  toDoList,
+  habitTracker,
+  budgetTracker,
+  typingSpeedTest,
+  screenRuler,
+  passwordManager,
+  quizBuilder,
+  triviaQuestions,
+  nicknameGenerator,
+  teamNameGenerator,
+  storyPlotGenerator,
+  icebreakerQuestions,
+  thisOrThat,
+  complimentGenerator,
+  roastGenerator,
+  asciiArtGenerator,
+  pixelFontMaker,
 
   // Direct conversion pages — generated, and search-only so they stay out of
   // the browse surfaces while remaining indexed and findable.
