@@ -1,8 +1,8 @@
 # SwiftKnife
 
-A fast, free collection of 78 tools across ten categories — PDF, image, text, developer, colour,
-converter, calculator, SEO, generator and social. All but four run entirely in the browser, so
-your files are never uploaded.
+A fast, free collection of 155 tools across fourteen categories — PDF, image, text, developer,
+colour, converter, units, calculator, SEO, generator, social, science, home and fun. All but three
+run entirely in the browser, so your files are never uploaded.
 
 Built with Next.js 16 (App Router, Turbopack), React 19, Tailwind CSS v4, and TypeScript in strict
 mode. Every tool page is statically generated.
@@ -23,6 +23,10 @@ pnpm dev          # http://localhost:3000
 | `pnpm check:hashes` | Verifies all six hash algorithms against published test vectors |
 | `pnpm check:search` | Asserts the ⌘K palette returns the tool each query means |
 | `pnpm check:units` | Verifies conversions against known values and round-trips every pair |
+| `pnpm check:science` | Molar masses, limiting reagents, decay, sig figs, resistor codes |
+| `pnpm check:home` | Every material and cost calculator, against hand-worked answers |
+| `pnpm check:fun` | Chi-squared uniformity of the randomisers, plus puzzle validity |
+| `pnpm check:vault` | The password manager's encryption, tampering and key-derivation |
 | `pnpm new:tool` | Scaffold a new tool (see below) |
 
 ---
@@ -100,8 +104,8 @@ src/
   app/
     layout.tsx                  root shell: fonts, theme, ⌘K provider, header/footer
     page.tsx                    landing page
-    [category]/page.tsx         category listing        (SSG, 10 pages)
-    [category]/[tool]/page.tsx  tool page               (SSG, 78 pages)
+    [category]/page.tsx         category listing        (SSG, 14 pages)
+    [category]/[tool]/page.tsx  tool page               (SSG, 237 pages)
     api/rates/route.ts          cached ECB exchange-rate proxy
     api/vimeo/route.ts          Vimeo oEmbed proxy (no CORS upstream)
     api/og-image/route.ts       reads a public page's og:image, host-allowlisted
@@ -142,7 +146,7 @@ fetched when someone opens that tool's page. None of it reaches the homepage bun
 
 ### Client vs. server
 
-**74 of the 78 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
+**152 of the 155 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
 That is the product's main selling point, not just an optimisation: no upload wait, no server cost,
 and files that genuinely never leave the device.
 
@@ -195,7 +199,7 @@ description hit. On top of that:
 Both the ⌘K palette and the homepage directory use this, so a query behaves the
 same in both places.
 
-`pnpm check:search` asserts 35 query → expected-tool pairs. Relevance is exactly
+`pnpm check:search` asserts 106 query → expected-tool pairs. Relevance is exactly
 the kind of thing that regresses silently when a new tool arrives with broad
 keywords.
 
@@ -207,19 +211,47 @@ list before you type.
 
 The unit conversion pages use it. Searching **lb to kg** used to return fuzzy
 junk, because one page carrying every measurement cannot rank for any specific
-conversion. There are now nine browsable converters plus 72 direct pages
+conversion. There are now nine browsable converters plus 82 direct pages
 (`/units/lb-to-kg`), each with a live converter, the formula written out and a
-table of common values. All 72 are in the sitemap and linked from their parent
+table of common values. All 82 are in the sitemap and linked from their parent
 converter; none of them appear in the footer or category grid, where they would
-bury the nine tools people actually browse for.
+bury the tools people actually browse for.
 
 `browsableTools` is the list for browse surfaces; `tools` — the full set — is
 what search, the sitemap and `generateStaticParams` use.
+
+`populatedCategories` is the same idea one level up. A category is declared in
+`categories.ts` before its tools exist, and without the filter an empty shelf
+ships: a nav entry, a sitemap URL and a category page with nothing on it. Every
+browse surface reads `populatedCategories`, so a category appears the moment its
+first tool is registered and 404s until then.
 
 Pairs are deliberately not exhaustive. Every permutation would be roughly 400
 pages that compete with each other; these are the conversions people search for,
 expanded in both directions because "kg to lbs" and "lbs to kg" are different
 queries.
+
+### Fair randomness
+
+`src/lib/random.ts` draws a line the fun tools depend on.
+
+Anything a person might treat as fair — a coin flip, a dice roll, a prize draw,
+a wheel — uses `secureInt`, which reads Web Crypto and **rejects the biased tail
+of the range**. The usual `value % max` is not uniform whenever `max` does not
+divide the generator's range evenly; on a d20 that skews every roll.
+
+Anything that has to be reproducible from a short code — a sudoku, a bingo card,
+a word search — uses a seeded `mulberry32` instead, so the same seed always
+gives the same puzzle.
+
+Shuffling is Fisher–Yates everywhere. The common shortcut,
+`sort(() => Math.random() - 0.5)`, is measurably biased and depends on the
+engine's sort implementation, which matters when someone is going to argue about
+the outcome.
+
+`pnpm check:fun` proves both properties with chi-squared tests over 60,000 draws
+and 30,000 shuffles. A biased shuffle looks perfectly random in any single run,
+so a statistical test is the only thing that catches one.
 
 ### Canvas mockups
 
