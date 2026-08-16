@@ -75,6 +75,7 @@ import { convertImage } from "@/tools/convert-image/meta";
 import { cropImage } from "@/tools/crop-image/meta";
 import { removeBackground } from "@/tools/remove-background/meta";
 import { resizeImage } from "@/tools/resize-image/meta";
+import { playStoreScreenshotGenerator } from "@/tools/play-store-screenshot-generator/meta";
 import { watermarkImage } from "@/tools/watermark-image/meta";
 
 // Text
@@ -265,6 +266,7 @@ export const tools: readonly Tool[] = [
   cropImage,
   watermarkImage,
   removeBackground,
+  playStoreScreenshotGenerator,
 
   // Text
   wordCounter,

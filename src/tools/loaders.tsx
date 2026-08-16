@@ -54,6 +54,9 @@ const registry: Record<string, React.ComponentType> = {
   "crop-image": lazyTool(() => import("@/tools/crop-image/Tool")),
   "watermark-image": lazyTool(() => import("@/tools/watermark-image/Tool")),
   "remove-background": lazyTool(() => import("@/tools/remove-background/Tool")),
+  "play-store-screenshot-generator": lazyTool(
+    () => import("@/tools/play-store-screenshot-generator/Tool"),
+  ),
 
   // Text
   "word-counter": lazyTool(() => import("@/tools/word-counter/Tool")),

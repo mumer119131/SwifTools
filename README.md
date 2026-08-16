@@ -1,6 +1,6 @@
 # SwiftKnife
 
-A fast, free collection of 155 tools across fourteen categories — PDF, image, text, developer,
+A fast, free collection of 156 tools across fourteen categories — PDF, image, text, developer,
 colour, converter, units, calculator, SEO, generator, social, science, home and fun. All but three
 run entirely in the browser, so your files are never uploaded.
 
@@ -27,6 +27,7 @@ pnpm dev          # http://localhost:3000
 | `pnpm check:home` | Every material and cost calculator, against hand-worked answers |
 | `pnpm check:fun` | Chi-squared uniformity of the randomisers, plus puzzle validity |
 | `pnpm check:vault` | The password manager's encryption, tampering and key-derivation |
+| `pnpm check:store-images` | Play Store size rules, and that no NaN reaches a canvas draw call |
 | `pnpm check:seo` | Unique titles and descriptions, server-rendered copy, FAQ quality |
 | `pnpm dates` | Regenerates sitemap `lastModified` dates from git history |
 | `pnpm new:tool` | Scaffold a new tool (see below) |
@@ -148,7 +149,7 @@ fetched when someone opens that tool's page. None of it reaches the homepage bun
 
 ### Client vs. server
 
-**152 of the 155 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
+**153 of the 156 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
 That is the product's main selling point, not just an optimisation: no upload wait, no server cost,
 and files that genuinely never leave the device.
 
@@ -248,10 +249,10 @@ back into the HTML:
 
 That took a tool page from 165 words of its own content wrapped in a 433-word
 shared footer, to around 550–680 words of unique server-rendered copy —
-**21,469 words across 155 tools**.
+**21,697 words across 156 tools**.
 
 `pnpm check:seo` enforces the rest: unique names, titles and descriptions across
-all 237 pages, descriptions inside 155 characters, at least 3 FAQ entries and 90
+all 238 pages, descriptions inside 155 characters, at least 3 FAQ entries and 90
 words of notes per live tool, no duplicate question or answer text between
 tools, and no filler answers. A `FAQPage` padded with "Yes, it's free!" is worse
 than none. It reads the title out of `buildToolMetadata` rather than rebuilding

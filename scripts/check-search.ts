@@ -148,6 +148,11 @@ const expectations: [string, string][] = [
   ["screen ruler", "screen-ruler"],
   ["pixel font", "pixel-font-maker"],
 
+  // Play Store listing images.
+  ["play store screenshot", "play-store-screenshot-generator"],
+  ["app store screenshots", "play-store-screenshot-generator"],
+  ["feature graphic", "play-store-screenshot-generator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
