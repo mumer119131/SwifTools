@@ -41,7 +41,7 @@ export const instagramPostGenerator: Tool = {
       answer: "No. It produces an image showing what a post would look like. There is no account connection and nothing is published.",
     },
     {
-      question: "What is this useful for?",
+      question: "What is an Instagram post mockup used for?",
       answer: "Client presentations, pitch decks, content calendars and design reviews — anywhere you need to show how something will look in a feed before committing to publishing it.",
     },
     {
