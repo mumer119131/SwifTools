@@ -9,6 +9,9 @@
  * pixel-exact at a fixed size.
  */
 
+import { hashSeed, mulberry32 } from "@/lib/random";
+
+
 /* ------------------------------------------------------------------ specs */
 
 /**
@@ -106,18 +109,310 @@ export interface Theme {
   bezel: string;
   /** Decorative blob behind the device, or null for none. */
   glow: string | null;
+  /**
+   * Colour the decorative pattern is drawn in, as `r, g, b` channels.
+   * Kept as channels rather than a full rgba string so the intensity control
+   * can set the alpha without string surgery.
+   */
+  ink: string;
+  /** Two extra hues for the mesh pattern, which needs colour rather than ink. */
+  accents: [string, string];
 }
 
 export const THEMES: Theme[] = [
-  { id: "midnight", label: "Midnight", background: ["#0f172a", "#1e293b"], angle: 135, headline: "#f8fafc", subtext: "#94a3b8", bezel: "#0b1120", glow: "rgba(99,102,241,0.30)" },
-  { id: "indigo", label: "Indigo", background: ["#4f46e5", "#7c3aed"], angle: 135, headline: "#ffffff", subtext: "#ddd6fe", bezel: "#1e1b4b", glow: "rgba(255,255,255,0.16)" },
-  { id: "sunset", label: "Sunset", background: ["#f97316", "#db2777"], angle: 140, headline: "#ffffff", subtext: "#ffe4e6", bezel: "#431407", glow: "rgba(255,255,255,0.18)" },
-  { id: "mint", label: "Mint", background: ["#059669", "#0891b2"], angle: 130, headline: "#ffffff", subtext: "#d1fae5", bezel: "#042f2e", glow: "rgba(255,255,255,0.16)" },
-  { id: "paper", label: "Paper", background: ["#f8fafc", "#e2e8f0"], angle: 160, headline: "#0f172a", subtext: "#475569", bezel: "#1e293b", glow: "rgba(15,23,42,0.06)" },
-  { id: "sand", label: "Sand", background: ["#fef3c7", "#fed7aa"], angle: 150, headline: "#431407", subtext: "#92400e", bezel: "#292524", glow: "rgba(120,53,15,0.10)" },
-  { id: "slate", label: "Slate", background: ["#1e293b", "#334155"], angle: 120, headline: "#f1f5f9", subtext: "#94a3b8", bezel: "#020617", glow: null },
-  { id: "mono", label: "Mono", background: ["#111827", "#111827"], angle: 0, headline: "#ffffff", subtext: "#9ca3af", bezel: "#000000", glow: null },
+  { id: "midnight", label: "Midnight", background: ["#0f172a", "#1e293b"], angle: 135, headline: "#f8fafc", subtext: "#94a3b8", bezel: "#0b1120", glow: "rgba(99,102,241,0.30)" , ink: "255, 255, 255", accents: ["#6366f1", "#0ea5e9"] },
+  { id: "indigo", label: "Indigo", background: ["#4f46e5", "#7c3aed"], angle: 135, headline: "#ffffff", subtext: "#ddd6fe", bezel: "#1e1b4b", glow: "rgba(255,255,255,0.16)" , ink: "255, 255, 255", accents: ["#f472b6", "#38bdf8"] },
+  { id: "sunset", label: "Sunset", background: ["#f97316", "#db2777"], angle: 140, headline: "#ffffff", subtext: "#ffe4e6", bezel: "#431407", glow: "rgba(255,255,255,0.18)" , ink: "255, 255, 255", accents: ["#fbbf24", "#f43f5e"] },
+  { id: "mint", label: "Mint", background: ["#059669", "#0891b2"], angle: 130, headline: "#ffffff", subtext: "#d1fae5", bezel: "#042f2e", glow: "rgba(255,255,255,0.16)" , ink: "255, 255, 255", accents: ["#34d399", "#22d3ee"] },
+  { id: "paper", label: "Paper", background: ["#f8fafc", "#e2e8f0"], angle: 160, headline: "#0f172a", subtext: "#475569", bezel: "#1e293b", glow: "rgba(15,23,42,0.06)" , ink: "15, 23, 42", accents: ["#818cf8", "#f9a8d4"] },
+  { id: "sand", label: "Sand", background: ["#fef3c7", "#fed7aa"], angle: 150, headline: "#431407", subtext: "#92400e", bezel: "#292524", glow: "rgba(120,53,15,0.10)" , ink: "120, 53, 15", accents: ["#fb923c", "#fbbf24"] },
+  { id: "slate", label: "Slate", background: ["#1e293b", "#334155"], angle: 120, headline: "#f1f5f9", subtext: "#94a3b8", bezel: "#020617", glow: null , ink: "255, 255, 255", accents: ["#64748b", "#38bdf8"] },
+  { id: "mono", label: "Mono", background: ["#111827", "#111827"], angle: 0, headline: "#ffffff", subtext: "#9ca3af", bezel: "#000000", glow: null , ink: "255, 255, 255", accents: ["#374151", "#4b5563"] },
 ];
+
+/* --------------------------------------------------------------- patterns */
+
+export type PatternId =
+  | "none" | "dots" | "grid" | "rings" | "blobs" | "mesh"
+  | "stripes" | "rays" | "waves" | "bubbles" | "topography";
+
+export const PATTERNS: { id: PatternId; label: string; note: string }[] = [
+  { id: "none", label: "Plain", note: "The gradient alone." },
+  { id: "mesh", label: "Mesh", note: "Soft overlapping colour fields. The current default in app marketing." },
+  { id: "blobs", label: "Blobs", note: "A few large organic shapes. Warm and unfussy." },
+  { id: "dots", label: "Dot grid", note: "A fine regular grid. Adds texture without competing." },
+  { id: "grid", label: "Grid lines", note: "Thin ruled lines, technical and calm." },
+  { id: "rings", label: "Rings", note: "Concentric circles centred behind the device, drawing the eye to it." },
+  { id: "rays", label: "Rays", note: "A sunburst from behind the device. Energetic — use sparingly." },
+  { id: "stripes", label: "Stripes", note: "Broad diagonal bands. Bold and graphic." },
+  { id: "waves", label: "Waves", note: "Stacked curves along the bottom edge." },
+  { id: "bubbles", label: "Bubbles", note: "Scattered circles of varying size. Playful." },
+  { id: "topography", label: "Contours", note: "Nested contour lines, like a map. Detailed but quiet." },
+];
+
+/**
+ * Draws the decorative layer between the gradient and the device.
+ *
+ * Every scattered pattern is driven by a seeded generator keyed to the slide,
+ * not by Math.random. Without that the preview and the export would differ,
+ * and re-rendering on each keystroke would make the background crawl about
+ * while you typed a caption.
+ *
+ * Geometry is expressed relative to the canvas, so a pattern that looks right
+ * on a 1024 × 500 feature graphic looks the same on a 1600 × 2560 tablet
+ * screenshot rather than becoming a fine mist or a handful of giant shapes.
+ */
+export function drawPattern(
+  context: CanvasRenderingContext2D,
+  pattern: PatternId,
+  width: number,
+  height: number,
+  theme: Theme,
+  /** 0–100, mapped onto each pattern's own sensible alpha range. */
+  intensity: number,
+  random: () => number,
+): void {
+  if (pattern === "none" || intensity <= 0) return;
+
+  const strength = Math.max(0, Math.min(100, intensity)) / 100;
+  const ink = (alpha: number) => `rgba(${theme.ink}, ${(alpha * strength).toFixed(4)})`;
+  const shorter = Math.min(width, height);
+  const longer = Math.max(width, height);
+
+  context.save();
+
+  switch (pattern) {
+    case "dots": {
+      const step = shorter * 0.045;
+      const radius = Math.max(1, step * 0.075);
+      context.fillStyle = ink(0.5);
+      for (let y = step / 2; y < height; y += step) {
+        for (let x = step / 2; x < width; x += step) {
+          context.beginPath();
+          context.arc(x, y, radius, 0, Math.PI * 2);
+          context.fill();
+        }
+      }
+      break;
+    }
+
+    case "grid": {
+      const step = shorter * 0.07;
+      context.strokeStyle = ink(0.28);
+      context.lineWidth = Math.max(1, shorter * 0.0018);
+      context.beginPath();
+      for (let x = step; x < width; x += step) {
+        context.moveTo(x, 0);
+        context.lineTo(x, height);
+      }
+      for (let y = step; y < height; y += step) {
+        context.moveTo(0, y);
+        context.lineTo(width, y);
+      }
+      context.stroke();
+      break;
+    }
+
+    case "rings": {
+      const centreX = width / 2;
+      const centreY = height * 0.52;
+      const step = shorter * 0.12;
+      context.strokeStyle = ink(0.3);
+      context.lineWidth = Math.max(1.5, shorter * 0.004);
+      // Enough rings to reach the far corner, so none stops mid-canvas.
+      const reach = Math.hypot(Math.max(centreX, width - centreX), Math.max(centreY, height - centreY));
+      for (let r = step; r < reach; r += step) {
+        context.beginPath();
+        context.arc(centreX, centreY, r, 0, Math.PI * 2);
+        context.stroke();
+      }
+      break;
+    }
+
+    case "blobs": {
+      const count = 4;
+      for (let index = 0; index < count; index += 1) {
+        const radius = shorter * (0.3 + random() * 0.35);
+        const x = random() * width;
+        const y = random() * height;
+
+        const blob = context.createRadialGradient(x, y, 0, x, y, radius);
+        blob.addColorStop(0, ink(0.22));
+        blob.addColorStop(1, `rgba(${theme.ink}, 0)`);
+        context.fillStyle = blob;
+        context.fillRect(0, 0, width, height);
+      }
+      break;
+    }
+
+    case "mesh": {
+      /*
+       * Several wide radial gradients in the theme's accent hues, placed at
+       * seeded points. This is the look most current app listings use, and it
+       * only works because the stops fade to fully transparent — a hard edge
+       * anywhere in a mesh reads immediately as a mistake.
+       */
+      const points: [string, number, number][] = [
+        [theme.accents[0], 0.2 + random() * 0.2, 0.15 + random() * 0.2],
+        [theme.accents[1], 0.6 + random() * 0.25, 0.25 + random() * 0.2],
+        [theme.accents[0], 0.15 + random() * 0.3, 0.7 + random() * 0.2],
+        [theme.accents[1], 0.7 + random() * 0.25, 0.75 + random() * 0.2],
+      ];
+
+      for (const [colour, fx, fy] of points) {
+        const x = width * fx;
+        const y = height * fy;
+        const radius = longer * (0.35 + random() * 0.2);
+
+        const mesh = context.createRadialGradient(x, y, 0, x, y, radius);
+        mesh.addColorStop(0, withAlpha(colour, 0.55 * strength));
+        mesh.addColorStop(1, withAlpha(colour, 0));
+        context.fillStyle = mesh;
+        context.fillRect(0, 0, width, height);
+      }
+      break;
+    }
+
+    case "stripes": {
+      const band = shorter * 0.09;
+      context.fillStyle = ink(0.09);
+      context.translate(width / 2, height / 2);
+      context.rotate(-Math.PI / 6);
+      // Cover the diagonal, since rotation exposes the corners.
+      const span = Math.hypot(width, height);
+      for (let x = -span; x < span; x += band * 2) {
+        context.fillRect(x, -span / 2, band, span);
+      }
+      break;
+    }
+
+    case "rays": {
+      const centreX = width / 2;
+      const centreY = height * 0.5;
+      const span = Math.hypot(width, height);
+      const count = 14;
+      context.fillStyle = ink(0.07);
+      context.translate(centreX, centreY);
+      for (let index = 0; index < count; index += 1) {
+        const angle = (index / count) * Math.PI * 2;
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.arc(0, 0, span, angle, angle + Math.PI / count);
+        context.closePath();
+        context.fill();
+      }
+      break;
+    }
+
+    case "waves": {
+      const amplitude = height * 0.035;
+      const layers = 3;
+      for (let layer = 0; layer < layers; layer += 1) {
+        const base = height * (0.72 + layer * 0.09);
+        context.fillStyle = ink(0.1 + layer * 0.04);
+        context.beginPath();
+        context.moveTo(0, height);
+        context.lineTo(0, base);
+        // Sampling every 2% of the width is smooth enough at any output size.
+        for (let step = 0; step <= 50; step += 1) {
+          const x = (width * step) / 50;
+          const y = base + Math.sin((step / 50) * Math.PI * 3 + layer) * amplitude;
+          context.lineTo(x, y);
+        }
+        context.lineTo(width, height);
+        context.closePath();
+        context.fill();
+      }
+      break;
+    }
+
+    case "bubbles": {
+      const count = 22;
+      for (let index = 0; index < count; index += 1) {
+        const radius = shorter * (0.015 + random() * 0.075);
+        const x = random() * width;
+        const y = random() * height;
+        context.beginPath();
+        context.arc(x, y, radius, 0, Math.PI * 2);
+        // A mix of filled and outlined circles reads as depth rather than
+        // as a single scattered layer.
+        if (random() > 0.45) {
+          context.fillStyle = ink(0.12);
+          context.fill();
+        } else {
+          context.strokeStyle = ink(0.22);
+          context.lineWidth = Math.max(1, shorter * 0.0025);
+          context.stroke();
+        }
+      }
+      break;
+    }
+
+    case "topography": {
+      const centreX = width * (0.3 + random() * 0.4);
+      const centreY = height * (0.3 + random() * 0.4);
+      const step = shorter * 0.055;
+      const wobble = shorter * 0.03;
+      context.strokeStyle = ink(0.22);
+      context.lineWidth = Math.max(1, shorter * 0.0022);
+
+      const reach = Math.hypot(width, height) * 0.75;
+      for (let ring = 1; ring * step < reach; ring += 1) {
+        const radius = ring * step;
+        context.beginPath();
+        // A contour is a circle with a low-frequency wobble, which is what
+        // separates it from the plain concentric rings above.
+        for (let step2 = 0; step2 <= 60; step2 += 1) {
+          const angle = (step2 / 60) * Math.PI * 2;
+          const r = radius + Math.sin(angle * 3 + ring * 0.7) * wobble;
+          const x = centreX + Math.cos(angle) * r;
+          const y = centreY + Math.sin(angle) * r;
+          if (step2 === 0) context.moveTo(x, y);
+          else context.lineTo(x, y);
+        }
+        context.closePath();
+        context.stroke();
+      }
+      break;
+    }
+  }
+
+  context.restore();
+}
+
+/** Applies an alpha to a #rrggbb colour without a colour library. */
+function withAlpha(hex: string, alpha: number): string {
+  const clean = hex.replace("#", "");
+  const full = clean.length === 3 ? clean.split("").map((c) => c + c).join("") : clean;
+  const r = parseInt(full.slice(0, 2), 16);
+  const g = parseInt(full.slice(2, 4), 16);
+  const b = parseInt(full.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(4)})`;
+}
+
+/**
+ * Builds one tile of monochrome noise, returned as raw RGBA bytes.
+ *
+ * Grain is drawn as a tiled pattern rather than as per-pixel noise over the
+ * whole canvas: a 1080 × 1920 image is two million pixels, and generating that
+ * on every keystroke while someone types a caption would make the preview
+ * unusable. A 160-pixel tile is 25,600 and imperceptibly different once tiled.
+ */
+export function noiseTile(size: number, random: () => number): Uint8ClampedArray {
+  const data = new Uint8ClampedArray(size * size * 4);
+
+  for (let index = 0; index < size * size; index += 1) {
+    const value = Math.floor(random() * 256);
+    const offset = index * 4;
+    data[offset] = value;
+    data[offset + 1] = value;
+    data[offset + 2] = value;
+    // Low alpha, because grain is a texture rather than a layer.
+    data[offset + 3] = 255;
+  }
+
+  return data;
+}
 
 export type Layout = "text-top" | "text-bottom" | "text-side" | "full-bleed";
 
@@ -158,6 +453,12 @@ export interface RenderOptions {
   tilt: number;
   /** Headline size as a percentage of canvas height. */
   headlineScale: number;
+  /** Decorative layer drawn over the gradient and behind the device. */
+  pattern: PatternId;
+  /** 0–100. Mapped onto each pattern's own sensible alpha range. */
+  patternIntensity: number;
+  /** Film-grain texture over everything. Composes with any pattern. */
+  grain: boolean;
   /** Index in the set, used only for the fallback placeholder text. */
   index: number;
 }
@@ -354,6 +655,22 @@ export function renderSlide(
     context.fillRect(0, 0, width, height);
   }
 
+  /*
+   * The decorative layer is seeded from the slide's index, so it is stable
+   * across re-renders. Using Math.random here would make the background shift
+   * on every keystroke while a caption is typed, and would produce an export
+   * that did not match the preview.
+   */
+  drawPattern(
+    context,
+    options.pattern,
+    width,
+    height,
+    theme,
+    options.patternIntensity,
+    mulberry32(hashSeed(`${options.pattern}-${options.index}-${theme.id}`)),
+  );
+
   const margin = Math.round(Math.min(width, height) * 0.075);
   const headlineSize = Math.round(height * (options.headlineScale / 100));
   const subSize = Math.round(headlineSize * 0.46);
@@ -417,9 +734,17 @@ export function renderSlide(
     deviceRegion = { x: left, y: margin * 0.5, width: width - left - margin, height: height - margin };
   }
 
+  const drawGrainLast = () => {
+    if (options.grain) applyGrain(context, width, height);
+  };
+
   if (slide.image) {
     drawDevice(context, slide.image, deviceRegion, options);
-  } else {
+    drawGrainLast();
+    return;
+  }
+
+  {
     // A placeholder so the layout is visible before a screenshot is added.
     context.save();
     context.strokeStyle = theme.subtext;
@@ -449,6 +774,43 @@ export function renderSlide(
     );
     context.restore();
   }
+
+  drawGrainLast();
+}
+
+/**
+ * Tiles a noise texture over the finished image.
+ *
+ * Returns silently where there is no DOM to build the tile in — the check
+ * script exercises `noiseTile` directly, since the compositing step needs a
+ * real canvas and cannot be meaningfully stubbed.
+ */
+function applyGrain(context: CanvasRenderingContext2D, width: number, height: number): void {
+  if (typeof document === "undefined") return;
+
+  const size = 160;
+  const tile = document.createElement("canvas");
+  tile.width = size;
+  tile.height = size;
+
+  const tileContext = tile.getContext("2d");
+  if (!tileContext) return;
+
+  const image = tileContext.createImageData(size, size);
+  image.data.set(noiseTile(size, mulberry32(0x9e3779b9)));
+  tileContext.putImageData(image, 0, 0);
+
+  const pattern = context.createPattern(tile, "repeat");
+  if (!pattern) return;
+
+  context.save();
+  // Overlay keeps the grain from washing the image out: it darkens what is
+  // dark and lightens what is light rather than flattening everything.
+  context.globalCompositeOperation = "overlay";
+  context.globalAlpha = 0.08;
+  context.fillStyle = pattern;
+  context.fillRect(0, 0, width, height);
+  context.restore();
 }
 
 /* ------------------------------------------------------------ validation */

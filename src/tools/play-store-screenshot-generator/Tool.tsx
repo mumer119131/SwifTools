@@ -18,15 +18,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { hashSeed, mulberry32 } from "@/lib/random";
 import {
   FONT_STACKS,
   LAYOUTS,
+  PATTERNS,
   SIZE_PRESETS,
   THEMES,
   checkSpec,
+  drawPattern,
   renderSlide,
   type Layout,
+  type PatternId,
   type Slide,
+  type Theme,
 } from "./logic";
 
 /** Reads a File into an Image the canvas can draw. */
@@ -54,6 +59,9 @@ export default function PlayStoreScreenshotTool() {
   const [layout, setLayout] = React.useState<Layout>("text-top");
   const [fontId, setFontId] = React.useState("system");
   const [showFrame, setShowFrame] = React.useState(true);
+  const [pattern, setPattern] = React.useState<PatternId>("mesh");
+  const [patternIntensity, setPatternIntensity] = React.useState(70);
+  const [grain, setGrain] = React.useState(false);
   const [tilt, setTilt] = React.useState(0);
   const [headlineScale, setHeadlineScale] = React.useState(4.5);
   const [format, setFormat] = React.useState<"png" | "jpeg">("png");
@@ -73,6 +81,9 @@ export default function PlayStoreScreenshotTool() {
     showFrame,
     tilt,
     headlineScale,
+    pattern,
+    patternIntensity,
+    grain,
   };
 
   const warnings = checkSpec(size.width, size.height, slides.length, size.kind);
@@ -301,6 +312,62 @@ export default function PlayStoreScreenshotTool() {
           </div>
         </div>
 
+        <div className="space-y-2 sm:col-span-2 lg:col-span-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <span className="text-sm font-medium text-foreground">Background detail</span>
+            <span className="text-xs text-muted-foreground">
+              {PATTERNS.find((entry) => entry.id === pattern)?.note}
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {PATTERNS.map((entry) => (
+              <button
+                key={entry.id}
+                type="button"
+                onClick={() => setPattern(entry.id)}
+                aria-label={`Use the ${entry.label} background`}
+                aria-pressed={pattern === entry.id}
+                className={cn(
+                  "cursor-pointer overflow-hidden rounded-lg border text-left",
+                  "transition-colors duration-[180ms] ease-out-expo",
+                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]",
+                  pattern === entry.id
+                    ? "border-border-strong ring-1 ring-[var(--border-strong)]"
+                    : "border-border hover:border-border-strong",
+                )}
+              >
+                <PatternSwatch pattern={entry.id} theme={theme} intensity={patternIntensity} />
+                <span
+                  className={cn(
+                    "block px-2 py-1.5 text-xs",
+                    pattern === entry.id ? "text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  {entry.label}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="ps-pattern-strength">Detail strength — {patternIntensity}%</Label>
+          <Slider
+            id="ps-pattern-strength"
+            min={0}
+            max={100}
+            step={5}
+            value={[patternIntensity]}
+            onValueChange={([value]) => setPatternIntensity(value)}
+            disabled={pattern === "none"}
+          />
+          <FieldHint>
+            {pattern === "none"
+              ? "Pick a background above to enable this."
+              : "Lower is usually better — the screenshot is the subject."}
+          </FieldHint>
+        </div>
+
         <div className="space-y-2">
           <Label htmlFor="ps-headline-size">Caption size — {headlineScale.toFixed(1)}%</Label>
           <Slider
@@ -326,9 +393,15 @@ export default function PlayStoreScreenshotTool() {
           />
         </div>
 
-        <div className="flex items-center gap-3 pt-7">
-          <Switch id="ps-frame" checked={showFrame} onCheckedChange={setShowFrame} />
-          <Label htmlFor="ps-frame">Draw a phone frame</Label>
+        <div className="space-y-3 pt-7">
+          <div className="flex items-center gap-3">
+            <Switch id="ps-frame" checked={showFrame} onCheckedChange={setShowFrame} />
+            <Label htmlFor="ps-frame">Draw a phone frame</Label>
+          </div>
+          <div className="flex items-center gap-3">
+            <Switch id="ps-grain" checked={grain} onCheckedChange={setGrain} />
+            <Label htmlFor="ps-grain">Add film grain</Label>
+          </div>
         </div>
 
         <div className="flex items-end pb-1">
@@ -484,6 +557,63 @@ export default function PlayStoreScreenshotTool() {
       </p>
     </div>
   );
+}
+
+/**
+ * A tiny live preview of one background option.
+ *
+ * Rendered rather than listed, because the names alone mean very little — the
+ * difference between "Rings" and "Contours" is obvious at a glance and opaque
+ * in a dropdown. Each swatch paints the real gradient and the real pattern
+ * function, so what you pick is what you get.
+ */
+function PatternSwatch({
+  pattern,
+  theme,
+  intensity,
+}: {
+  pattern: PatternId;
+  theme: Theme;
+  intensity: number;
+}) {
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
+    if (!canvas || !context) return;
+
+    const width = 108;
+    const height = 68;
+    canvas.width = width;
+    canvas.height = height;
+
+    const radians = (theme.angle * Math.PI) / 180;
+    const gradient = context.createLinearGradient(
+      width / 2 - (Math.cos(radians) * width) / 2,
+      height / 2 - (Math.sin(radians) * height) / 2,
+      width / 2 + (Math.cos(radians) * width) / 2,
+      height / 2 + (Math.sin(radians) * height) / 2,
+    );
+    gradient.addColorStop(0, theme.background[0]);
+    gradient.addColorStop(1, theme.background[1]);
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, width, height);
+
+    // The same seed the full render uses for slide 0, so the swatch is a
+    // genuine sample rather than a different arrangement of the same idea.
+    drawPattern(
+      context,
+      pattern,
+      width,
+      height,
+      theme,
+      intensity,
+      mulberry32(hashSeed(`${pattern}-0-${theme.id}`)),
+    );
+  }, [pattern, theme, intensity]);
+
+  return <canvas ref={canvasRef} className="block h-[68px] w-[108px]" aria-hidden="true" />;
 }
 
 /**
