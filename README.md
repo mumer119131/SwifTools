@@ -27,6 +27,8 @@ pnpm dev          # http://localhost:3000
 | `pnpm check:home` | Every material and cost calculator, against hand-worked answers |
 | `pnpm check:fun` | Chi-squared uniformity of the randomisers, plus puzzle validity |
 | `pnpm check:vault` | The password manager's encryption, tampering and key-derivation |
+| `pnpm check:seo` | Unique titles and descriptions, server-rendered copy, FAQ quality |
+| `pnpm dates` | Regenerates sitemap `lastModified` dates from git history |
 | `pnpm new:tool` | Scaffold a new tool (see below) |
 
 ---
@@ -230,6 +232,34 @@ Pairs are deliberately not exhaustive. Every permutation would be roughly 400
 pages that compete with each other; these are the conversions people search for,
 expanded in both directions because "kg to lbs" and "lbs to kg" are different
 queries.
+
+### Server-rendered page content
+
+Tool bodies load with `ssr: false`, so anything written inside a tool
+component is invisible to a crawler. Two registry fields put the substance
+back into the HTML:
+
+- **`notes`** — plain-string paragraphs rendered by `ToolShell`, a server
+  component. Plain strings rather than JSX precisely because the point is that
+  it reaches the markup.
+- **`faq`** — real questions with real answers, rendered as a definition list
+  and emitted as `FAQPage` JSON-LD. Not an accordion: collapsed content is
+  weighted lower, and there is no reason to hide four short answers.
+
+That took a tool page from 165 words of its own content wrapped in a 433-word
+shared footer, to around 550–680 words of unique server-rendered copy —
+**21,469 words across 155 tools**.
+
+`pnpm check:seo` enforces the rest: unique names, titles and descriptions across
+all 237 pages, descriptions inside 155 characters, at least 3 FAQ entries and 90
+words of notes per live tool, no duplicate question or answer text between
+tools, and no filler answers. A `FAQPage` padded with "Yes, it's free!" is worse
+than none. It reads the title out of `buildToolMetadata` rather than rebuilding
+the format string, so it tests the site rather than a copy of its logic.
+
+Tool pages also generate their own Open Graph card from `opengraph-image.tsx`,
+and sitemap `lastModified` comes from the last commit touching each tool's
+folder rather than the build time.
 
 ### Fair randomness
 

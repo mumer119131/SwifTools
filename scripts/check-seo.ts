@@ -18,6 +18,8 @@ import process from "node:process";
 
 import { browsableTools, publishedTools, tools } from "@/config/tools";
 import { getCategory } from "@/config/categories";
+import { buildToolMetadata } from "@/lib/seo";
+import { pageTitle } from "@/config/site";
 
 let failures = 0;
 let warnings = 0;
@@ -42,8 +44,14 @@ for (const tool of tools) {
 
   if (!category) fail(`${tool.slug}: category "${tool.category}" does not exist`);
 
-  // Google truncates around 60 characters of title and 155 of description.
-  const title = `${tool.name} — Free Online ${category?.label ?? ""} Tool | SwiftKnife`;
+  /*
+   * Read the real title out of buildToolMetadata rather than rebuilding the
+   * format string here — a check that duplicates the logic it is testing will
+   * agree with itself while the site does something else. Google truncates
+   * around 60 characters of title and 155 of description.
+   */
+  const segment = buildToolMetadata(tool).title;
+  const title = pageTitle(typeof segment === "string" ? segment : tool.name);
   if (title.length > 70) warn(`${tool.slug}: title is ${title.length} chars — "${title}"`);
 
   if (tool.description.length > 155) {
