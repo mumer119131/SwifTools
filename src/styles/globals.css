@@ -351,6 +351,28 @@
   .animate-reveal {
     animation: reveal var(--dur-slow) var(--ease-out) backwards;
   }
+
+  /*
+   * Scroll reveal. Visible by default — the Reveal component only sets
+   * `pending` once it has confirmed the element is below the fold, so no-JS
+   * and slow-JS both render normally rather than blank.
+   */
+  .reveal-target {
+    transition:
+      opacity var(--dur-slow) var(--ease-out),
+      transform var(--dur-slow) var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-target[data-reveal="pending"] {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  .reveal-target[data-reveal="shown"] {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes reveal {

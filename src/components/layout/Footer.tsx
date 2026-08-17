@@ -5,6 +5,7 @@ import { Logo } from "@/components/layout/Logo";
 import { GitHubIcon, XIcon } from "@/components/layout/BrandIcons";
 
 const legalLinks = [
+  { label: "All tools", href: "/tools" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy", href: "/privacy" },

@@ -35,6 +35,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
+    {
+      url: absoluteUrl("/tools"),
+      lastModified,
+      changeFrequency: "weekly" as const,
+      // The full catalogue now lives here rather than on the homepage.
+      priority: 0.9,
+    },
     ...populatedCategories.map((category) => ({
       url: absoluteUrl(`/${category.slug}`),
       lastModified,

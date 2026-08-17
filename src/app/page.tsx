@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, Gauge, Infinity as InfinityIcon, Lock, ShieldCheck, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  Gauge,
+  Infinity as InfinityIcon,
+  Lock,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 
 import { siteConfig } from "@/config/site";
 import {
@@ -11,8 +18,8 @@ import {
 } from "@/config/tools";
 import { SearchTrigger } from "@/components/layout/SearchCommand";
 import { ToolCard } from "@/components/shared/ToolCard";
-import { ToolDirectory } from "@/components/home/ToolDirectory";
 import { JsonLdScript } from "@/components/shared/JsonLd";
+import { Reveal } from "@/components/shared/Reveal";
 import { Badge } from "@/components/ui/misc";
 import { Button } from "@/components/ui/button";
 import { itemListLd } from "@/lib/seo";
@@ -43,50 +50,61 @@ const valueProps = [
   },
 ];
 
+/** The stagger cap from the design system: six items, 40ms apart. */
+function stagger(index: number): number {
+  return Math.min(index, 5) * 40;
+}
+
 export default function HomePage() {
-  const featured = popularTools.length > 0 ? popularTools : publishedTools.slice(0, 6);
+  const featured = (popularTools.length > 0 ? popularTools : publishedTools).slice(0, 6);
+  const clientSide = browsableTools.filter((tool) => tool.processing === "client").length;
 
   return (
     <>
       {/* ------------------------------------------------------------- Hero */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="ambient-wash" aria-hidden="true" />
-        <div className="relative mx-auto w-full max-w-6xl px-5 pb-16 pt-20 text-center sm:px-6 lg:px-8 lg:pb-24 lg:pt-28">
-          <Badge variant="outline" className="animate-reveal mb-7">
+        <div className="relative mx-auto w-full max-w-5xl px-5 pb-20 pt-20 text-center sm:px-6 lg:px-8 lg:pb-28 lg:pt-32">
+          <Badge variant="outline" className="animate-reveal mb-8">
             <Sparkles className="size-3" strokeWidth={2} aria-hidden="true" />
-            <span data-numeric>{browsableTools.length}</span> tools and counting
+            <span data-numeric>{browsableTools.length}</span> tools ·{" "}
+            <span data-numeric>{clientSide}</span> never upload a thing
           </Badge>
 
           <h1
-            className="animate-reveal mx-auto max-w-4xl text-balance font-semibold tracking-[-0.035em] text-foreground"
-            style={{ fontSize: "clamp(2.75rem, 6vw, 4.5rem)", lineHeight: 1.05, animationDelay: "40ms" }}
+            className="animate-reveal mx-auto max-w-4xl text-balance font-semibold tracking-[-0.04em] text-foreground"
+            style={{
+              fontSize: "clamp(2.75rem, 7vw, 5rem)",
+              lineHeight: 1.02,
+              animationDelay: "40ms",
+            }}
           >
             {siteConfig.tagline}
           </h1>
 
           <p
-            className="animate-reveal mx-auto mt-6 max-w-xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg"
+            className="animate-reveal mx-auto mt-7 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground"
             style={{ animationDelay: "80ms" }}
           >
             {siteConfig.description}
           </p>
 
+          {/* Search first: it is how most people actually find a tool here. */}
           <div
-            className="animate-reveal mx-auto mt-9 flex max-w-xl flex-col items-center gap-3"
+            className="animate-reveal mx-auto mt-10 flex max-w-xl flex-col items-center gap-3"
             style={{ animationDelay: "120ms" }}
           >
             <SearchTrigger variant="hero" />
             <Button asChild size="lg" className="w-full sm:w-auto">
-              <Link href="#tools">
-                Browse all tools
+              <Link href="/tools">
+                Browse all {browsableTools.length} tools
                 <ArrowRight strokeWidth={1.75} />
               </Link>
             </Button>
           </div>
 
-          {/* --------------------------------------------------- Trust strip */}
           <ul
-            className="animate-reveal mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
+            className="animate-reveal mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
             style={{ animationDelay: "160ms" }}
           >
             {trustPoints.map((point) => (
@@ -99,123 +117,150 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* --------------------------------------------------- Category grid */}
-      <section className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <header className="mb-8">
-          <h2 className="text-2xl font-semibold tracking-[-0.02em] text-foreground">
-            Browse by category
-          </h2>
-          <p className="mt-2 text-muted-foreground">
-            Eight collections covering the things people actually need to get done.
-          </p>
-        </header>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {populatedCategories.map((category, index) => {
-            const Icon = category.icon;
-            return (
-              <Link
-                key={category.slug}
-                href={`/${category.slug}`}
-                className={cn(
-                  "surface-card surface-card-interactive animate-reveal group flex flex-col gap-3 p-5",
-                  `accent-${category.slug}`,
-                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]",
-                )}
-                style={{ animationDelay: `${Math.min(index, 5) * 40}ms` }}
-              >
-                <span className="bg-accent-tint grid size-10 place-items-center rounded-md">
-                  <Icon className="text-accent size-5" strokeWidth={1.75} />
-                </span>
-                <span className="space-y-1">
-                  <span className="block text-[0.9375rem] font-medium text-foreground">
-                    {category.label}
-                  </span>
-                  <span className="block text-sm leading-relaxed text-muted-foreground">
-                    {category.description}
-                  </span>
-                </span>
-                <span className="mt-auto pt-1 text-xs text-subtle-foreground" data-numeric>
-                  {toolCountByCategory[category.slug]} tools
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
       {/* --------------------------------------------------- Popular tools */}
       {featured.length > 0 ? (
-        <section className="border-y border-border bg-surface/40">
-          <div className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-6 lg:px-8 lg:py-20">
-            <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-6 lg:px-8 lg:py-24">
+          <Reveal>
+            <header className="mb-10 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-semibold tracking-[-0.02em] text-foreground">
-                  Popular tools
+                <h2 className="text-2xl font-semibold tracking-[-0.025em] text-foreground sm:text-3xl">
+                  Start here
                 </h2>
                 <p className="mt-2 text-muted-foreground">The ones people reach for most.</p>
               </div>
               <Button asChild variant="outline" size="sm">
-                <Link href="#tools">
+                <Link href="/tools">
                   See everything
                   <ArrowRight strokeWidth={1.75} />
                 </Link>
               </Button>
             </header>
+          </Reveal>
 
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {featured.slice(0, 6).map((tool) => (
-                <ToolCard key={`${tool.category}/${tool.slug}`} tool={tool} />
-              ))}
-            </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((tool, index) => (
+              <Reveal key={`${tool.category}/${tool.slug}`} delay={stagger(index)}>
+                <ToolCard tool={tool} />
+              </Reveal>
+            ))}
           </div>
         </section>
       ) : null}
 
+      {/* --------------------------------------------------- Category grid */}
+      <section className="border-y border-border bg-surface/40">
+        <div className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-6 lg:px-8 lg:py-24">
+          <Reveal>
+            <header className="mb-10 max-w-2xl">
+              <h2 className="text-2xl font-semibold tracking-[-0.025em] text-foreground sm:text-3xl">
+                Browse by category
+              </h2>
+              <p className="mt-2 text-muted-foreground">
+                {populatedCategories.length} collections covering the things people actually need to
+                get done.
+              </p>
+            </header>
+          </Reveal>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {populatedCategories.map((category, index) => {
+              const Icon = category.icon;
+              return (
+                <Reveal key={category.slug} delay={stagger(index % 6)}>
+                  <Link
+                    href={`/${category.slug}`}
+                    className={cn(
+                      "surface-card surface-card-interactive group flex h-full flex-col gap-3 p-5",
+                      `accent-${category.slug}`,
+                      "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]",
+                    )}
+                  >
+                    <span className="bg-accent-tint grid size-10 place-items-center rounded-md">
+                      <Icon className="text-accent size-5" strokeWidth={1.75} />
+                    </span>
+                    <span className="space-y-1">
+                      <span className="block text-[0.9375rem] font-medium text-foreground">
+                        {category.label}
+                      </span>
+                      <span className="block text-sm leading-relaxed text-muted-foreground">
+                        {category.description}
+                      </span>
+                    </span>
+                    <span className="mt-auto pt-1 text-xs text-subtle-foreground" data-numeric>
+                      {toolCountByCategory[category.slug]} tools
+                    </span>
+                  </Link>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* ------------------------------------------------------ Why <name> */}
-      <section className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-6 lg:px-8 lg:py-20">
-        <header className="mb-8 max-w-2xl">
-          <h2 className="text-2xl font-semibold tracking-[-0.02em] text-foreground">
-            Why {siteConfig.name}
-          </h2>
-          <p className="mt-2 text-muted-foreground">
-            Most online tool sites upload your files to a server you know nothing about. This one
-            mostly doesn&rsquo;t need to.
-          </p>
-        </header>
+      <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-6 lg:px-8 lg:py-24">
+        <Reveal>
+          <header className="mb-10 max-w-2xl">
+            <h2 className="text-2xl font-semibold tracking-[-0.025em] text-foreground sm:text-3xl">
+              Why {siteConfig.name}
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              Most online tool sites upload your files to a server you know nothing about. This one
+              mostly doesn&rsquo;t need to.
+            </p>
+          </header>
+        </Reveal>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {valueProps.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="surface-card flex gap-4 p-5">
-              <span className="grid size-10 shrink-0 place-items-center rounded-md border border-border bg-background">
-                <Icon className="size-5 text-foreground" strokeWidth={1.75} />
-              </span>
-              <div className="space-y-1.5">
-                <h3 className="text-[0.9375rem] font-medium text-foreground">{title}</h3>
-                <p className="text-sm leading-relaxed text-muted-foreground">{body}</p>
+          {valueProps.map(({ icon: Icon, title, body }, index) => (
+            <Reveal key={title} delay={stagger(index)}>
+              <div className="surface-card flex h-full gap-4 p-5">
+                <span className="grid size-10 shrink-0 place-items-center rounded-md border border-border bg-background">
+                  <Icon className="size-5 text-foreground" strokeWidth={1.75} />
+                </span>
+                <div className="space-y-1.5">
+                  <h3 className="text-[0.9375rem] font-medium text-foreground">{title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{body}</p>
+                </div>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
 
-      {/* ----------------------------------------------- Full tool directory */}
-      <section id="tools" className="mx-auto w-full max-w-6xl scroll-mt-24 px-5 pb-8 sm:px-6 lg:px-8">
-        <header className="mb-8">
-          <h2 className="text-2xl font-semibold tracking-[-0.02em] text-foreground">All tools</h2>
-          <p className="mt-2 text-muted-foreground">
-            Every tool in one place. Filter below, or press{" "}
-            <kbd className="inline-flex h-5 items-center rounded border border-border bg-surface px-1.5 font-mono text-[0.6875rem] text-muted-foreground">
-              ⌘K
-            </kbd>{" "}
-            from anywhere.
-          </p>
-        </header>
-
-        <ToolDirectory />
+      {/* --------------------------------------------------------- Closing */}
+      <section className="border-t border-border">
+        <div className="relative mx-auto w-full max-w-6xl overflow-hidden px-5 py-24 text-center sm:px-6 lg:px-8">
+          <div className="ambient-wash" aria-hidden="true" />
+          <Reveal className="relative">
+            <h2 className="mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-[-0.03em] text-foreground sm:text-4xl">
+              Every tool, one page, nothing to sign up for.
+            </h2>
+            <p className="mx-auto mt-4 max-w-lg text-pretty text-muted-foreground">
+              {browsableTools.length} tools across {populatedCategories.length} categories, filterable
+              in one place.
+            </p>
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              <Button asChild size="lg">
+                <Link href="/tools">
+                  Browse all tools
+                  <ArrowRight strokeWidth={1.75} />
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/about">How it works</Link>
+              </Button>
+            </div>
+          </Reveal>
+        </div>
       </section>
 
-      <JsonLdScript data={itemListLd(browsableTools, `All ${siteConfig.name} tools`)} />
+      {/*
+        The structured data describes what this page actually lists. The full
+        catalogue's ItemList lives on /tools, where the full catalogue is —
+        claiming 163 items here would describe a page that no longer exists.
+      */}
+      <JsonLdScript data={itemListLd(featured, `Popular ${siteConfig.name} tools`)} />
     </>
   );
 }

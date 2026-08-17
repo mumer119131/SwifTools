@@ -179,7 +179,7 @@ export function ToolsMenu({ pathname }: { pathname: string }) {
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
             <Link
-              href="/#tools"
+              href="/tools"
               className={cn(
                 "inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm text-muted-foreground",
                 "transition-colors duration-[180ms] ease-out-expo hover:bg-surface-hover hover:text-foreground",
