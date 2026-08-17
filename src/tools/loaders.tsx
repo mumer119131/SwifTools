@@ -233,7 +233,6 @@ const registry: Record<string, React.ComponentType> = {
   "imessage-chat-generator": lazyTool(() => import("@/tools/imessage-chat-generator/Tool")),
   "youtube-thumbnail-grabber": lazyTool(() => import("@/tools/youtube-thumbnail-grabber/Tool")),
   "vimeo-thumbnail-grabber": lazyTool(() => import("@/tools/vimeo-thumbnail-grabber/Tool")),
-  "instagram-photo-downloader": lazyTool(() => import("@/tools/instagram-photo-downloader/Tool")),
   "twitter-ad-revenue-generator": lazyTool(
     () => import("@/tools/twitter-ad-revenue-generator/Tool"),
   ),

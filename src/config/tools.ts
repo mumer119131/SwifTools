@@ -229,7 +229,6 @@ import { taxCalculator } from "@/tools/tax-calculator/meta";
 import { imessageChatGenerator } from "@/tools/imessage-chat-generator/meta";
 import { instagramDmGenerator } from "@/tools/instagram-dm-generator/meta";
 import { instagramFilters } from "@/tools/instagram-filters/meta";
-import { instagramPhotoDownloader } from "@/tools/instagram-photo-downloader/meta";
 import { instagramPostGenerator } from "@/tools/instagram-post-generator/meta";
 import { instagramStoryGenerator } from "@/tools/instagram-story-generator/meta";
 import { tweetGenerator } from "@/tools/tweet-generator/meta";
@@ -359,7 +358,6 @@ export const tools: readonly Tool[] = [
   imessageChatGenerator,
   youtubeThumbnailGrabber,
   vimeoThumbnailGrabber,
-  instagramPhotoDownloader,
   twitterAdRevenueGenerator,
 
   // SEO

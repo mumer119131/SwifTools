@@ -1,6 +1,6 @@
 # PocketToolz
 
-A fast, free collection of 164 tools across fourteen categories — PDF, image, text, developer,
+A fast, free collection of 163 tools across fourteen categories — PDF, image, text, developer,
 colour, converter, units, calculator, SEO, generator, social, science, home and fun. All but three
 run entirely in the browser, so your files are never uploaded.
 
@@ -137,11 +137,11 @@ src/
     layout.tsx                  root shell: fonts, theme, ⌘K provider, header/footer
     page.tsx                    landing page
     [category]/page.tsx         category listing        (SSG, 14 pages)
-    [category]/[tool]/page.tsx  tool page               (SSG, 237 pages)
+    [category]/[tool]/page.tsx  tool page               (SSG, 236 pages)
     api/rates/route.ts          cached ECB exchange-rate proxy
     api/vimeo/route.ts          Vimeo oEmbed proxy (no CORS upstream)
-    api/og-image/route.ts       reads a public page's og:image, host-allowlisted
-    (legal)/privacy, terms
+    ads.txt/route.ts            generated from the configured publisher ID
+    (legal)/about, contact, privacy, terms
     sitemap.ts robots.ts manifest.ts opengraph-image.tsx icon.tsx apple-icon.tsx
   components/
     layout/     Header, Footer, Logo, ThemeToggle, SearchCommand (⌘K),
@@ -178,7 +178,7 @@ fetched when someone opens that tool's page. None of it reaches the homepage bun
 
 ### Client vs. server
 
-**161 of the 164 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
+**161 of the 163 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
 That is the product's main selling point, not just an optimisation: no upload wait, no server cost,
 and files that genuinely never leave the device.
 
@@ -188,12 +188,15 @@ Four need a server, each for a stated reason:
   via Frankfurter, cached for an hour, so one upstream request is shared by every visitor.
 - **Vimeo thumbnail grabber** — `/api/vimeo` proxies Vimeo's official oEmbed endpoint, which is
   public and keyless but sends no CORS headers, so a browser cannot call it.
-- **Instagram photo downloader** — `/api/og-image` reads the preview image a public post
-  advertises to link crawlers. Expect it to be unreliable; see the note on that tool's page.
+Both use a **host allowlist, not a blocklist**. Without one a fetch proxy could be pointed at
+internal addresses — verified that both an arbitrary host and the `169.254.169.254` cloud metadata
+endpoint are rejected with a 400.
 
-`/api/og-image` uses a **host allowlist, not a blocklist**. Without one it would be an open proxy
-that could be pointed at internal addresses — verified that both an arbitrary host and the
-`169.254.169.254` cloud metadata endpoint are rejected with a 400.
+A third route, `/api/og-image`, was removed along with the Instagram photo downloader it served.
+Downloading another platform's user photos is squarely within what AdSense treats as facilitating
+unauthorised access to copyrighted material, and it breached Instagram's own terms besides. Its
+endpoint was a general-purpose server-side URL fetcher, so once the only consumer was gone it was
+pure attack surface with no benefit.
 
 None of these routes read a request body or store anything.
 
@@ -278,7 +281,7 @@ back into the HTML:
 
 That took a tool page from 165 words of its own content wrapped in a 433-word
 shared footer, to around 550–680 words of unique server-rendered copy —
-**23,473 words across 164 tools**.
+**23,358 words across 163 tools**.
 
 `pnpm check:seo` enforces the rest: unique names, titles and descriptions across
 all 238 pages, descriptions inside 155 characters, at least 3 FAQ entries and 90
