@@ -21,7 +21,7 @@ interface Note {
 const EMPTY: Note = { title: "Untitled note", body: "" };
 
 export default function OnlineNotepadTool() {
-  const [note, setNote, clear] = useLocalStorage<Note>("swiftknife:notepad", EMPTY);
+  const [note, setNote, clear] = useLocalStorage<Note>("pockettoolz:notepad", EMPTY);
   const [monospace, setMonospace] = React.useState(false);
 
   const words = note.body.trim() ? note.body.trim().split(/\s+/).length : 0;

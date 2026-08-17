@@ -1,4 +1,4 @@
-# SwiftKnife
+# PocketToolz
 
 A fast, free collection of 164 tools across fourteen categories — PDF, image, text, developer,
 colour, converter, units, calculator, SEO, generator, social, science, home and fun. All but three
@@ -42,7 +42,7 @@ The app name is **never** hardcoded. It lives in exactly one place:
 ```ts
 // src/config/site.ts
 export const siteConfig = {
-  name: "SwiftKnife",
+  name: "PocketToolz",
   tagline: "Every tool you need, sharp and fast.",
   // …
 };

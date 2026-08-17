@@ -18,7 +18,7 @@ export default function TypingSpeedTestTool() {
   const [typed, setTyped] = React.useState("");
   const [running, setRunning] = React.useState(false);
   const [elapsed, setElapsed] = React.useState(0);
-  const [best, setBest] = useLocalStorage<Record<string, number>>("swiftknife:typing-best", NO_BEST);
+  const [best, setBest] = useLocalStorage<Record<string, number>>("pockettoolz:typing-best", NO_BEST);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
 
   const finished = typed.length >= passage.text.length;

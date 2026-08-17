@@ -21,7 +21,7 @@ import { analyseJson, formatJson, minifyJson, parseJson } from "./logic";
 
 type Mode = "beautify" | "minify";
 
-const SAMPLE = '{"name":"SwiftKnife","tools":[{"slug":"json-formatter","live":true}],"count":48}';
+const SAMPLE = '{"name":"PocketToolz","tools":[{"slug":"json-formatter","live":true}],"count":48}';
 
 export default function JsonFormatterTool() {
   const [input, setInput] = React.useState("");

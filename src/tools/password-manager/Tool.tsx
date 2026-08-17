@@ -27,7 +27,7 @@ const BLANK: Entry = { id: "", site: "", username: "", password: "", notes: "" }
 
 export default function PasswordManagerTool() {
   const [stored, setStored, clearStored] = useLocalStorage<StoredVault | null>(
-    "swiftknife:vault",
+    "pockettoolz:vault",
     null,
   );
 

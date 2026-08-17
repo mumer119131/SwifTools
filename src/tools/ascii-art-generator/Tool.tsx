@@ -11,7 +11,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FONTS, render, wrapAsComment } from "./logic";
 
 export default function AsciiArtTool() {
-  const [text, setText] = React.useState("SWIFTKNIFE");
+  const [text, setText] = React.useState("POCKETTOOLZ");
   const [fontId, setFontId] = React.useState("block");
   const [spacing, setSpacing] = React.useState(1);
   const [comment, setComment] = React.useState<"none" | "block" | "hash" | "slash">("none");

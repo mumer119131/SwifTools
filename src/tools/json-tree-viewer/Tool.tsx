@@ -21,7 +21,7 @@ import {
 } from "./logic";
 
 const SAMPLE = `{
-  "site": "SwiftKnife",
+  "site": "PocketToolz",
   "tools": [
     { "slug": "json-tree-viewer", "category": "developer", "live": true },
     { "slug": "color-mixer", "category": "color", "live": true }

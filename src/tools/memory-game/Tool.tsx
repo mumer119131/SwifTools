@@ -25,7 +25,7 @@ export default function MemoryGameTool() {
   const [running, setRunning] = React.useState(false);
   const [elapsed, setElapsed] = React.useState(0);
   const [locked, setLocked] = React.useState(false);
-  const [best, setBest] = useLocalStorage<Record<string, Best>>("swiftknife:memory-best", NO_BEST);
+  const [best, setBest] = useLocalStorage<Record<string, Best>>("pockettoolz:memory-best", NO_BEST);
 
   const won = cards.length > 0 && cards.every((card) => card.matched);
 

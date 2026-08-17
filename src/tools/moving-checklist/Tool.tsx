@@ -27,7 +27,7 @@ function taskId(label: string): string {
 const BASE_TASKS: Task[] = DEFAULT_TASKS.map((task) => ({ ...task, id: taskId(task.label) }));
 
 export default function MovingChecklistTool() {
-  const [saved, setSaved, clear] = useLocalStorage<Saved>("swiftknife:moving-checklist", EMPTY);
+  const [saved, setSaved, clear] = useLocalStorage<Saved>("pockettoolz:moving-checklist", EMPTY);
   const [draft, setDraft] = React.useState<Record<number, string>>({});
 
   const tasks = [...BASE_TASKS, ...saved.custom];

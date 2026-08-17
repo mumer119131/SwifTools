@@ -15,7 +15,7 @@ const EMPTY: Habit[] = [];
 const WINDOW = 35; // five weeks
 
 export default function HabitTrackerTool() {
-  const [habits, setHabits, clear] = useLocalStorage<Habit[]>("swiftknife:habits", EMPTY);
+  const [habits, setHabits, clear] = useLocalStorage<Habit[]>("pockettoolz:habits", EMPTY);
   const [draft, setDraft] = React.useState("");
   const hydrated = useHydrated();
 

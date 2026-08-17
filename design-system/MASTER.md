@@ -1,4 +1,4 @@
-# SwiftKnife — Design System (Source of Truth)
+# PocketToolz — Design System (Source of Truth)
 
 > Locked in response to §0 of `Instruction.md`. Every component reads these tokens via CSS
 > variables. No raw hex in JSX, ever.

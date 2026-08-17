@@ -28,7 +28,7 @@ interface Store {
 const DEFAULT: Store = { width: 5, height: 7, font: seedFont(5, 7) };
 
 export default function PixelFontMakerTool() {
-  const [store, setStore, clear] = useLocalStorage<Store>("swiftknife:pixel-font", DEFAULT);
+  const [store, setStore, clear] = useLocalStorage<Store>("pockettoolz:pixel-font", DEFAULT);
   const [active, setActive] = React.useState("A");
   const [preview, setPreview] = React.useState("HELLO 123");
   const paintingRef = React.useRef<0 | 1 | null>(null);

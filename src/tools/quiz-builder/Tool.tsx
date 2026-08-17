@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { STARTER, mark, type Quiz } from "./logic";
 
 export default function QuizBuilderTool() {
-  const [quiz, setQuiz, clear] = useLocalStorage<Quiz>("swiftknife:quiz", STARTER);
+  const [quiz, setQuiz, clear] = useLocalStorage<Quiz>("pockettoolz:quiz", STARTER);
   const [mode, setMode] = React.useState<"build" | "play">("build");
   const [answers, setAnswers] = React.useState<Record<string, number>>({});
   const [submitted, setSubmitted] = React.useState(false);

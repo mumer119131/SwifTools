@@ -57,7 +57,7 @@ export async function GET(request: Request) {
       headers: {
         // Identify as a link-preview crawler, which is what we actually are —
         // that is the request the og: tags exist to answer.
-        "user-agent": "Mozilla/5.0 (compatible; SwiftKnifeBot/1.0; +link-preview)",
+        "user-agent": "Mozilla/5.0 (compatible; PocketToolzBot/1.0; +link-preview)",
         accept: "text/html",
         "accept-language": "en",
       },

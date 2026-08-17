@@ -22,7 +22,7 @@ import { AISLES, guessAisle, itemTotal, type GroceryItem } from "./logic";
 const EMPTY: GroceryItem[] = [];
 
 export default function GroceryListTool() {
-  const [items, setItems, clear] = useLocalStorage<GroceryItem[]>("swiftknife:grocery-list", EMPTY);
+  const [items, setItems, clear] = useLocalStorage<GroceryItem[]>("pockettoolz:grocery-list", EMPTY);
   const [draft, setDraft] = React.useState("");
 
   const total = items.reduce((sum, item) => sum + itemTotal(item), 0);

@@ -31,7 +31,7 @@ const PRIORITY_META: Record<Priority, { label: string; icon: typeof ArrowUp; cla
 };
 
 export default function ToDoListTool() {
-  const [tasks, setTasks, clear] = useLocalStorage<Task[]>("swiftknife:todo", EMPTY);
+  const [tasks, setTasks, clear] = useLocalStorage<Task[]>("pockettoolz:todo", EMPTY);
   const [draft, setDraft] = React.useState("");
   const [priority, setPriority] = React.useState<Priority>("normal");
   const [filter, setFilter] = React.useState<"all" | "active" | "done">("all");

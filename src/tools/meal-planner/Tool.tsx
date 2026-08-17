@@ -13,7 +13,7 @@ import { DAYS, MEALS, cellKey, planToText, shoppingList, type Plan } from "./log
 const EMPTY: Plan = {};
 
 export default function MealPlannerTool() {
-  const [plan, setPlan, clear] = useLocalStorage<Plan>("swiftknife:meal-planner", EMPTY);
+  const [plan, setPlan, clear] = useLocalStorage<Plan>("pockettoolz:meal-planner", EMPTY);
   const [expanded, setExpanded] = React.useState<string | null>(null);
 
   const list = shoppingList(plan);

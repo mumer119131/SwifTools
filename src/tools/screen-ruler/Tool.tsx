@@ -19,7 +19,7 @@ const CARD_WIDTH_MM = 85.6;
 const DEFAULT_PPI = 96;
 
 export default function ScreenRulerTool() {
-  const [ppi, setPpi] = useLocalStorage<number>("swiftknife:screen-ppi", DEFAULT_PPI);
+  const [ppi, setPpi] = useLocalStorage<number>("pockettoolz:screen-ppi", DEFAULT_PPI);
   const [cardWidth, setCardWidth] = React.useState(323); // ~96 ppi
   const [calibrating, setCalibrating] = React.useState(false);
 

@@ -45,7 +45,7 @@ const EMPTY: Store = {
 const BLANK = { name: "", meal: "Breakfast", calories: "", protein: "", carbs: "", fat: "" };
 
 export default function CalorieTrackerTool() {
-  const [store, setStore] = useLocalStorage<Store>("swiftknife:calorie-tracker", EMPTY);
+  const [store, setStore] = useLocalStorage<Store>("pockettoolz:calorie-tracker", EMPTY);
   const [draft, setDraft] = React.useState(BLANK);
   const hydrated = useHydrated();
 

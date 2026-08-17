@@ -27,7 +27,7 @@ interface Store {
 const EMPTY: Store = { income: "3200", lines: STARTER };
 
 export default function BudgetTrackerTool() {
-  const [store, setStore, clear] = useLocalStorage<Store>("swiftknife:budget", EMPTY);
+  const [store, setStore, clear] = useLocalStorage<Store>("pockettoolz:budget", EMPTY);
 
   const summary = summarise(Number(store.income), store.lines);
 

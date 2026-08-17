@@ -6,11 +6,11 @@
  * and Open Graph tags, the OG image, the manifest, the sitemap and JSON-LD.
  */
 export const siteConfig = {
-  name: "SwiftKnife",
-  tagline: "Every tool you need, sharp and fast.",
+  name: "PocketToolz",
+  tagline: "Every tool you need, always to hand.",
   description:
     "A fast, free collection of PDF, image, text, developer, and converter tools — all in one place.",
-  url: "https://swiftknife.com",
+  url: "https://pockettoolz.com",
   ogImage: "/og.png",
   author: "Umer Labs",
   links: {
@@ -26,7 +26,7 @@ export const siteUrl = new URL(siteConfig.url);
 
 /**
  * Builds a page title. Passing no segment yields the bare brand title so the
- * homepage doesn't read "SwiftKnife | SwiftKnife".
+ * homepage doesn't read "PocketToolz | PocketToolz".
  */
 export function pageTitle(segment?: string): string {
   return segment ? `${segment} | ${siteConfig.name}` : `${siteConfig.name} — ${siteConfig.tagline}`;

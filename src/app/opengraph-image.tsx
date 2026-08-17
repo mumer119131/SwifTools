@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 import { siteConfig } from "@/config/site";
-import { tools } from "@/config/tools";
+import { browsableTools } from "@/config/tools";
 
 export const alt = `${siteConfig.name} — ${siteConfig.tagline}`;
 export const size = { width: 1200, height: 630 };
@@ -66,7 +66,12 @@ export default function OpenGraphImage() {
             {siteConfig.tagline}
           </span>
           <span style={{ fontSize: 30, color: "#8a8f98", letterSpacing: -0.5 }}>
-            {tools.length} free tools · No signup · Runs in your browser
+            {/*
+              Browsable, not the full registry. `tools` includes the 82
+              search-only unit pair pages, so counting it advertised 246 while
+              the homepage said 164 — a number the visitor cannot find on arrival.
+            */}
+            {browsableTools.length} free tools · No signup · Runs in your browser
           </span>
         </div>
       </div>
