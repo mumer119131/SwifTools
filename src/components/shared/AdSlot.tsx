@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { usePathname } from "next/navigation";
 
 import { adsConfig } from "@/config/ads";
 import { cn } from "@/lib/utils";
@@ -32,25 +33,36 @@ export function AdSlot({ placement, className }: { placement: AdPlacement; class
   const unitId = adsConfig.units[placement];
   const active = adsConfig.enabled && unitId !== "";
 
-  const ref = React.useRef<HTMLModElement>(null);
-  const pushed = React.useRef(false);
+  /*
+   * The route is what makes a slot a *different* slot.
+   *
+   * ToolShell renders this at a fixed position, so navigating from one tool to
+   * another reconciles to the same component instance. Without keying on the
+   * path, React reuses the <ins> element AdSense has already filled, no fresh
+   * push happens, and every page after the first shows a stale ad or nothing —
+   * which reads as poor fill rate rather than as a bug, and so goes unnoticed.
+   */
+  const pathname = usePathname();
+
+  /** The path this instance last pushed for, rather than a boolean. */
+  const pushedFor = React.useRef<string | null>(null);
 
   React.useEffect(() => {
-    if (!active || pushed.current) return;
+    if (!active || pushedFor.current === pathname) return;
 
     /*
-     * AdSense fills a unit when it is pushed onto the global queue. Pushing the
-     * same element twice throws "All ins elements already have ads", so the
-     * ref guards against React's development double-invoke and any re-render.
+     * AdSense fills the next unfilled <ins> when something is pushed onto the
+     * queue. Pushing twice for the same element throws "All ins elements
+     * already have ads", so this fires once per route.
      */
     try {
       const queue = ((window as unknown as { adsbygoogle?: unknown[] }).adsbygoogle ??= []);
       queue.push({});
-      pushed.current = true;
+      pushedFor.current = pathname;
     } catch {
       // A blocked or failed script must not take the page down with it.
     }
-  }, [active]);
+  }, [active, pathname]);
 
   if (!active) return null;
 
@@ -66,7 +78,9 @@ export function AdSlot({ placement, className }: { placement: AdPlacement; class
         Advertisement
       </span>
       <ins
-        ref={ref}
+        // A new key on navigation gives AdSense a clean element to fill.
+        // Reusing a filled <ins> is silently ignored by the library.
+        key={pathname}
         className="adsbygoogle block"
         style={{ display: "block" }}
         data-ad-client={adsConfig.clientId}
