@@ -1,11 +1,16 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { browsableTools, populatedCategories, toolHref } from "@/config/tools";
+import { browsableTools, populatedCategories, toolCountByCategory } from "@/config/tools";
 import { Logo } from "@/components/layout/Logo";
 import { GitHubIcon, XIcon } from "@/components/layout/BrandIcons";
 
 const legalLinks = [
-  { label: "All tools", href: "/tools" },
+  { label: "Privacy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+];
+
+const siteLinks = [
+  { label: `All ${browsableTools.length} tools`, href: "/tools" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy", href: "/privacy" },
@@ -50,37 +55,50 @@ export function Footer() {
             ) : null}
           </div>
 
-          {/* Every browsable tool is linked here — cheap, permanent crawl paths.
-              Search-only pages reach the crawler through the sitemap and their
-              own parent converter instead of bloating this list. */}
-          <nav aria-label="All tools" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {populatedCategories.map((category) => {
-              const categoryTools = browsableTools.filter((tool) => tool.category === category.slug);
-              return (
-                <div key={category.slug} className="space-y-3">
-                  <h2 className="text-xs font-medium tracking-[0.02em] text-foreground">
+          {/*
+            Categories, not every tool.
+            
+            This used to list all 163, which made the footer taller than most
+            of the pages it sat under. Tools stay one hop away through /tools
+            and their category page, both linked here, and every one of them is
+            in the sitemap — so nothing is harder to find, and the footer is a
+            footer again.
+          */}
+          <nav aria-label="Browse" className="grid gap-8 sm:grid-cols-2">
+            <div className="space-y-3">
+              <h2 className="text-xs font-medium tracking-[0.02em] text-foreground">Categories</h2>
+              <ul className="grid grid-cols-2 gap-x-6 gap-y-2">
+                {populatedCategories.map((category) => (
+                  <li key={category.slug}>
                     <Link
                       href={`/${category.slug}`}
-                      className="rounded-sm transition-opacity duration-[120ms] hover:opacity-70"
+                      className="rounded-sm text-[0.8125rem] leading-relaxed text-muted-foreground transition-colors duration-[120ms] hover:text-foreground"
                     >
                       {category.label}
+                      <span className="ml-1.5 text-subtle-foreground" data-numeric>
+                        {toolCountByCategory[category.slug]}
+                      </span>
                     </Link>
-                  </h2>
-                  <ul className="space-y-2">
-                    {categoryTools.map((tool) => (
-                      <li key={tool.slug}>
-                        <Link
-                          href={toolHref(tool)}
-                          className="rounded-sm text-[0.8125rem] leading-relaxed text-muted-foreground transition-colors duration-[120ms] hover:text-foreground"
-                        >
-                          {tool.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <h2 className="text-xs font-medium tracking-[0.02em] text-foreground">Site</h2>
+              <ul className="grid grid-cols-2 gap-x-6 gap-y-2">
+                {siteLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="rounded-sm text-[0.8125rem] leading-relaxed text-muted-foreground transition-colors duration-[120ms] hover:text-foreground"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </nav>
         </div>
 

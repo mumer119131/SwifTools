@@ -39,7 +39,7 @@ export default function ToolsPage() {
         <Breadcrumbs items={crumbs} className="mb-8" />
 
         <header className="max-w-2xl">
-          <h1 className="text-3xl font-semibold tracking-[-0.03em] text-foreground sm:text-4xl">
+          <h1 className="font-display text-3xl text-foreground sm:text-4xl">
             All {browsableTools.length} tools
           </h1>
           <p className="mt-3 text-base leading-relaxed text-muted-foreground">

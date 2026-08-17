@@ -1,12 +1,5 @@
 import Link from "next/link";
-import {
-  ArrowRight,
-  Gauge,
-  Infinity as InfinityIcon,
-  Lock,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, Gauge, Infinity as InfinityIcon, Lock, ShieldCheck } from "lucide-react";
 
 import { siteConfig } from "@/config/site";
 import {
@@ -20,12 +13,15 @@ import { SearchTrigger } from "@/components/layout/SearchCommand";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { JsonLdScript } from "@/components/shared/JsonLd";
 import { Reveal } from "@/components/shared/Reveal";
-import { Badge } from "@/components/ui/misc";
 import { Button } from "@/components/ui/button";
 import { itemListLd } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
-const trustPoints = ["100% free", "No signup", "Files never leave your browser"];
+const trustPoints = [
+  { label: "Free, with no limits", icon: InfinityIcon },
+  { label: "No account, ever", icon: Lock },
+  { label: "Files stay on your device", icon: ShieldCheck },
+];
 
 const valueProps = [
   {
@@ -59,58 +55,90 @@ export default function HomePage() {
   const featured = (popularTools.length > 0 ? popularTools : publishedTools).slice(0, 6);
   const clientSide = browsableTools.filter((tool) => tool.processing === "client").length;
 
+  /* Broad entry points rather than the biggest categories — someone landing
+     cold is more likely to want "PDF" than "Units". */
+  const quickLinks = ["pdf", "image", "text", "developer", "calculator", "converter"]
+    .map((slug) => populatedCategories.find((category) => category.slug === slug))
+    .filter((category): category is (typeof populatedCategories)[number] => Boolean(category));
+
   return (
     <>
       {/* ------------------------------------------------------------- Hero */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="ambient-wash" aria-hidden="true" />
-        <div className="relative mx-auto w-full max-w-5xl px-5 pb-20 pt-20 text-center sm:px-6 lg:px-8 lg:pb-28 lg:pt-32">
-          <Badge variant="outline" className="animate-reveal mb-8">
-            <Sparkles className="size-3" strokeWidth={2} aria-hidden="true" />
-            <span data-numeric>{browsableTools.length}</span> tools ·{" "}
-            <span data-numeric>{clientSide}</span> never upload a thing
-          </Badge>
 
+        <div className="relative mx-auto w-full max-w-4xl px-5 pb-20 pt-24 sm:px-6 lg:px-8 lg:pb-28 lg:pt-32">
           <h1
-            className="animate-reveal mx-auto max-w-4xl text-balance font-semibold tracking-[-0.04em] text-foreground"
-            style={{
-              fontSize: "clamp(2.75rem, 7vw, 5rem)",
-              lineHeight: 1.02,
-              animationDelay: "40ms",
-            }}
+            className="animate-reveal font-display text-balance text-center text-foreground"
+            style={{ fontSize: "clamp(2.75rem, 7.5vw, 5.25rem)", lineHeight: 0.98 }}
           >
             {siteConfig.tagline}
           </h1>
 
           <p
-            className="animate-reveal mx-auto mt-7 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground"
-            style={{ animationDelay: "80ms" }}
+            className="animate-reveal mx-auto mt-7 max-w-xl text-pretty text-center text-lg leading-relaxed text-muted-foreground"
+            style={{ animationDelay: "60ms" }}
           >
-            {siteConfig.description}
+            {browsableTools.length} free tools for files, images, text and code.{" "}
+            <span className="text-foreground">{clientSide} of them never upload anything</span> —
+            the work happens on your own device.
           </p>
 
-          {/* Search first: it is how most people actually find a tool here. */}
+          {/* The search is the hero's main action, not an afterthought below a
+              button. Most people arrive knowing what they want. */}
           <div
-            className="animate-reveal mx-auto mt-10 flex max-w-xl flex-col items-center gap-3"
-            style={{ animationDelay: "120ms" }}
+            className="animate-reveal mx-auto mt-10 max-w-xl"
+            style={{ animationDelay: "100ms" }}
           >
             <SearchTrigger variant="hero" />
-            <Button asChild size="lg" className="w-full sm:w-auto">
-              <Link href="/tools">
-                Browse all {browsableTools.length} tools
-                <ArrowRight strokeWidth={1.75} />
-              </Link>
-            </Button>
+          </div>
+
+          {/* Jump straight in. Six categories, chosen as the broadest entry
+              points rather than the largest. */}
+          <div
+            className="animate-reveal mt-6 flex flex-wrap items-center justify-center gap-2"
+            style={{ animationDelay: "140ms" }}
+          >
+            {quickLinks.map((category) => {
+              const Icon = category.icon;
+              return (
+                <Link
+                  key={category.slug}
+                  href={`/${category.slug}`}
+                  className={cn(
+                    "inline-flex h-9 items-center gap-2 rounded-full border border-border bg-surface px-4 text-sm text-muted-foreground",
+                    "transition-[color,border-color,transform] duration-[180ms] ease-out-expo",
+                    "hover:-translate-y-px hover:border-border-strong hover:text-foreground",
+                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]",
+                    `accent-${category.slug}`,
+                  )}
+                >
+                  <Icon className="text-accent size-3.5" strokeWidth={2} />
+                  {category.label}
+                </Link>
+              );
+            })}
+            <Link
+              href="/tools"
+              className={cn(
+                "inline-flex h-9 items-center gap-1.5 rounded-full px-4 text-sm text-foreground underline underline-offset-4",
+                "transition-opacity duration-[180ms] ease-out-expo hover:opacity-70",
+                "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]",
+              )}
+            >
+              All {browsableTools.length}
+              <ArrowRight className="size-3.5" strokeWidth={2} />
+            </Link>
           </div>
 
           <ul
-            className="animate-reveal mt-12 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground"
-            style={{ animationDelay: "160ms" }}
+            className="animate-reveal mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-border pt-8 text-sm text-muted-foreground"
+            style={{ animationDelay: "180ms" }}
           >
             {trustPoints.map((point) => (
-              <li key={point} className="flex items-center gap-2">
-                <span className="size-1 rounded-full bg-subtle-foreground" aria-hidden="true" />
-                {point}
+              <li key={point.label} className="flex items-center gap-2">
+                <point.icon className="size-4 text-subtle-foreground" strokeWidth={1.75} />
+                {point.label}
               </li>
             ))}
           </ul>
@@ -123,7 +151,7 @@ export default function HomePage() {
           <Reveal>
             <header className="mb-10 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-semibold tracking-[-0.025em] text-foreground sm:text-3xl">
+                <h2 className="font-display text-2xl text-foreground sm:text-3xl">
                   Start here
                 </h2>
                 <p className="mt-2 text-muted-foreground">The ones people reach for most.</p>
@@ -152,7 +180,7 @@ export default function HomePage() {
         <div className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-6 lg:px-8 lg:py-24">
           <Reveal>
             <header className="mb-10 max-w-2xl">
-              <h2 className="text-2xl font-semibold tracking-[-0.025em] text-foreground sm:text-3xl">
+              <h2 className="font-display text-2xl text-foreground sm:text-3xl">
                 Browse by category
               </h2>
               <p className="mt-2 text-muted-foreground">
@@ -201,7 +229,7 @@ export default function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-6 lg:px-8 lg:py-24">
         <Reveal>
           <header className="mb-10 max-w-2xl">
-            <h2 className="text-2xl font-semibold tracking-[-0.025em] text-foreground sm:text-3xl">
+            <h2 className="font-display text-2xl text-foreground sm:text-3xl">
               Why {siteConfig.name}
             </h2>
             <p className="mt-2 text-muted-foreground">
@@ -233,7 +261,7 @@ export default function HomePage() {
         <div className="relative mx-auto w-full max-w-6xl overflow-hidden px-5 py-24 text-center sm:px-6 lg:px-8">
           <div className="ambient-wash" aria-hidden="true" />
           <Reveal className="relative">
-            <h2 className="mx-auto max-w-2xl text-balance text-3xl font-semibold tracking-[-0.03em] text-foreground sm:text-4xl">
+            <h2 className="font-display mx-auto max-w-2xl text-balance text-3xl text-foreground sm:text-4xl">
               Every tool, one page, nothing to sign up for.
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-pretty text-muted-foreground">

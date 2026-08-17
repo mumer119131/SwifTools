@@ -11,7 +11,7 @@ import {
   Image as ImageIcon,
   Palette,
   Search,
-  Sparkles,
+  Wand,
   Type,
   type LucideIcon,
 } from "lucide-react";
@@ -117,7 +117,7 @@ export const categories: readonly CategoryMeta[] = [
     description: "Passwords, QR codes, placeholder data and more.",
     metaDescription:
       "Free online generators for secure passwords, QR codes, fake test data, lorem ipsum placeholder text and more.",
-    icon: Sparkles,
+    icon: Wand,
     accentVar: "--accent-generator",
   },
   {

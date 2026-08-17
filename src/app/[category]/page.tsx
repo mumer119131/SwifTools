@@ -49,7 +49,7 @@ export default async function CategoryPage({ params }: PageProps) {
               <Icon className="text-accent size-6" strokeWidth={1.75} />
             </span>
             <div className="space-y-3">
-              <h1 className="text-3xl font-semibold tracking-[-0.025em] text-foreground sm:text-4xl">
+              <h1 className="font-display text-3xl text-foreground sm:text-4xl">
                 {category.label} Tools
               </h1>
               <p className="max-w-2xl text-base leading-relaxed text-muted-foreground">

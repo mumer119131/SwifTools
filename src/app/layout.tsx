@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Bricolage_Grotesque } from "next/font/google";
 import { Toaster } from "sonner";
 
 import "@/styles/globals.css";
@@ -16,6 +17,21 @@ import { websiteLd } from "@/lib/seo";
 import { adsConfig } from "@/config/ads";
 import { Analytics } from "@/components/layout/Analytics";
 import { analyticsConfig, gtagBootstrap } from "@/config/analytics";
+
+/**
+ * Display face for headings.
+ *
+ * `display: "swap"` so a slow font never leaves a heading invisible — the
+ * fallback shows immediately and is replaced when Bricolage arrives. The
+ * variable axes are left at their defaults; this is a heading face, and the
+ * optical-size axis is what gives it its character at large sizes.
+ */
+const bricolage = Bricolage_Grotesque({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-bricolage",
+  weight: ["600", "700", "800"],
+});
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -89,7 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       // next-themes sets the class on the client; this keeps hydration quiet.
       suppressHydrationWarning
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${GeistSans.variable} ${GeistMono.variable} ${bricolage.variable}`}
     >
       <body className="min-h-dvh">
         {/*

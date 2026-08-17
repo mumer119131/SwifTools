@@ -154,6 +154,9 @@
 
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  /* Bricolage Grotesque, for headings only. Body text stays on Geist — a
+     display face at 16px is harder to read, not more characterful. */
+  --font-display: var(--font-bricolage), var(--font-geist-sans), ui-sans-serif, sans-serif;
 
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius);
@@ -346,6 +349,15 @@
 
   .border-accent {
     border-color: color-mix(in oklab, var(--accent, var(--border)) 40%, transparent);
+  }
+
+  /* Headings only. Applied through a utility rather than a bare h1/h2 rule so
+     a heading can opt out where the sans face reads better — small headings
+     inside cards, for instance. */
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.03em;
   }
 
   .animate-reveal {
