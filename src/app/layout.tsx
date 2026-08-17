@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Toaster } from "sonner";
@@ -12,6 +13,7 @@ import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { SearchCommandProvider } from "@/components/layout/SearchCommand";
 import { JsonLdScript } from "@/components/shared/JsonLd";
 import { websiteLd } from "@/lib/seo";
+import { adsConfig } from "@/config/ads";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -89,6 +91,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </SearchCommandProvider>
         </ThemeProvider>
         <JsonLdScript data={websiteLd()} />
+
+        {/*
+          Loaded only when a publisher ID is configured, so a default build
+          makes no third-party request at all. `afterInteractive` keeps it off
+          the critical path — an ad script blocking first paint would undo the
+          performance work everywhere else.
+        */}
+        {adsConfig.enabled ? (
+          <Script
+            id="adsense"
+            async
+            strategy="afterInteractive"
+            crossOrigin="anonymous"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsConfig.clientId}`}
+          />
+        ) : null}
       </body>
     </html>
   );

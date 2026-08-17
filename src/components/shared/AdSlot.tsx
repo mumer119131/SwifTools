@@ -1,15 +1,17 @@
+"use client";
+
+import * as React from "react";
+
+import { adsConfig } from "@/config/ads";
 import { cn } from "@/lib/utils";
 
 /**
- * Reserved advertising region (§10 of the brief).
+ * Advertising regions.
  *
- * Ads are deliberately NOT implemented. These containers exist so slots can be
- * dropped in later without touching layout: the space is already accounted for
- * in the grid and the surrounding rhythm. They render nothing, make no network
- * calls, and are removed from the accessibility tree.
- *
- * To activate later: render the ad unit as this component's child. Nothing
- * around it needs to change.
+ * The sizes are fixed and reserved whether or not an ad fills them, because a
+ * slot that collapses to zero and then expands when the ad arrives shifts the
+ * page under the reader's cursor. That is a Cumulative Layout Shift penalty
+ * and, more to the point, it is infuriating to use.
  */
 const placements = {
   "tool-rail": "hidden xl:block w-[300px] min-h-[600px]",
@@ -19,32 +21,76 @@ const placements = {
 
 export type AdPlacement = keyof typeof placements;
 
-export function AdSlot({
-  placement,
-  className,
-  children,
-}: {
-  placement: AdPlacement;
-  className?: string;
-  children?: React.ReactNode;
-}) {
-  if (!children) return null;
+/**
+ * One AdSense unit.
+ *
+ * Renders nothing at all when no publisher ID is configured, or when this
+ * particular placement has no unit ID — no markup, no script, no third-party
+ * request. That is what lets the privacy policy tell the truth by default.
+ */
+export function AdSlot({ placement, className }: { placement: AdPlacement; className?: string }) {
+  const unitId = adsConfig.units[placement];
+  const active = adsConfig.enabled && unitId !== "";
+
+  const ref = React.useRef<HTMLModElement>(null);
+  const pushed = React.useRef(false);
+
+  React.useEffect(() => {
+    if (!active || pushed.current) return;
+
+    /*
+     * AdSense fills a unit when it is pushed onto the global queue. Pushing the
+     * same element twice throws "All ins elements already have ads", so the
+     * ref guards against React's development double-invoke and any re-render.
+     */
+    try {
+      const queue = ((window as unknown as { adsbygoogle?: unknown[] }).adsbygoogle ??= []);
+      queue.push({});
+      pushed.current = true;
+    } catch {
+      // A blocked or failed script must not take the page down with it.
+    }
+  }, [active]);
+
+  if (!active) return null;
 
   return (
-    <div
-      aria-hidden="true"
-      data-ad-slot={placement}
+    <aside
       className={cn(placements[placement], className)}
+      // Labelled rather than hidden: AdSense requires ads to be
+      // distinguishable from site content, and a screen reader user is
+      // entitled to know what the region is before entering it.
+      aria-label="Advertisement"
     >
-      {children}
-    </div>
+      <span className="mb-1 block text-[10px] uppercase tracking-wide text-subtle-foreground">
+        Advertisement
+      </span>
+      <ins
+        ref={ref}
+        className="adsbygoogle block"
+        style={{ display: "block" }}
+        data-ad-client={adsConfig.clientId}
+        data-ad-slot={unitId}
+        data-ad-format={placement === "tool-rail" ? "vertical" : "horizontal"}
+        data-full-width-responsive={placement === "tool-rail" ? "false" : "true"}
+      />
+    </aside>
   );
 }
 
 /**
- * Layout-only spacer that holds a slot's footprint open. Used where collapsing
- * to zero height would change the page rhythm once ads are switched on.
+ * Holds a slot's footprint open.
+ *
+ * With ads off this reserves the space so the layout is identical either way,
+ * which means switching ads on cannot reflow anything that was already
+ * designed and reviewed against the empty state.
  */
 export function AdSlotReservation({ placement }: { placement: AdPlacement }) {
-  return <div aria-hidden="true" data-ad-reservation={placement} className={placements[placement]} />;
+  const unitId = adsConfig.units[placement];
+
+  if (adsConfig.enabled && unitId !== "") return <AdSlot placement={placement} />;
+
+  return (
+    <div aria-hidden="true" data-ad-reservation={placement} className={placements[placement]} />
+  );
 }

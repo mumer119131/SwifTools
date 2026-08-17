@@ -35,6 +35,34 @@ pnpm dev          # http://localhost:3000
 
 ---
 
+## Advertising
+
+Everything ad-related reads from `src/config/ads.ts`, which is driven by
+`NEXT_PUBLIC_ADSENSE_CLIENT_ID`. With it unset — the default — the site ships no
+ad script, no ad markup and no third-party request at all.
+
+The privacy policy branches on that same flag. That is deliberate: a privacy
+page claiming "no tracking cookies" while an ad script sets them is not a stale
+document, it is a false statement. Generating both from one switch makes them
+impossible to drift apart.
+
+```bash
+cp .env.example .env.local   # then fill in the publisher and unit IDs
+```
+
+`ads.txt` is a route rather than a static file, so it always names the publisher
+actually configured. A stale ads.txt is worse than none — it authorises someone
+else to sell your inventory.
+
+Slots reserve their footprint whether or not an ad fills them, so switching ads
+on cannot reflow a layout that was designed against the empty state.
+
+**Consent:** for UK and EEA traffic Google requires a certified consent platform.
+Enable Google's own (free) one in AdSense under *Privacy & messaging* — it needs
+no code beyond the tag this repo already emits.
+
+---
+
 ## Rebranding the whole app
 
 The app name is **never** hardcoded. It lives in exactly one place:

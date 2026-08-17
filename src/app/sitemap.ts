@@ -48,11 +48,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       // Planned tools are listed but ranked below the ones that actually work.
       priority: tool.status === "live" ? 0.7 : 0.3,
     })),
-    ...["/privacy", "/terms"].map((path) => ({
+    ...["/about", "/contact", "/privacy", "/terms"].map((path) => ({
       url: absoluteUrl(path),
       lastModified,
       changeFrequency: "yearly" as const,
-      priority: 0.2,
+      priority: 0.3,
     })),
   ];
 }
