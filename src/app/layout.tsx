@@ -41,6 +41,23 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
+  /*
+   * Search Console and Bing ownership tokens, from the environment.
+   *
+   * Needed before a sitemap can be submitted, and Search Console is also how
+   * you find out that a page stopped being indexed. Omitted entirely when
+   * unset, so no empty meta tag ships. DNS TXT verification works just as well
+   * and avoids this — the meta tag is the easier route on a host where you do
+   * not control DNS records.
+   */
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } }
+      : {}),
+  },
 };
 
 export const viewport: Viewport = {
