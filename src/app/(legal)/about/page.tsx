@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { analyticsConfig } from "@/config/analytics";
 import { absoluteUrl, siteConfig } from "@/config/site";
 import { browsableTools, populatedCategories } from "@/config/tools";
 
@@ -49,7 +50,11 @@ export default function AboutPage() {
       <h2>What we do not do</h2>
       <ul>
         <li>No accounts, so there is nothing to sign up for and no password to lose.</li>
-        <li>No analytics, no tag managers, no session recording.</li>
+        <li>
+          {analyticsConfig.enabled
+            ? "No session recording, no heatmaps, no profiling. We count page visits so we know which tools to maintain — see the privacy policy for exactly what that involves."
+            : "No analytics, no tag managers, no session recording."}
+        </li>
         <li>No storing of your files, your text or your results.</li>
         <li>
           No dark patterns — no fake progress bars, no &ldquo;processing&rdquo; delays designed to

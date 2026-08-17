@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { adsConfig } from "@/config/ads";
+import { analyticsConfig } from "@/config/analytics";
 import { absoluteUrl, siteConfig } from "@/config/site";
 import { publishedTools } from "@/config/tools";
 
@@ -47,10 +48,54 @@ export default function PrivacyPage() {
         <li>
           <strong>Nothing we set ourselves.</strong> Your theme preference and anything a tool
           saves — a to-do list, a habit grid, a vault — are kept in your browser&rsquo;s local
-          storage and never sent to us. We set no cookies of our own and run no analytics.
-          {adsConfig.enabled ? " Our advertising provider does set cookies; see below." : null}
+          storage and never sent to us. We set no cookies of our own.
+          {analyticsConfig.enabled || adsConfig.enabled
+            ? " Google does set cookies, for the analytics and advertising described below."
+            : " We run no analytics."}
         </li>
       </ul>
+
+      <h2>Analytics</h2>
+      {analyticsConfig.enabled ? (
+        <>
+          <p>
+            {siteConfig.name} uses <strong>Google Analytics</strong> to count visits and see which
+            tools get used. It records the page you are on, roughly where in the world you are, and
+            what kind of device and browser you have. It sets a cookie to tell a returning visitor
+            from a new one.
+          </p>
+          <p>
+            It does <strong>not</strong> see anything you put into a tool. The files you process,
+            the text you paste, the passwords you generate and the notes you save never leave your
+            browser, so there is nothing there for analytics to collect even in principle. Your IP
+            address is truncated before it is stored.
+          </p>
+          <p>
+            In the UK, the EEA and Switzerland nothing is stored until you agree to it — the default
+            is off, and you are asked first. Everywhere else it is on by default. You can opt out in
+            any browser with{" "}
+            <a
+              href="https://tools.google.com/dlpage/gaoptout"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Google&rsquo;s opt-out add-on
+            </a>
+            .
+          </p>
+          <p>
+            Why have it at all, on a site that makes a point of not tracking you: without some
+            measure of which tools are used, the ones nobody opens get maintained forever and the
+            ones people rely on get no attention. That is the trade, and it seemed more honest to
+            name it than to pretend the site runs on instinct.
+          </p>
+        </>
+      ) : (
+        <p>
+          {siteConfig.name} runs no analytics. There is no measurement script of any kind, and no
+          record is kept of which pages you visit.
+        </p>
+      )}
 
       <h2>Advertising</h2>
       {adsConfig.enabled ? (
@@ -90,10 +135,10 @@ export default function PrivacyPage() {
 
       <h2>Third parties</h2>
       <p>
-        The site is served as static files and loads no analytics, no tag managers and no external
-        fonts.{" "}
-        {adsConfig.enabled
-          ? "The only third party involved is Google, for the advertising described above. Every tool page otherwise talks to our origin and nothing else."
+        The site is served as static files and loads no tag managers, no external fonts and no
+        session recording.{" "}
+        {analyticsConfig.enabled || adsConfig.enabled
+          ? "The only third party involved is Google, for the analytics and advertising described above. Every tool page otherwise talks to our origin and nothing else."
           : "It loads no third-party scripts at all. Your browser talks to our origin and nothing else."}
       </p>
       <p>

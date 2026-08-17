@@ -35,6 +35,28 @@ pnpm dev          # http://localhost:3000
 
 ---
 
+## Analytics
+
+Google Analytics 4, configured in `src/config/analytics.ts`. **Off in development
+by default** — otherwise every `pnpm dev` session lands in the production
+property and the numbers you are making decisions with are mostly you.
+
+Consent Mode v2 defaults are region-scoped: storage denied in the UK, EEA and
+Switzerland until a consent platform grants it, granted elsewhere. The bootstrap
+is an inline script in the root layout rather than `next/script`, because the
+consent defaults must reach the dataLayer before gtag.js processes its first
+config, and `beforeInteractive` does not inline when nested inside a client
+component.
+
+Page views are sent explicitly on route change with `send_page_view: false`. The
+App Router navigates without a document load, and gtag's history-based fallback
+double-counts some navigations and misses others.
+
+As with ads, the privacy and about pages read from the same flag — a site that
+claims it runs no analytics while loading gtag is not out of date, it is lying.
+
+---
+
 ## Advertising
 
 Everything ad-related reads from `src/config/ads.ts`, which is driven by

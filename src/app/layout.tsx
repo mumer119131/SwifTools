@@ -14,6 +14,8 @@ import { SearchCommandProvider } from "@/components/layout/SearchCommand";
 import { JsonLdScript } from "@/components/shared/JsonLd";
 import { websiteLd } from "@/lib/seo";
 import { adsConfig } from "@/config/ads";
+import { Analytics } from "@/components/layout/Analytics";
+import { analyticsConfig, gtagBootstrap } from "@/config/analytics";
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -79,6 +81,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
       <body className="min-h-dvh">
+        {/*
+          The analytics bootstrap, rendered as a plain inline script from this
+          server component so it lands literally in the HTML and executes
+          before the async library. That ordering is the whole point: the
+          Consent Mode defaults must reach the dataLayer before gtag.js
+          processes its first config, or the library initialises with no
+          consent state. next/script's beforeInteractive only hoists from the
+          root layout, and even there a raw tag is the predictable option.
+        */}
+        {analyticsConfig.enabled ? (
+          <script
+            id="ga-init"
+            dangerouslySetInnerHTML={{
+              __html: gtagBootstrap(analyticsConfig.measurementId),
+            }}
+          />
+        ) : null}
+
         <ThemeProvider>
           <SearchCommandProvider>
             <a
@@ -108,6 +128,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </SearchCommandProvider>
         </ThemeProvider>
         <JsonLdScript data={websiteLd()} />
+
+        {analyticsConfig.enabled ? (
+          <Script
+            id="ga-src"
+            async
+            strategy="afterInteractive"
+            src={`https://www.googletagmanager.com/gtag/js?id=${analyticsConfig.measurementId}`}
+          />
+        ) : null}
+        <Analytics />
 
         {/*
           Loaded only when a publisher ID is configured, so a default build
