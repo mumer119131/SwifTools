@@ -51,3 +51,58 @@ export function useHydrated(): boolean {
     () => false,
   );
 }
+
+/* --------------------------------------------------------------- the clock */
+
+/**
+ * A ticking clock, shared by every component that asks for one.
+ *
+ * The obvious implementation — `useEffect(() => setInterval(() => setNow(Date.now())))`
+ * — trips React's `set-state-in-effect` rule when seeding the first value, and
+ * reading `Date.now()` during render trips the purity rule. This is the
+ * intended mechanism instead: one interval, a cached timestamp, and a snapshot
+ * that only changes on a tick.
+ *
+ * The cache is what makes it safe. `getSnapshot` must return an
+ * `Object.is`-equal value when nothing has changed, and `() => Date.now()`
+ * returns a different number on every call — which would re-render forever.
+ */
+let cachedNow = 0;
+let ticker: ReturnType<typeof setInterval> | null = null;
+const clockListeners = new Set<() => void>();
+
+function subscribeToClock(onChange: () => void): () => void {
+  clockListeners.add(onChange);
+
+  if (ticker === null) {
+    cachedNow = Date.now();
+    ticker = setInterval(() => {
+      cachedNow = Date.now();
+      for (const listener of clockListeners) listener();
+    }, 1000);
+  }
+
+  return () => {
+    clockListeners.delete(onChange);
+    // Stop the interval once nothing is watching, rather than leaving it
+    // running for the life of the page.
+    if (clockListeners.size === 0 && ticker !== null) {
+      clearInterval(ticker);
+      ticker = null;
+    }
+  };
+}
+
+/**
+ * Milliseconds since the epoch, updated once a second.
+ *
+ * Returns 0 during server rendering and on the first client pass, so callers
+ * must treat 0 as "not known yet" rather than as the Unix epoch.
+ */
+export function useNow(): number {
+  return React.useSyncExternalStore(
+    subscribeToClock,
+    () => cachedNow || Date.now(),
+    () => 0,
+  );
+}

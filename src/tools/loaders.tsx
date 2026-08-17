@@ -57,6 +57,7 @@ const registry: Record<string, React.ComponentType> = {
   "play-store-screenshot-generator": lazyTool(
     () => import("@/tools/play-store-screenshot-generator/Tool"),
   ),
+  "favicon-generator": lazyTool(() => import("@/tools/favicon-generator/Tool")),
 
   // Text
   "word-counter": lazyTool(() => import("@/tools/word-counter/Tool")),
@@ -79,6 +80,9 @@ const registry: Record<string, React.ComponentType> = {
   "jwt-decoder": lazyTool(() => import("@/tools/jwt-decoder/Tool")),
   "code-to-image": lazyTool(() => import("@/tools/code-to-image/Tool")),
   "css-minifier": lazyTool(() => import("@/tools/css-minifier/Tool")),
+  "css-gradient-generator": lazyTool(() => import("@/tools/css-gradient-generator/Tool")),
+  "box-shadow-generator": lazyTool(() => import("@/tools/box-shadow-generator/Tool")),
+  "csv-to-json": lazyTool(() => import("@/tools/csv-to-json/Tool")),
   "css-formatter": lazyTool(() => import("@/tools/css-formatter/Tool")),
   "js-minifier": lazyTool(() => import("@/tools/js-minifier/Tool")),
   "js-formatter": lazyTool(() => import("@/tools/js-formatter/Tool")),
@@ -96,6 +100,7 @@ const registry: Record<string, React.ComponentType> = {
   "color-picker": lazyTool(() => import("@/tools/color-picker/Tool")),
   "color-palette-generator": lazyTool(() => import("@/tools/color-palette-generator/Tool")),
   "color-mixer": lazyTool(() => import("@/tools/color-mixer/Tool")),
+  "contrast-checker": lazyTool(() => import("@/tools/contrast-checker/Tool")),
 
   // Converter
   "unit-converter": lazyTool(() => import("@/tools/unit-converter/Tool")),
@@ -109,6 +114,7 @@ const registry: Record<string, React.ComponentType> = {
   "time-converter": lazyTool(() => import("@/tools/time-converter/Tool")),
   "currency-converter": lazyTool(() => import("@/tools/currency-converter/Tool")),
   "timezone-converter": lazyTool(() => import("@/tools/timezone-converter/Tool")),
+  "unix-timestamp-converter": lazyTool(() => import("@/tools/unix-timestamp-converter/Tool")),
   "number-base-converter": lazyTool(() => import("@/tools/number-base-converter/Tool")),
 
   // Calculator
@@ -121,6 +127,10 @@ const registry: Record<string, React.ComponentType> = {
   "calorie-calculator": lazyTool(() => import("@/tools/calorie-calculator/Tool")),
   "age-calculator": lazyTool(() => import("@/tools/age-calculator/Tool")),
   "percentage-calculator": lazyTool(() => import("@/tools/percentage-calculator/Tool")),
+  "tip-calculator": lazyTool(() => import("@/tools/tip-calculator/Tool")),
+  "date-difference-calculator": lazyTool(
+    () => import("@/tools/date-difference-calculator/Tool"),
+  ),
   "invoice-generator": lazyTool(() => import("@/tools/invoice-generator/Tool")),
 
   // Fun & utility

@@ -153,6 +153,22 @@ const expectations: [string, string][] = [
   ["app store screenshots", "play-store-screenshot-generator"],
   ["feature graphic", "play-store-screenshot-generator"],
 
+  // The eight tools added to fill evidenced gaps. Every one of these queries
+  // returned nothing, or something unrelated, before they existed.
+  ["favicon", "favicon-generator"],
+  ["favicon generator", "favicon-generator"],
+  ["unix timestamp", "unix-timestamp-converter"],
+  ["epoch converter", "unix-timestamp-converter"],
+  ["contrast checker", "contrast-checker"],
+  ["wcag contrast", "contrast-checker"],
+  ["csv to json", "csv-to-json"],
+  ["json to csv", "csv-to-json"],
+  ["css gradient", "css-gradient-generator"],
+  ["box shadow", "box-shadow-generator"],
+  ["tip calculator", "tip-calculator"],
+  ["split the bill", "tip-calculator"],
+  ["days between dates", "date-difference-calculator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
@@ -160,8 +176,14 @@ const expectations: [string, string][] = [
   ["unit converter", "unit-converter"],
 ];
 
-/** Queries that must return nothing sensible rather than noise. */
-const shouldBeEmptyOrFuzzy = ["zzzzqqqq", "xyzzyplugh", "favicon"];
+/**
+ * Queries that must return nothing sensible rather than noise.
+ *
+ * "favicon" used to be here, as a record that the site had no answer for a
+ * high-volume query. It now belongs in the expectations above instead, which
+ * is the outcome that entry was documenting the absence of.
+ */
+const shouldBeEmptyOrFuzzy = ["zzzzqqqq", "xyzzyplugh"];
 
 let failures = 0;
 

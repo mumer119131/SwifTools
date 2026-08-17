@@ -1,6 +1,6 @@
 # SwiftKnife
 
-A fast, free collection of 156 tools across fourteen categories — PDF, image, text, developer,
+A fast, free collection of 164 tools across fourteen categories — PDF, image, text, developer,
 colour, converter, units, calculator, SEO, generator, social, science, home and fun. All but three
 run entirely in the browser, so your files are never uploaded.
 
@@ -27,6 +27,7 @@ pnpm dev          # http://localhost:3000
 | `pnpm check:home` | Every material and cost calculator, against hand-worked answers |
 | `pnpm check:fun` | Chi-squared uniformity of the randomisers, plus puzzle validity |
 | `pnpm check:vault` | The password manager's encryption, tampering and key-derivation |
+| `pnpm check:batch` | CSV quoting, WCAG contrast, calendar arithmetic, the ICO encoder |
 | `pnpm check:store-images` | Play Store size rules, and that no NaN reaches a canvas draw call |
 | `pnpm check:seo` | Unique titles and descriptions, server-rendered copy, FAQ quality |
 | `pnpm dates` | Regenerates sitemap `lastModified` dates from git history |
@@ -149,7 +150,7 @@ fetched when someone opens that tool's page. None of it reaches the homepage bun
 
 ### Client vs. server
 
-**153 of the 156 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
+**161 of the 164 tools run entirely in the browser** via Canvas, the File API, Web Workers and WASM.
 That is the product's main selling point, not just an optimisation: no upload wait, no server cost,
 and files that genuinely never leave the device.
 
@@ -202,7 +203,7 @@ description hit. On top of that:
 Both the ⌘K palette and the homepage directory use this, so a query behaves the
 same in both places.
 
-`pnpm check:search` asserts 106 query → expected-tool pairs. Relevance is exactly
+`pnpm check:search` asserts 122 query → expected-tool pairs. Relevance is exactly
 the kind of thing that regresses silently when a new tool arrives with broad
 keywords.
 
@@ -249,7 +250,7 @@ back into the HTML:
 
 That took a tool page from 165 words of its own content wrapped in a 433-word
 shared footer, to around 550–680 words of unique server-rendered copy —
-**21,697 words across 156 tools**.
+**23,473 words across 164 tools**.
 
 `pnpm check:seo` enforces the rest: unique names, titles and descriptions across
 all 238 pages, descriptions inside 155 characters, at least 3 FAQ entries and 90

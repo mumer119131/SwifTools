@@ -75,6 +75,7 @@ import { convertImage } from "@/tools/convert-image/meta";
 import { cropImage } from "@/tools/crop-image/meta";
 import { removeBackground } from "@/tools/remove-background/meta";
 import { resizeImage } from "@/tools/resize-image/meta";
+import { faviconGenerator } from "@/tools/favicon-generator/meta";
 import { playStoreScreenshotGenerator } from "@/tools/play-store-screenshot-generator/meta";
 import { watermarkImage } from "@/tools/watermark-image/meta";
 
@@ -99,6 +100,9 @@ import { jsonTreeViewer } from "@/tools/json-tree-viewer/meta";
 import { jwtDecoder } from "@/tools/jwt-decoder/meta";
 import { urlSlugGenerator } from "@/tools/url-slug-generator/meta";
 import { codeToImage } from "@/tools/code-to-image/meta";
+import { boxShadowGenerator } from "@/tools/box-shadow-generator/meta";
+import { csvToJson } from "@/tools/csv-to-json/meta";
+import { cssGradientGenerator } from "@/tools/css-gradient-generator/meta";
 import { cssFormatter } from "@/tools/css-formatter/meta";
 import { cssMinifier } from "@/tools/css-minifier/meta";
 import { jsFormatter } from "@/tools/js-formatter/meta";
@@ -113,6 +117,7 @@ import { sha512HashGenerator } from "@/tools/sha512-hash-generator/meta";
 
 // Color
 import { colorMixer } from "@/tools/color-mixer/meta";
+import { contrastChecker } from "@/tools/contrast-checker/meta";
 import { colorPaletteGenerator } from "@/tools/color-palette-generator/meta";
 
 // Units
@@ -203,7 +208,10 @@ import { voltageDividerCalculator } from "@/tools/voltage-divider-calculator/met
 
 // Converter
 import { currencyConverter } from "@/tools/currency-converter/meta";
+import { unixTimestampConverter } from "@/tools/unix-timestamp-converter/meta";
 import { numberBaseConverter } from "@/tools/number-base-converter/meta";
+import { tipCalculator } from "@/tools/tip-calculator/meta";
+import { dateDifferenceCalculator } from "@/tools/date-difference-calculator/meta";
 import { timezoneConverter } from "@/tools/timezone-converter/meta";
 import { unitConverter } from "@/tools/unit-converter/meta";
 
@@ -267,6 +275,7 @@ export const tools: readonly Tool[] = [
   watermarkImage,
   removeBackground,
   playStoreScreenshotGenerator,
+  faviconGenerator,
 
   // Text
   wordCounter,
@@ -292,6 +301,9 @@ export const tools: readonly Tool[] = [
   jsMinifier,
   cssFormatter,
   cssMinifier,
+  cssGradientGenerator,
+  boxShadowGenerator,
+  csvToJson,
   reactNativeShadowGenerator,
   sha256HashGenerator,
   md5HashGenerator,
@@ -304,6 +316,7 @@ export const tools: readonly Tool[] = [
   colorPicker,
   colorPaletteGenerator,
   colorMixer,
+  contrastChecker,
 
   // Units — the hub, then one page per measurement type. The ~64 direct
   // conversion pages are appended after this list; they are search-only.
@@ -320,6 +333,7 @@ export const tools: readonly Tool[] = [
   // Converter
   currencyConverter,
   timezoneConverter,
+  unixTimestampConverter,
   numberBaseConverter,
 
   // Calculator
@@ -330,6 +344,8 @@ export const tools: readonly Tool[] = [
   calorieCalculator,
   ageCalculator,
   percentageCalculator,
+  tipCalculator,
+  dateDifferenceCalculator,
   invoiceGenerator,
 
   // Social
