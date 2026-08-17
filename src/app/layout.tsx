@@ -60,6 +60,17 @@ export const metadata: Metadata = {
       ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } }
       : {}),
   },
+  /*
+   * AdSense site verification.
+   *
+   * Derived from the same publisher ID that drives the ad script and ads.txt,
+   * rather than pasted separately — three copies of one identifier is three
+   * chances for them to disagree, and a mismatched verification tag fails
+   * review without saying why.
+   */
+  ...(adsConfig.enabled
+    ? { other: { "google-adsense-account": adsConfig.clientId } }
+    : {}),
 };
 
 export const viewport: Viewport = {

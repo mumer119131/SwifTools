@@ -12,12 +12,16 @@
  */
 
 /**
- * From `NEXT_PUBLIC_ADSENSE_CLIENT_ID`, in the form `ca-pub-0000000000000000`.
+ * The AdSense publisher ID, in the form `ca-pub-0000000000000000`.
  *
  * Public by necessity — it appears in the page source of every AdSense site,
- * and ads.txt publishes it deliberately. It is an identifier, not a secret.
+ * and ads.txt publishes it deliberately. It is an identifier, not a secret,
+ * so it is defaulted here rather than left to an environment variable someone
+ * has to remember: a missing ID means the verification tag never ships and the
+ * application silently fails review. Override it for a staging property.
  */
-const clientId = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID?.trim() ?? "";
+const clientId =
+  process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID?.trim() || "ca-pub-1659754718895137";
 
 /** Google's fixed identifier for AdSense in an ads.txt record. */
 const GOOGLE_SELLER_ID = "f08c47fec0942fa0";

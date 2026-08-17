@@ -101,7 +101,7 @@ export default function PrivacyPage() {
       {adsConfig.enabled ? (
         <>
           <p>
-            {siteConfig.name} shows ads supplied by <strong>Google AdSense</strong>. Google is a
+            {siteConfig.name} uses <strong>Google AdSense</strong> for advertising. Google is a
             third-party vendor and uses cookies and similar identifiers to serve ads and to measure
             whether they were seen. Depending on your settings and where you are, those ads may be
             personalised using data Google has already collected about you elsewhere.
