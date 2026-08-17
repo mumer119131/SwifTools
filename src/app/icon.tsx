@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 512, height: 512 };
 export const contentType = "image/png";
 
-/** Favicon and PWA icon, drawn from the same blade mark as the header logo. */
+/** Favicon and PWA icon, the same three-capsule mark as the header logo. */
 export default function Icon() {
   return new ImageResponse(
     (
@@ -18,11 +18,10 @@ export default function Icon() {
           borderRadius: 96,
         }}
       >
-        <svg width="320" height="320" viewBox="0 0 24 24" fill="none">
-          <path
-            d="M4 19.5 19.5 4v6.4a4 4 0 0 1-1.17 2.83l-5.1 5.1A4 4 0 0 1 10.4 19.5H4Z"
-            fill="#f7f8f8"
-          />
+        <svg width="300" height="300" viewBox="0 0 24 24" fill="none">
+          <rect x="2" y="3" width="20" height="4" rx="2" fill="#f7f8f8" />
+          <rect x="4.5" y="10" width="15" height="4" rx="2" fill="#f7f8f8" />
+          <rect x="7" y="17" width="10" height="4" rx="2" fill="#f7f8f8" />
         </svg>
       </div>
     ),

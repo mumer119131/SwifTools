@@ -41,11 +41,10 @@ export default function OpenGraphImage() {
         />
 
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M4 19.5 19.5 4v6.4a4 4 0 0 1-1.17 2.83l-5.1 5.1A4 4 0 0 1 10.4 19.5H4Z"
-              fill="#f7f8f8"
-            />
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="3" width="20" height="4" rx="2" fill="#f7f8f8" />
+            <rect x="4.5" y="10" width="15" height="4" rx="2" fill="#f7f8f8" />
+            <rect x="7" y="17" width="10" height="4" rx="2" fill="#f7f8f8" />
           </svg>
           <span style={{ fontSize: 38, fontWeight: 600, color: "#f7f8f8", letterSpacing: -1 }}>
             {siteConfig.name}
