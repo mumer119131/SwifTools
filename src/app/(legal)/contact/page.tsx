@@ -9,15 +9,6 @@ export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl("/contact") },
 };
 
-/**
- * The address is assembled from parts rather than written as one literal.
- *
- * It is a token gesture against scrapers rather than real protection, but it
- * costs nothing and filters the least sophisticated ones. Anyone reading the
- * page sees an ordinary address.
- */
-const CONTACT = ["hello", "pockettoolz.com"].join("@");
-
 export default function ContactPage() {
   return (
     <>
@@ -29,7 +20,7 @@ export default function ContactPage() {
 
       <h2>Email</h2>
       <p>
-        <a href={`mailto:${CONTACT}`}>{CONTACT}</a>
+        <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
       </p>
 
       <h2>What is worth writing about</h2>

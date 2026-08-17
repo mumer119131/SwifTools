@@ -13,6 +13,15 @@ export const siteConfig = {
   url: "https://pockettoolz.com",
   ogImage: "/og.png",
   author: "Umer Labs",
+  /**
+   * The one published contact address.
+   *
+   * Kept here rather than in the contact page so the same address reaches the
+   * page, the Organization schema and anywhere else that needs it — a site
+   * whose advertised contact differs from its structured data is a trust
+   * signal pointing the wrong way.
+   */
+  email: "umerlabsofficial@gmail.com",
   links: {
     twitter: "",
     github: "",

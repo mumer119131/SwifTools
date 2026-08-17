@@ -182,7 +182,22 @@ export function websiteLd(): JsonLd {
     alternateName: siteConfig.tagline,
     description: siteConfig.description,
     url: siteConfig.url,
-    publisher: { "@type": "Organization", name: siteConfig.author },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.author,
+      url: siteConfig.url,
+      /*
+       * A reachable contact in the structured data is a trust signal, and one
+       * that ad and search reviewers do look for. It has to be the same address
+       * the contact page publishes, which is why both read from siteConfig.
+       */
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: siteConfig.email,
+        availableLanguage: "English",
+      },
+    },
   };
 }
 
