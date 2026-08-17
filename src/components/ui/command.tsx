@@ -24,15 +24,20 @@ function CommandDialog({
   children,
   title,
   description,
-  // Forwarded to the inner Command, not the Dialog. Spreading it with the rest
-  // would land it on Dialog and be silently ignored — which is exactly the kind
+  // Forwarded to the inner Command, not the Dialog. Spreading these with the
+  // rest would land them on Dialog and be silently ignored — exactly the kind
   // of prop that looks applied and isn't.
   shouldFilter,
+  value,
+  onValueChange,
   ...props
 }: React.ComponentProps<typeof Dialog> & {
   title: string;
   description: string;
   shouldFilter?: boolean;
+  /** Controlled selection, so a stale highlight cannot survive a new query. */
+  value?: string;
+  onValueChange?: (value: string) => void;
 }) {
   return (
     <Dialog {...props}>
@@ -42,7 +47,7 @@ function CommandDialog({
       >
         <DialogTitle className="sr-only">{title}</DialogTitle>
         <DialogDescription className="sr-only">{description}</DialogDescription>
-        <Command loop shouldFilter={shouldFilter}>
+        <Command loop shouldFilter={shouldFilter} value={value} onValueChange={onValueChange}>
           {children}
         </Command>
       </DialogContent>

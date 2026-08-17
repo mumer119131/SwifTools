@@ -5,7 +5,14 @@ import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
 
 import { categories } from "@/config/categories";
-import { browsableTools, populatedCategories, popularTools, toolHref, tools } from "@/config/tools";
+import {
+  browsableTools,
+  populatedCategories,
+  popularTools,
+  toolHref,
+  tools,
+  type Tool,
+} from "@/config/tools";
 import {
   CommandDialog,
   CommandEmpty,
@@ -30,6 +37,18 @@ export function useSearchCommand() {
   const context = React.useContext(SearchCommandContext);
   if (!context) throw new Error("useSearchCommand must be used inside <SearchCommandProvider>");
   return context;
+}
+
+/**
+ * The value cmdk keys selection off.
+ *
+ * Defined once because two places need it — the rows themselves and the
+ * calculation of which row should be selected after a query changes. If those
+ * two ever disagreed, selection would silently stop working and the list would
+ * quietly go back to scrolling to the wrong place.
+ */
+function rowValue(tool: Tool, valuePrefix?: string): string {
+  return `${valuePrefix ? `${valuePrefix}:` : ""}${tool.category}/${tool.slug}`;
 }
 
 export function SearchCommandProvider({ children }: { children: React.ReactNode }) {
@@ -69,6 +88,47 @@ export function SearchCommandProvider({ children }: { children: React.ReactNode 
   const results = React.useMemo(() => searchTools(query, tools), [query]);
   const searching = query.trim().length > 0;
 
+  /*
+   * Keep the result list pinned to the top as the query changes.
+   *
+   * Two things scroll it away, and both had to be fixed. The list is the whole
+   * catalogue when nothing is typed, so scrolling down to browse and then
+   * typing leaves the container's scrollTop where it was. And cmdk scrolls its
+   * *selected* item into view — so a selection left over from the previous set
+   * of results drags the viewport down to wherever that item now sits.
+   *
+   * Driving the selection to the first row fixes the second, and cmdk then
+   * scrolls the top item into view of its own accord. The explicit scroll reset
+   * covers the first, and the case where the list is empty and there is nothing
+   * for cmdk to select at all.
+   */
+  const listRef = React.useRef<HTMLDivElement>(null);
+
+  const firstRow = searching ? results[0]?.tool : popularTools[0];
+  const firstValue = firstRow ? rowValue(firstRow, searching ? undefined : "popular") : "";
+
+  /*
+   * The selection is remembered against the query it belongs to, and derived
+   * during render rather than reset from an effect.
+   *
+   * Pinning `value` to the first row unconditionally would fix the scroll and
+   * break the arrow keys — every re-render would snap the highlight back to the
+   * top. Storing which query a selection came from means arrowing works
+   * normally, and the moment the query changes the stored selection stops
+   * matching and the first row takes over.
+   */
+  const [selection, setSelection] = React.useState({ query: "", value: "" });
+  const selected = selection.query === query ? selection.value : firstValue;
+
+  React.useEffect(() => {
+    // After paint, so it lands after cmdk has done its own scroll-into-view
+    // rather than being immediately undone by it.
+    const frame = requestAnimationFrame(() => {
+      listRef.current?.scrollTo({ top: 0 });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [query, open]);
+
   const value = React.useMemo(() => ({ open, setOpen }), [open]);
 
   return (
@@ -86,13 +146,17 @@ export function SearchCommandProvider({ children }: { children: React.ReactNode 
         // Filtering and ranking are ours — cmdk's fuzzy matcher is far too
         // permissive for a catalogue this size. See src/lib/search.ts.
         shouldFilter={false}
+        // Controlled, so a selection from the previous query cannot survive
+        // into the next one and drag the list down with it.
+        value={selected}
+        onValueChange={(next) => setSelection({ query, value: next })}
       >
         <CommandInput
           placeholder="Search tools…"
           value={query}
           onValueChange={setQuery}
         />
-        <CommandList>
+        <CommandList ref={listRef}>
           <CommandEmpty>
             No tool matches that. Try a file type — &ldquo;pdf&rdquo;, &ldquo;webp&rdquo;,
             &ldquo;json&rdquo;.
@@ -170,7 +234,7 @@ function ToolRow({
   return (
     <CommandItem
       // Unique per row. Ranking is ours, so this only has to identify it.
-      value={`${valuePrefix ? `${valuePrefix}:` : ""}${tool.category}/${tool.slug}`}
+      value={rowValue(tool, valuePrefix)}
       onSelect={() => onSelect(toolHref(tool))}
       className={cn("accent-" + tool.category)}
     >
