@@ -266,6 +266,7 @@ const registry: Record<string, React.ComponentType> = {
   // Generator
   "password-generator": lazyTool(() => import("@/tools/password-generator/Tool")),
   "qr-code-generator": lazyTool(() => import("@/tools/qr-code-generator/Tool")),
+  "barcode-generator": lazyTool(() => import("@/tools/barcode-generator/Tool")),
   "fake-data-generator": lazyTool(() => import("@/tools/fake-data-generator/Tool")),
   "lorem-ipsum-generator": lazyTool(() => import("@/tools/lorem-ipsum-generator/Tool")),
   "pomodoro-timer": lazyTool(() => import("@/tools/pomodoro-timer/Tool")),

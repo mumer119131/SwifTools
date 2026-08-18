@@ -250,6 +250,16 @@ const expectations: [string, string][] = [
   ["add signature to pdf", "sign-pdf"],
   ["e-sign", "sign-pdf"],
 
+  // Barcodes. These previously returned the QR generator, which is a
+  // different symbology entirely.
+  ["barcode", "barcode-generator"],
+  ["barcode generator", "barcode-generator"],
+  ["ean 13", "barcode-generator"],
+  ["upc barcode", "barcode-generator"],
+  ["code 128", "barcode-generator"],
+  // QR must still win its own name.
+  ["qr code", "qr-code-generator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

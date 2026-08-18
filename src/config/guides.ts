@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { FileDown, FileText, ImageIcon, KeyRound, LayoutGrid, Palette, Regex, Ruler, ShieldCheck, Scale } from "lucide-react";
+import { CircuitBoard, Dices, FileDown, FileText, ImageIcon, KeyRound, LayoutGrid, Palette, Regex, Ruler, Search, ShieldCheck, Scale } from "lucide-react";
 
 /**
  * The guides registry.
@@ -279,6 +279,88 @@ export const guides: Guide[] = [
     updated: "2026-08-18",
     minutes: 9,
     tools: ["regex-tester", "find-and-replace", "extract-from-text", "sort-lines"],
+  },
+  {
+    slug: "randomness",
+    title: "How random is random?",
+    heading: "How random is random, and when it matters",
+    description:
+      "Why a coin flip on a computer is not a coin flip, the bias hiding in the obvious implementation, and when any of it actually matters.",
+    keywords: [
+      "how random are online randomisers",
+      "is math.random truly random",
+      "pseudorandom vs true random",
+      "modulo bias",
+      "fair shuffle algorithm",
+      "are online dice fair",
+    ],
+    icon: Dices,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 8,
+    tools: [
+      "random-number-generator",
+      "coin-flipper",
+      "dice-roller",
+      "wheel-spinner",
+      "list-randomizer",
+      "random-name-picker",
+      "password-generator",
+    ],
+  },
+  {
+    slug: "electronics-basics",
+    title: "Electronics basics",
+    heading: "Ohm's law, resistors and why your LED needs one",
+    description:
+      "The one equation that explains most of a beginner circuit, how to read a resistor, and the calculation that stops an LED burning out.",
+    keywords: [
+      "ohms law explained",
+      "why do leds need a resistor",
+      "how to read resistor colour bands",
+      "voltage divider explained",
+      "electronics for beginners",
+      "what is a current limiting resistor",
+    ],
+    icon: CircuitBoard,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 8,
+    tools: [
+      "ohms-law-calculator",
+      "led-resistor-calculator",
+      "resistor-color-code-calculator",
+      "voltage-divider-calculator",
+      "capacitor-calculator",
+    ],
+  },
+  {
+    slug: "technical-seo",
+    title: "Technical SEO",
+    heading: "The technical SEO that actually matters",
+    description:
+      "Robots, canonicals, structured data and sitemaps \u2014 what each one really does, and the confusions that cost people their rankings.",
+    keywords: [
+      "technical seo basics",
+      "robots.txt vs noindex",
+      "what is a canonical tag",
+      "what is structured data",
+      "why is my page not indexed",
+      "technical seo checklist",
+    ],
+    icon: Search,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 9,
+    tools: [
+      "meta-tag-generator",
+      "schema-generator",
+      "robots-txt-generator",
+      "robots-txt-tester",
+      "sitemap-generator",
+      "hreflang-generator",
+      "utm-builder",
+    ],
   },
 ];
 

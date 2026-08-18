@@ -1,13 +1,16 @@
 import type { ComponentType } from "react";
 
 import ColourFormatsGuide from "@/guides/colour-formats/content";
+import ElectronicsBasicsGuide from "@/guides/electronics-basics/content";
 import HashingEncodingEncryptionGuide from "@/guides/hashing-encoding-encryption/content";
 import ImageFormatsGuide from "@/guides/image-formats/content";
 import MeasuringARoomGuide from "@/guides/measuring-a-room/content";
 import MetricImperialGuide from "@/guides/metric-imperial/content";
 import OnlineToolPrivacyGuide from "@/guides/online-tool-privacy/content";
 import PdfBasicsGuide from "@/guides/pdf-basics/content";
+import RandomnessGuide from "@/guides/randomness/content";
 import RegularExpressionsGuide from "@/guides/regular-expressions/content";
+import TechnicalSeoGuide from "@/guides/technical-seo/content";
 import ReduceFileSizeGuide from "@/guides/reduce-file-size/content";
 import SocialSizesGuide from "@/guides/social-media-image-sizes/content";
 
@@ -29,4 +32,7 @@ export const guideContent: Record<string, ComponentType> = {
   "metric-imperial": MetricImperialGuide,
   "measuring-a-room": MeasuringARoomGuide,
   "regular-expressions": RegularExpressionsGuide,
+  "randomness": RandomnessGuide,
+  "electronics-basics": ElectronicsBasicsGuide,
+  "technical-seo": TechnicalSeoGuide,
 };
