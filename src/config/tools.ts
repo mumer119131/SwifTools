@@ -78,6 +78,10 @@ import { resizeImage } from "@/tools/resize-image/meta";
 import { faviconGenerator } from "@/tools/favicon-generator/meta";
 import { playStoreScreenshotGenerator } from "@/tools/play-store-screenshot-generator/meta";
 import { watermarkImage } from "@/tools/watermark-image/meta";
+import { exifViewer } from "@/tools/exif-viewer/meta";
+import { imageToBase64 } from "@/tools/image-to-base64/meta";
+import { rotateImage } from "@/tools/rotate-image/meta";
+import { socialMediaResizer } from "@/tools/social-media-resizer/meta";
 
 // Text
 import { caseConverter } from "@/tools/case-converter/meta";
@@ -280,10 +284,14 @@ export const tools: readonly Tool[] = [
   resizeImage,
   convertImage,
   cropImage,
+  rotateImage,
+  socialMediaResizer,
   watermarkImage,
   removeBackground,
   playStoreScreenshotGenerator,
   faviconGenerator,
+  exifViewer,
+  imageToBase64,
 
   // Text
   wordCounter,

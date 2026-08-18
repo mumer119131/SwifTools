@@ -51,6 +51,10 @@ const registry: Record<string, React.ComponentType> = {
   // Image
   "compress-image": lazyTool(() => import("@/tools/compress-image/Tool")),
   "resize-image": lazyTool(() => import("@/tools/resize-image/Tool")),
+  "rotate-image": lazyTool(() => import("@/tools/rotate-image/Tool")),
+  "social-media-resizer": lazyTool(() => import("@/tools/social-media-resizer/Tool")),
+  "exif-viewer": lazyTool(() => import("@/tools/exif-viewer/Tool")),
+  "image-to-base64": lazyTool(() => import("@/tools/image-to-base64/Tool")),
   "convert-image": lazyTool(() => import("@/tools/convert-image/Tool")),
   "crop-image": lazyTool(() => import("@/tools/crop-image/Tool")),
   "watermark-image": lazyTool(() => import("@/tools/watermark-image/Tool")),

@@ -197,6 +197,25 @@ const expectations: [string, string][] = [
   ["robots.txt tester", "robots-txt-tester"],
   ["hreflang", "hreflang-generator"],
 
+  // Image and privacy tools. "remove exif" and "image to base64" returned
+  // nothing before these existed; "instagram post size" landed on the
+  // Instagram filter tool, which cannot help with dimensions.
+  ["exif", "exif-viewer"],
+  ["remove exif data", "exif-viewer"],
+  ["strip gps from photo", "exif-viewer"],
+  ["photo metadata", "exif-viewer"],
+  ["image to base64", "image-to-base64"],
+  ["base64 encode image", "image-to-base64"],
+  ["data uri", "image-to-base64"],
+  ["rotate image", "rotate-image"],
+  ["flip image", "rotate-image"],
+  ["mirror image", "rotate-image"],
+  ["social media image resizer", "social-media-resizer"],
+  ["instagram post size", "social-media-resizer"],
+  ["youtube thumbnail size", "social-media-resizer"],
+  ["twitter header size", "social-media-resizer"],
+  ["linkedin banner size", "social-media-resizer"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
