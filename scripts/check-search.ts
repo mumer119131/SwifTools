@@ -295,6 +295,19 @@ const expectations: [string, string][] = [
   // The format converter keeps its own queries.
   ["hex to rgb", "color-picker"],
 
+  // Aspect ratios, password strength and running pace. "how strong is my
+  // password" previously returned the generator, which makes them rather
+  // than judges them.
+  ["aspect ratio calculator", "aspect-ratio-calculator"],
+  ["aspect ratio", "aspect-ratio-calculator"],
+  ["password strength", "password-strength-checker"],
+  ["how strong is my password", "password-strength-checker"],
+  ["pace calculator", "pace-calculator"],
+  ["running pace", "pace-calculator"],
+  ["marathon pace", "pace-calculator"],
+  // The generator keeps its own query.
+  ["password generator", "password-generator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

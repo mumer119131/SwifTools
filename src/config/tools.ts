@@ -107,6 +107,7 @@ import { cronExpressionBuilder } from "@/tools/cron-expression-builder/meta";
 import { hmacGenerator } from "@/tools/hmac-generator/meta";
 import { jsonToTypescript } from "@/tools/json-to-typescript/meta";
 import { sqlFormatter } from "@/tools/sql-formatter/meta";
+import { aspectRatioCalculator } from "@/tools/aspect-ratio-calculator/meta";
 import { subnetCalculator } from "@/tools/subnet-calculator/meta";
 import { yamlToJson } from "@/tools/yaml-to-json/meta";
 import { cssGradientGenerator } from "@/tools/css-gradient-generator/meta";
@@ -231,6 +232,7 @@ import { compoundInterestCalculator } from "@/tools/compound-interest-calculator
 import { invoiceGenerator } from "@/tools/invoice-generator/meta";
 import { hoursCalculator } from "@/tools/hours-calculator/meta";
 import { mortgageCalculator } from "@/tools/mortgage-calculator/meta";
+import { paceCalculator } from "@/tools/pace-calculator/meta";
 import { vatCalculator } from "@/tools/vat-calculator/meta";
 import { loanCalculator } from "@/tools/loan-calculator/meta";
 import { percentageCalculator } from "@/tools/percentage-calculator/meta";
@@ -263,6 +265,7 @@ import { sitemapGenerator } from "@/tools/sitemap-generator/meta";
 import { fakeDataGenerator } from "@/tools/fake-data-generator/meta";
 import { loremIpsumGenerator } from "@/tools/lorem-ipsum-generator/meta";
 import { passwordGenerator } from "@/tools/password-generator/meta";
+import { passwordStrengthChecker } from "@/tools/password-strength-checker/meta";
 import { pomodoroTimer } from "@/tools/pomodoro-timer/meta";
 import { timer } from "@/tools/timer/meta";
 import { barcodeGenerator } from "@/tools/barcode-generator/meta";
@@ -335,6 +338,7 @@ export const tools: readonly Tool[] = [
   yamlToJson,
   sqlFormatter,
   subnetCalculator,
+  aspectRatioCalculator,
   cronExpressionBuilder,
   hmacGenerator,
   reactNativeShadowGenerator,
@@ -375,6 +379,7 @@ export const tools: readonly Tool[] = [
   hoursCalculator,
   mortgageCalculator,
   vatCalculator,
+  paceCalculator,
   compoundInterestCalculator,
   taxCalculator,
   bmiCalculator,
@@ -410,6 +415,7 @@ export const tools: readonly Tool[] = [
 
   // Generator
   passwordGenerator,
+  passwordStrengthChecker,
   qrCodeGenerator,
   barcodeGenerator,
   fakeDataGenerator,

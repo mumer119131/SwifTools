@@ -229,7 +229,10 @@ import { youtubeThumbnailGrabberContent } from "@/tools/youtube-thumbnail-grabbe
 import { imagePairContent } from "@/tools/image-pairs/content";
 import { barcodeGeneratorContent } from "@/tools/barcode-generator/content";
 import { hoursCalculatorContent } from "@/tools/hours-calculator/content";
+import { aspectRatioCalculatorContent } from "@/tools/aspect-ratio-calculator/content";
 import { imageColorPickerContent } from "@/tools/image-color-picker/content";
+import { paceCalculatorContent } from "@/tools/pace-calculator/content";
+import { passwordStrengthCheckerContent } from "@/tools/password-strength-checker/content";
 import { mortgageCalculatorContent } from "@/tools/mortgage-calculator/content";
 import { vatCalculatorContent } from "@/tools/vat-calculator/content";
 import { watermarkPdfContent } from "@/tools/watermark-pdf/content";
@@ -427,6 +430,9 @@ export const contentBySlug: Record<string, ToolContent> = {
   "vat-calculator": vatCalculatorContent,
   "watermark-pdf": watermarkPdfContent,
   "image-color-picker": imageColorPickerContent,
+  "aspect-ratio-calculator": aspectRatioCalculatorContent,
+  "password-strength-checker": passwordStrengthCheckerContent,
+  "pace-calculator": paceCalculatorContent,
   "organize-pdf": organizePdfContent,
   "sign-pdf": signPdfContent,
   "timer": timerContent,
