@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { FileDown, FileText, ImageIcon, KeyRound, LayoutGrid, Palette, ShieldCheck } from "lucide-react";
+import { FileDown, FileText, ImageIcon, KeyRound, LayoutGrid, Palette, Regex, Ruler, ShieldCheck, Scale } from "lucide-react";
 
 /**
  * The guides registry.
@@ -204,6 +204,81 @@ export const guides: Guide[] = [
     updated: "2026-08-18",
     minutes: 6,
     tools: ["color-picker", "color-palette-generator", "color-mixer", "contrast-checker"],
+  },
+  {
+    slug: "metric-imperial",
+    title: "Metric and imperial",
+    heading: "Metric and imperial: what actually differs, and what to watch for",
+    description:
+      "Why two systems still exist, the conversions worth memorising, and the three that catch people out \u2014 including a gallon that is not a gallon.",
+    keywords: [
+      "metric vs imperial",
+      "why does the us use imperial",
+      "metric imperial differences",
+      "us gallon vs uk gallon",
+      "imperial system explained",
+      "why is a us pint smaller",
+      "conversion factors worth memorising",
+    ],
+    icon: Scale,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 7,
+    tools: [
+      "unit-converter",
+      "length-converter",
+      "weight-converter",
+      "temperature-converter",
+      "volume-converter",
+      "cooking-measurement-converter",
+    ],
+  },
+  {
+    slug: "measuring-a-room",
+    title: "Measuring a room",
+    heading: "How to measure a room for paint, flooring or tiles",
+    description:
+      "Which measurements each job actually needs, how much to add for waste, and the openings people forget to subtract.",
+    keywords: [
+      "how to measure a room",
+      "measuring a room step by step",
+      "how much paint do i need for a room",
+      "measuring for flooring",
+      "how much waste to add tiles",
+      "measuring a room for wallpaper",
+    ],
+    icon: Ruler,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 7,
+    tools: [
+      "square-footage-calculator",
+      "room-size-calculator",
+      "paint-calculator",
+      "flooring-calculator",
+      "tile-calculator",
+      "wallpaper-calculator",
+    ],
+  },
+  {
+    slug: "regular-expressions",
+    title: "Regular expressions",
+    heading: "Regular expressions, from the parts you actually need",
+    description:
+      "The dozen or so pieces that cover almost every real use, why greedy matching surprises everyone, and when not to reach for a regex at all.",
+    keywords: [
+      "regex explained",
+      "regular expressions tutorial",
+      "what does .* mean in regex",
+      "greedy vs lazy matching",
+      "regex cheat sheet",
+      "when not to use regex",
+    ],
+    icon: Regex,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 9,
+    tools: ["regex-tester", "find-and-replace", "extract-from-text", "sort-lines"],
   },
 ];
 

@@ -3,8 +3,11 @@ import type { ComponentType } from "react";
 import ColourFormatsGuide from "@/guides/colour-formats/content";
 import HashingEncodingEncryptionGuide from "@/guides/hashing-encoding-encryption/content";
 import ImageFormatsGuide from "@/guides/image-formats/content";
+import MeasuringARoomGuide from "@/guides/measuring-a-room/content";
+import MetricImperialGuide from "@/guides/metric-imperial/content";
 import OnlineToolPrivacyGuide from "@/guides/online-tool-privacy/content";
 import PdfBasicsGuide from "@/guides/pdf-basics/content";
+import RegularExpressionsGuide from "@/guides/regular-expressions/content";
 import ReduceFileSizeGuide from "@/guides/reduce-file-size/content";
 import SocialSizesGuide from "@/guides/social-media-image-sizes/content";
 
@@ -23,4 +26,7 @@ export const guideContent: Record<string, ComponentType> = {
   "hashing-encoding-encryption": HashingEncodingEncryptionGuide,
   "pdf-basics": PdfBasicsGuide,
   "colour-formats": ColourFormatsGuide,
+  "metric-imperial": MetricImperialGuide,
+  "measuring-a-room": MeasuringARoomGuide,
+  "regular-expressions": RegularExpressionsGuide,
 };
