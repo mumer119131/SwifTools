@@ -152,11 +152,22 @@ export function ToolShell({ tool, children }: ToolShellProps) {
             {related.length > 0 ? (
               <section className="mt-14">
                 <h2 className="text-xl font-semibold tracking-[-0.02em] text-foreground">
-                  Related {category?.label} tools
+                  Related tools
                 </h2>
-                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                {/*
+                  The heading no longer names the category: relatedness is
+                  ranked by keyword overlap now, so a genuinely closer match
+                  from another category can and should appear. That also makes
+                  the category badge worth showing again — without it, a PDF
+                  compressor turning up under an image tool reads as a mistake.
+                */}
+                <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {related.map((item) => (
-                    <ToolCard key={item.slug} tool={item} showCategory={false} />
+                    <ToolCard
+                      key={`${item.category}/${item.slug}`}
+                      tool={item}
+                      showCategory={item.category !== tool.category}
+                    />
                   ))}
                 </div>
               </section>

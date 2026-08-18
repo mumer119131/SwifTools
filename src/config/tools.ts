@@ -1,5 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 
+import { relatedTools } from "@/lib/related";
+
 import type { ToolCategory } from "@/config/categories";
 import { categories } from "@/config/categories";
 
@@ -556,11 +558,16 @@ export const popularTools = tools.filter((tool) => tool.popular);
  * /units/lb-to-kg from a search should be offered the full Weight Converter,
  * not sixty more pair pages.
  */
-export function getRelatedTools(tool: Tool, limit = 4): Tool[] {
-  return getToolsByCategory(tool.category)
-    .filter((candidate) => candidate.slug !== tool.slug)
-    .sort((a, b) => Number(b.status === "live") - Number(a.status === "live"))
-    .slice(0, limit);
+/**
+ * The tools most worth showing next to this one, ranked by keyword overlap.
+ *
+ * Delegates to `relatedTools`, which holds the scoring. This used to return the
+ * first few tools in the category in declaration order, so every tool in a
+ * category recommended the same handful and the rest received no internal links
+ * at all.
+ */
+export function getRelatedTools(tool: Tool, limit = 6): Tool[] {
+  return relatedTools(tool, tools, limit);
 }
 
 export function toolHref(tool: Pick<Tool, "category" | "slug">): string {

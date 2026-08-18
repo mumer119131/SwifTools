@@ -13,6 +13,7 @@
     "check:hashes": "node --experimental-strip-types scripts/check-hashes.ts",
     "check:search": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-search.ts",
     "check:units": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-units.ts",
+    "check:related": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-related.ts",
     "check:developer": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-developer.ts",
     "check:image-batch": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-image-batch.ts",
     "check:exif": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-exif.ts",
