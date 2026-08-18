@@ -229,7 +229,10 @@ import { youtubeThumbnailGrabberContent } from "@/tools/youtube-thumbnail-grabbe
 import { imagePairContent } from "@/tools/image-pairs/content";
 import { barcodeGeneratorContent } from "@/tools/barcode-generator/content";
 import { hoursCalculatorContent } from "@/tools/hours-calculator/content";
+import { imageColorPickerContent } from "@/tools/image-color-picker/content";
 import { mortgageCalculatorContent } from "@/tools/mortgage-calculator/content";
+import { vatCalculatorContent } from "@/tools/vat-calculator/content";
+import { watermarkPdfContent } from "@/tools/watermark-pdf/content";
 import { organizePdfContent } from "@/tools/organize-pdf/content";
 import { signPdfContent } from "@/tools/sign-pdf/content";
 import { timerContent } from "@/tools/timer/content";
@@ -421,6 +424,9 @@ export const contentBySlug: Record<string, ToolContent> = {
   "barcode-generator": barcodeGeneratorContent,
   "hours-calculator": hoursCalculatorContent,
   "mortgage-calculator": mortgageCalculatorContent,
+  "vat-calculator": vatCalculatorContent,
+  "watermark-pdf": watermarkPdfContent,
+  "image-color-picker": imageColorPickerContent,
   "organize-pdf": organizePdfContent,
   "sign-pdf": signPdfContent,
   "timer": timerContent,

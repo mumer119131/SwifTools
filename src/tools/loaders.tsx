@@ -138,6 +138,9 @@ const registry: Record<string, React.ComponentType> = {
   "loan-calculator": lazyTool(() => import("@/tools/loan-calculator/Tool")),
   "hours-calculator": lazyTool(() => import("@/tools/hours-calculator/Tool")),
   "mortgage-calculator": lazyTool(() => import("@/tools/mortgage-calculator/Tool")),
+  "vat-calculator": lazyTool(() => import("@/tools/vat-calculator/Tool")),
+  "watermark-pdf": lazyTool(() => import("@/tools/watermark-pdf/Tool")),
+  "image-color-picker": lazyTool(() => import("@/tools/image-color-picker/Tool")),
   "compound-interest-calculator": lazyTool(
     () => import("@/tools/compound-interest-calculator/Tool"),
   ),

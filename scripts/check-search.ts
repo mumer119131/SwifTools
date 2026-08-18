@@ -280,6 +280,21 @@ const expectations: [string, string][] = [
   ["loan calculator", "loan-calculator"],
   ["emi", "loan-calculator"],
 
+  // VAT, PDF watermarking and sampling colour from an image. "remove vat"
+  // used to return the percentage calculator, and "get color from image"
+  // the colour picker, which converts formats rather than reading pixels.
+  ["vat calculator", "vat-calculator"],
+  ["remove vat", "vat-calculator"],
+  ["add vat", "vat-calculator"],
+  ["reverse vat", "vat-calculator"],
+  ["watermark pdf", "watermark-pdf"],
+  ["add watermark to pdf", "watermark-pdf"],
+  ["image color picker", "image-color-picker"],
+  ["get color from image", "image-color-picker"],
+  ["extract colors from image", "image-color-picker"],
+  // The format converter keeps its own queries.
+  ["hex to rgb", "color-picker"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

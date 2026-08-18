@@ -56,6 +56,7 @@ import { mergePdf } from "@/tools/merge-pdf/meta";
 import { pdfToJpg } from "@/tools/pdf-to-jpg/meta";
 import { pdfToWord } from "@/tools/pdf-to-word/meta";
 import { organizePdf } from "@/tools/organize-pdf/meta";
+import { watermarkPdf } from "@/tools/watermark-pdf/meta";
 import { signPdfTool } from "@/tools/sign-pdf/meta";
 import { splitPdf } from "@/tools/split-pdf/meta";
 import { wordToPdf } from "@/tools/word-to-pdf/meta";
@@ -88,6 +89,7 @@ import { wordCounter } from "@/tools/word-counter/meta";
 // Developer
 import { base64EncodeDecode } from "@/tools/base64-encode-decode/meta";
 import { colorPicker } from "@/tools/color-picker/meta";
+import { imageColorPicker } from "@/tools/image-color-picker/meta";
 import { htmlFormatter } from "@/tools/html-formatter/meta";
 import { jsonFormatter } from "@/tools/json-formatter/meta";
 import { markdownToHtml } from "@/tools/markdown-to-html/meta";
@@ -229,6 +231,7 @@ import { compoundInterestCalculator } from "@/tools/compound-interest-calculator
 import { invoiceGenerator } from "@/tools/invoice-generator/meta";
 import { hoursCalculator } from "@/tools/hours-calculator/meta";
 import { mortgageCalculator } from "@/tools/mortgage-calculator/meta";
+import { vatCalculator } from "@/tools/vat-calculator/meta";
 import { loanCalculator } from "@/tools/loan-calculator/meta";
 import { percentageCalculator } from "@/tools/percentage-calculator/meta";
 import { taxCalculator } from "@/tools/tax-calculator/meta";
@@ -276,6 +279,7 @@ export const tools: readonly Tool[] = [
   splitPdf,
   signPdfTool,
   organizePdf,
+  watermarkPdf,
   compressPdf,
   pdfToWord,
   pdfToJpg,
@@ -343,6 +347,7 @@ export const tools: readonly Tool[] = [
 
   // Color
   colorPicker,
+  imageColorPicker,
   colorPaletteGenerator,
   colorMixer,
   contrastChecker,
@@ -369,6 +374,7 @@ export const tools: readonly Tool[] = [
   loanCalculator,
   hoursCalculator,
   mortgageCalculator,
+  vatCalculator,
   compoundInterestCalculator,
   taxCalculator,
   bmiCalculator,
