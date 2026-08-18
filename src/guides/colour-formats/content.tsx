@@ -84,7 +84,7 @@ export default function ColourFormatsGuide() {
         <li><strong>Pasting a brand colour someone gave you</strong> — HEX. It is what they will send.</li>
         <li><strong>Needing transparency</strong> — RGB or HSL with an alpha value.</li>
         <li><strong>Building a palette or a set of shades</strong> — OKLCH, or HSL if you must, and check the result.</li>
-        <li><strong>Doing anything where contrast matters</strong> — OKLCH, and then <Link href="/developer/contrast-checker">verify it</Link>.</li>
+        <li><strong>Doing anything where contrast matters</strong> — OKLCH, and then <Link href="/color/contrast-checker">verify it</Link>.</li>
       </ul>
       <p>
         You can convert between all of them with the{" "}
@@ -104,7 +104,7 @@ export default function ColourFormatsGuide() {
       <p>
         It is also the one that is trivially checkable, so there is no reason to
         ship a page that fails it.{" "}
-        <Link href="/developer/contrast-checker">Check a pair</Link> before you
+        <Link href="/color/contrast-checker">Check a pair</Link> before you
         commit to it.
       </p>
     </>

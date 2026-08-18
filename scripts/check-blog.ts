@@ -21,7 +21,8 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import process from "node:process";
 
 import { guides } from "@/config/guides";
-import { tools } from "@/config/tools";
+import { categories } from "@/config/categories";
+import { toolHref, tools } from "@/config/tools";
 
 let failures = 0;
 
@@ -156,6 +157,51 @@ assert(
   "no post targets a keyword a tool or guide already owns",
   collisions.length === 0,
   collisions.join("; "),
+);
+
+/* ------------------------------------- every link in a post resolves */
+
+/**
+ * Markdown links inside posts, validated against the registry.
+ *
+ * The same gap as the guides had: a post's `tools` array is checked, but the
+ * links inside the writing are typed from memory. A 404 mid-paragraph is
+ * invisible until a reader clicks it.
+ */
+const routes = new Set<string>([
+  "/",
+  "/tools",
+  "/guides",
+  "/blog",
+  "/about",
+  "/contact",
+  "/privacy",
+  "/terms",
+  ...categories.map((category) => `/${category.slug}`),
+  ...tools.map((tool) => toolHref(tool)),
+  ...guides.map((guide) => `/guides/${guide.slug}`),
+  ...posts.map((post) => `/blog/${post.slug}`),
+]);
+
+let linkCount = 0;
+const broken: string[] = [];
+
+for (const file of files) {
+  const source = readFileSync(`src/posts/${file}`, "utf8");
+  const hrefs = [
+    ...[...source.matchAll(/\]\((\/[^)#?]*)\)/g)].map((match) => match[1]),
+    ...[...source.matchAll(/href="(\/[^"#?]*)"/g)].map((match) => match[1]),
+  ];
+  for (const href of hrefs) {
+    linkCount += 1;
+    if (!routes.has(href)) broken.push(`${href} in ${file}`);
+  }
+}
+
+assert(
+  `every internal link in the posts resolves (${linkCount} links)`,
+  broken.length === 0,
+  broken.join("; "),
 );
 
 /* ------------------------------------------------------------- plumbing */

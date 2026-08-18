@@ -12,11 +12,12 @@
  */
 
 import { execSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import process from "node:process";
 
 import { guides, getGuide, guideHref } from "@/config/guides";
-import { tools } from "@/config/tools";
+import { categories } from "@/config/categories";
+import { toolHref, tools } from "@/config/tools";
 
 let failures = 0;
 
@@ -132,6 +133,63 @@ const clientGuides = execSync(
   { encoding: "utf8" },
 ).split("\n").filter(Boolean);
 assert("no guide is a client component", clientGuides.length === 0, clientGuides.join(", "));
+
+/* --------------------------------- every link in the prose resolves */
+
+/**
+ * Validates the internal links written by hand inside the prose.
+ *
+ * The `tools` array on each guide was already checked, but the links inside
+ * the writing were not — and those are the ones typed from memory. Two of them
+ * pointed at `/developer/contrast-checker`, which has never existed: the tool
+ * is in the colour category. Nothing surfaced it, because a 404 in the middle
+ * of a paragraph is invisible unless someone clicks it.
+ *
+ * Resolved against the registry rather than by fetching, so this runs without
+ * a build and fails at the point the link is written.
+ */
+const routes = new Set<string>([
+  "/",
+  "/tools",
+  "/guides",
+  "/blog",
+  "/about",
+  "/contact",
+  "/privacy",
+  "/terms",
+  ...categories.map((category) => `/${category.slug}`),
+  ...tools.map((tool) => toolHref(tool)),
+  ...guides.map((guide) => guideHref(guide)),
+]);
+
+const proseFiles = readdirSync("src/guides", { recursive: true })
+  .map(String)
+  .filter((name) => name.endsWith(".tsx"))
+  .map((name) => `src/guides/${name}`);
+
+let linkCount = 0;
+const broken: string[] = [];
+
+for (const file of proseFiles) {
+  const source = readFileSync(file, "utf8");
+  const hrefs = [
+    ...[...source.matchAll(/href="(\/[^"#?]*)"/g)].map((match) => match[1]),
+    ...[...source.matchAll(/\]\((\/[^)#?]*)\)/g)].map((match) => match[1]),
+  ];
+
+  for (const href of hrefs) {
+    linkCount += 1;
+    // Blog posts are validated by check-blog; guides may link to them.
+    if (href.startsWith("/blog/")) continue;
+    if (!routes.has(href)) broken.push(`${href} in ${file.replace("src/guides/", "")}`);
+  }
+}
+
+assert(
+  `every internal link in the prose resolves (${linkCount} links)`,
+  broken.length === 0,
+  broken.join("; "),
+);
 
 /* ------------------------------------------------------------ hrefs work */
 
