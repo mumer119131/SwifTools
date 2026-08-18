@@ -188,6 +188,15 @@ const expectations: [string, string][] = [
   ["extract emails", "extract-from-text"],
   ["email extractor", "extract-from-text"],
 
+  // SEO tools. "utm builder" returned quiz-builder and "schema generator"
+  // returned meme-generator before these existed.
+  ["utm builder", "utm-builder"],
+  ["utm parameters", "utm-builder"],
+  ["schema generator", "schema-generator"],
+  ["json-ld", "schema-generator"],
+  ["robots.txt tester", "robots-txt-tester"],
+  ["hreflang", "hreflang-generator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

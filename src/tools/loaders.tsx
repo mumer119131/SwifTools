@@ -244,6 +244,10 @@ const registry: Record<string, React.ComponentType> = {
 
   // SEO
   "meta-tag-generator": lazyTool(() => import("@/tools/meta-tag-generator/Tool")),
+  "utm-builder": lazyTool(() => import("@/tools/utm-builder/Tool")),
+  "schema-generator": lazyTool(() => import("@/tools/schema-generator/Tool")),
+  "robots-txt-tester": lazyTool(() => import("@/tools/robots-txt-tester/Tool")),
+  "hreflang-generator": lazyTool(() => import("@/tools/hreflang-generator/Tool")),
   "keyword-density-checker": lazyTool(() => import("@/tools/keyword-density-checker/Tool")),
   "robots-txt-generator": lazyTool(() => import("@/tools/robots-txt-generator/Tool")),
   "sitemap-generator": lazyTool(() => import("@/tools/sitemap-generator/Tool")),

@@ -244,6 +244,10 @@ import { whatsappChatGenerator } from "@/tools/whatsapp-chat-generator/meta";
 import { youtubeThumbnailGrabber } from "@/tools/youtube-thumbnail-grabber/meta";
 
 // SEO
+import { hreflangGenerator } from "@/tools/hreflang-generator/meta";
+import { robotsTxtTester } from "@/tools/robots-txt-tester/meta";
+import { schemaGenerator } from "@/tools/schema-generator/meta";
+import { utmBuilder } from "@/tools/utm-builder/meta";
 import { keywordDensityChecker } from "@/tools/keyword-density-checker/meta";
 import { metaTagGenerator } from "@/tools/meta-tag-generator/meta";
 import { robotsTxtGenerator } from "@/tools/robots-txt-generator/meta";
@@ -374,6 +378,10 @@ export const tools: readonly Tool[] = [
   keywordDensityChecker,
   robotsTxtGenerator,
   sitemapGenerator,
+  utmBuilder,
+  schemaGenerator,
+  robotsTxtTester,
+  hreflangGenerator,
 
   // Generator
   passwordGenerator,
