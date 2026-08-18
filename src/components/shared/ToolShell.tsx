@@ -1,6 +1,7 @@
 import { Lock, Server, Zap } from "lucide-react";
 
 import { getCategory } from "@/config/categories";
+import { getToolContent } from "@/config/tool-content";
 import { getRelatedTools, type Tool } from "@/config/tools";
 import { Breadcrumbs, type Crumb } from "@/components/shared/Breadcrumbs";
 import { CategoryBadge } from "@/components/shared/CategoryBadge";
@@ -21,6 +22,8 @@ interface ToolShellProps {
 export function ToolShell({ tool, children }: ToolShellProps) {
   const category = getCategory(tool.category);
   const related = getRelatedTools(tool);
+  // Prose lives outside the registry so it never reaches the client bundle.
+  const { steps, notes, faq } = getToolContent(tool.slug);
   const Icon = tool.icon;
 
   const crumbs: Crumb[] = [
@@ -75,13 +78,13 @@ export function ToolShell({ tool, children }: ToolShellProps) {
             {/* Reserved ad region (§10): between the tool and the explainer. */}
             <AdSlotReservation placement="between-steps" />
 
-            {tool.notes?.length ? (
+            {notes?.length ? (
               <section id="about" className="mt-14 scroll-mt-24">
                 <h2 className="text-xl font-semibold tracking-[-0.02em] text-foreground">
                   About the {tool.name}
                 </h2>
                 <div className="mt-5 max-w-2xl space-y-4">
-                  {tool.notes.map((note) => (
+                  {notes.map((note) => (
                     <p key={note} className="text-[0.9375rem] leading-relaxed text-muted-foreground">
                       {note}
                     </p>
@@ -90,13 +93,13 @@ export function ToolShell({ tool, children }: ToolShellProps) {
               </section>
             ) : null}
 
-            {tool.steps?.length ? (
+            {steps?.length ? (
               <section id="how-it-works" className="mt-14 scroll-mt-24">
                 <h2 className="text-xl font-semibold tracking-[-0.02em] text-foreground">
                   How it works
                 </h2>
                 <ol className="mt-5 space-y-4">
-                  {tool.steps.map((step, index) => (
+                  {steps.map((step, index) => (
                     <li key={step} className="flex gap-4">
                       <span
                         className="grid size-7 shrink-0 place-items-center rounded-full border border-border bg-surface font-mono text-xs text-muted-foreground"
@@ -113,7 +116,7 @@ export function ToolShell({ tool, children }: ToolShellProps) {
               </section>
             ) : null}
 
-            {tool.faq?.length ? (
+            {faq?.length ? (
               <section id="faq" className="mt-14 scroll-mt-24">
                 <h2 className="text-xl font-semibold tracking-[-0.02em] text-foreground">
                   Frequently asked questions
@@ -124,7 +127,7 @@ export function ToolShell({ tool, children }: ToolShellProps) {
                   hide four short answers behind a click.
                 */}
                 <dl className="mt-5 max-w-2xl space-y-6">
-                  {tool.faq.map((entry) => (
+                  {faq.map((entry) => (
                     <div key={entry.question}>
                       <dt className="text-[0.9375rem] font-medium text-foreground">
                         {entry.question}

@@ -7,6 +7,14 @@ import { categories } from "@/config/categories";
 
 export type { ToolCategory };
 
+/**
+ * A tool as the client knows it.
+ *
+ * Deliberately lean: this object is imported by client components (the ⌘K
+ * palette, the mega menu, the homepage directory), so every field here ships
+ * to the browser for all ~280 tools. The long-form prose lives in
+ * `@/config/tool-content`, which only server components import.
+ */
 export interface Tool {
   /** URL segment. Combined with the category: "compress-pdf" -> /pdf/compress-pdf */
   slug: string;
@@ -20,27 +28,6 @@ export interface Tool {
   /** Where the work happens. See §4.4 — client wherever it is possible. */
   processing: "client" | "server";
   status: "live" | "soon";
-  /** Rendered as "How it works" and emitted as `HowTo` JSON-LD. */
-  steps?: string[];
-  /**
-   * Server-rendered explanation, one paragraph per entry.
-   *
-   * Plain strings rather than JSX on purpose: the tool bodies are loaded with
-   * `ssr: false`, so anything written inside them is invisible to a crawler.
-   * This is the substance of the page as far as search is concerned — the part
-   * that says why the number is what it is, or what the tool gets right that a
-   * naive version gets wrong.
-   */
-  notes?: string[];
-  /**
-   * Questions people actually ask about this tool, emitted as `FAQPage`
-   * JSON-LD and rendered on the page.
-   *
-   * Only real questions with real answers. "Is it free?" is not a question
-   * anyone types into a search engine, and padding the schema with filler is
-   * the fastest way to have it ignored.
-   */
-  faq?: { question: string; answer: string }[];
   /** Surfaced in the homepage "Popular tools" rail. */
   popular?: boolean;
   /**

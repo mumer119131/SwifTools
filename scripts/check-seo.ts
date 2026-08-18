@@ -18,6 +18,7 @@ import process from "node:process";
 
 import { browsableTools, publishedTools, tools } from "@/config/tools";
 import { getCategory } from "@/config/categories";
+import { getToolContent } from "@/config/tool-content";
 import { buildToolMetadata } from "@/lib/seo";
 import { pageTitle } from "@/config/site";
 
@@ -96,15 +97,15 @@ const missingFaq: string[] = [];
 const thinNotes: string[] = [];
 
 for (const tool of needsContent) {
-  if (!tool.notes?.length) missingNotes.push(tool.slug);
+  if (!getToolContent(tool.slug).notes?.length) missingNotes.push(tool.slug);
   else {
-    const words = tool.notes.join(" ").split(/\s+/).length;
+    const words = (getToolContent(tool.slug).notes ?? []).join(" ").split(/\s+/).length;
     // Under ~90 words is not an explanation, it is a caption.
     if (words < 90) thinNotes.push(`${tool.slug} (${words} words)`);
   }
 
-  if (!tool.faq?.length || tool.faq.length < 3) {
-    missingFaq.push(`${tool.slug} (${tool.faq?.length ?? 0})`);
+  if (!getToolContent(tool.slug).faq?.length || (getToolContent(tool.slug).faq ?? []).length < 3) {
+    missingFaq.push(`${tool.slug} (${getToolContent(tool.slug).faq?.length ?? 0})`);
   }
 }
 
@@ -116,7 +117,7 @@ if (missingNotes.length > 0) {
 
 if (thinNotes.length > 0) {
   fail(`${thinNotes.length} tools have notes under 90 words: ${thinNotes.slice(0, 6).join(", ")}${thinNotes.length > 6 ? ", …" : ""}`);
-} else if (needsContent.every((tool) => tool.notes?.length)) {
+} else if (needsContent.every((tool) => getToolContent(tool.slug).notes?.length)) {
   console.log("  ok    every notes block is substantial");
 }
 
@@ -141,7 +142,7 @@ const FILLER = [
 ];
 
 for (const tool of needsContent) {
-  for (const entry of tool.faq ?? []) {
+  for (const entry of getToolContent(tool.slug).faq ?? []) {
     const question = entry.question.trim();
     const answer = entry.answer.trim();
 
@@ -174,14 +175,14 @@ for (const tool of needsContent) {
   }
 }
 
-const totalQuestions = needsContent.reduce((sum, tool) => sum + (tool.faq?.length ?? 0), 0);
+const totalQuestions = needsContent.reduce((sum, tool) => sum + (getToolContent(tool.slug).faq?.length ?? 0), 0);
 if (totalQuestions > 0) {
   console.log(`  ok    ${totalQuestions} FAQ entries, all unique and substantive`);
 }
 
 /* -------------------------------------------------------------- HowTo LD */
 
-const noSteps = publishedTools.filter((tool) => !tool.searchOnly && !tool.steps?.length);
+const noSteps = publishedTools.filter((tool) => !tool.searchOnly && !getToolContent(tool.slug).steps?.length);
 if (noSteps.length > 0) {
   fail(`${noSteps.length} live tools have no steps, so emit no HowTo schema: ${noSteps.slice(0, 6).join(", ")}`);
 } else {
@@ -189,7 +190,7 @@ if (noSteps.length > 0) {
 }
 
 const totalNoteWords = needsContent.reduce(
-  (sum, tool) => sum + (tool.notes?.join(" ").split(/\s+/).length ?? 0),
+  (sum, tool) => sum + (getToolContent(tool.slug).notes?.join(" ").split(/\s+/).length ?? 0),
   0,
 );
 

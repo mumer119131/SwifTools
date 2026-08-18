@@ -37,11 +37,6 @@ function toTool(pair: UnitPair): Tool {
     processing: "client",
     status: "live",
     searchOnly: true,
-    steps: [
-      `Type a value in ${pair.fromLabel.toLowerCase()} — the result appears as you type.`,
-      "The formula is shown, so you can check the arithmetic rather than trusting it.",
-      `Use the table for common values, or open the full ${categoryLabel} Converter for other units.`,
-    ],
   };
 }
 

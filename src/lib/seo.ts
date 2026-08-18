@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { absoluteUrl, pageTitle, siteConfig } from "@/config/site";
 import { getCategory } from "@/config/categories";
+import { getToolContent } from "@/config/tool-content";
 import { toolHref, type Tool } from "@/config/tools";
 
 /**
@@ -120,7 +121,8 @@ export function softwareApplicationLd(tool: Tool): JsonLd {
 }
 
 export function howToLd(tool: Tool): JsonLd | null {
-  if (!tool.steps?.length) return null;
+  const { steps } = getToolContent(tool.slug);
+  if (!steps?.length) return null;
 
   return {
     "@context": "https://schema.org",
@@ -130,7 +132,7 @@ export function howToLd(tool: Tool): JsonLd | null {
     totalTime: "PT1M",
     supply: [],
     tool: [{ "@type": "HowToTool", name: tool.name }],
-    step: tool.steps.map((text, index) => ({
+    step: steps.map((text, index) => ({
       "@type": "HowToStep",
       position: index + 1,
       name: `Step ${index + 1}`,
@@ -148,12 +150,13 @@ export function howToLd(tool: Tool): JsonLd | null {
  * so this returns null rather than inventing anything.
  */
 export function faqLd(tool: Tool): JsonLd | null {
-  if (!tool.faq?.length) return null;
+  const { faq } = getToolContent(tool.slug);
+  if (!faq?.length) return null;
 
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: tool.faq.map((entry) => ({
+    mainEntity: faq.map((entry) => ({
       "@type": "Question",
       name: entry.question,
       acceptedAnswer: { "@type": "Answer", text: entry.answer },

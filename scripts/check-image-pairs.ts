@@ -14,6 +14,7 @@ import process from "node:process";
 
 import { FORMATS, caveats, comparison, formatPairs, getFormatPair } from "@/lib/image-formats";
 import { imagePairTools } from "@/tools/image-pairs/meta";
+import { getToolContent } from "@/config/tool-content";
 
 /** The only types a browser canvas can reliably encode. */
 const ENCODABLE = new Set(["image/png", "image/jpeg", "image/webp"]);
@@ -96,8 +97,8 @@ for (const tool of imagePairTools) {
   assert(`${tool.slug} is search-only`, tool.searchOnly === true);
   assert(`${tool.slug} is in the image category`, tool.category === "image");
   assert(`${tool.slug} runs client-side`, tool.processing === "client");
-  assert(`${tool.slug} has notes`, (tool.notes?.length ?? 0) >= 3);
-  assert(`${tool.slug} has FAQ entries`, (tool.faq?.length ?? 0) >= 3);
+  assert(`${tool.slug} has notes`, (getToolContent(tool.slug).notes?.length ?? 0) >= 3);
+  assert(`${tool.slug} has FAQ entries`, (getToolContent(tool.slug).faq?.length ?? 0) >= 3);
   assert(
     `${tool.slug} description is within the meta limit`,
     tool.description.length <= 155,
