@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Download, Share, SquarePlus, X } from "lucide-react";
+import { Download, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useLocalStorage } from "@/lib/use-local-storage";
@@ -16,7 +16,45 @@ interface InstallEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
-const DISMISSED_KEY = "pockettoolz:install-dismissed";
+/**
+ * When the offer was last dismissed, as a timestamp.
+ *
+ * Originally a boolean, which hid the offer for good — someone who tapped away
+ * on their first visit could never find it again, and there is no other route
+ * to installing. A timestamp lets it return, occasionally.
+ */
+const DISMISSED_KEY = "pockettoolz:install-dismissed-at";
+
+/** Long enough not to nag, short enough that a change of mind is possible. */
+const SNOOZE_MS = 60 * 24 * 60 * 60 * 1000;
+
+/**
+ * The iOS Share button, drawn to match.
+ *
+ * Inline rather than from the icon set: this has to be recognisable as the
+ * exact glyph on the device — a rounded tray with an arrow lifting out of it —
+ * and a generic "share" icon that looks slightly different is worse than none,
+ * because it sends people looking for the wrong shape.
+ */
+function IosShareGlyph() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="mx-1 inline-block size-4 -translate-y-px text-foreground"
+      aria-label="the Share button"
+      role="img"
+    >
+      <path d="M12 3v12" />
+      <path d="m8 7 4-4 4 4" />
+      <path d="M7 11H6a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1" />
+    </svg>
+  );
+}
 
 /**
  * Offers to install the site, once, quietly.
@@ -31,10 +69,11 @@ const DISMISSED_KEY = "pockettoolz:install-dismissed";
  * it is worth keeping; after half a minute of use it is an offer.
  */
 export function InstallPrompt() {
-  const [dismissed, setDismissed] = useLocalStorage(DISMISSED_KEY, false);
+  const [dismissedAt, setDismissedAt] = useLocalStorage<number>(DISMISSED_KEY, 0);
   const [event, setEvent] = React.useState<InstallEvent | null>(null);
   const [showIos, setShowIos] = React.useState(false);
   const [ready, setReady] = React.useState(false);
+  const [readyAt, setReadyAt] = React.useState(0);
 
   React.useEffect(() => {
     // Already installed — nothing to offer.
@@ -58,6 +97,7 @@ export function InstallPrompt() {
 
     const timer = window.setTimeout(() => {
       setReady(true);
+      setReadyAt(Date.now());
       if (isIos && isSafari) setShowIos(true);
     }, 30_000);
 
@@ -67,7 +107,10 @@ export function InstallPrompt() {
     };
   }, []);
 
-  const visible = !dismissed && ready && (event !== null || showIos);
+  // `Date.now()` is not read during render — the snooze is compared against the
+  // moment the component decided it was ready, which is stable.
+  const snoozed = dismissedAt > 0 && readyAt > 0 && readyAt - dismissedAt < SNOOZE_MS;
+  const visible = !snoozed && ready && (event !== null || showIos);
   if (!visible) return null;
 
   async function install() {
@@ -76,7 +119,7 @@ export function InstallPrompt() {
     await event.userChoice;
     // Either way the offer is spent: the event cannot be reused.
     setEvent(null);
-    setDismissed(true);
+    setDismissedAt(Date.now());
   }
 
   return (
@@ -97,14 +140,42 @@ export function InstallPrompt() {
           <p className="text-sm font-medium text-foreground">Keep it to hand</p>
 
           {showIos ? (
-            <p className="mt-1 flex flex-wrap items-center gap-x-1 text-sm leading-relaxed text-muted-foreground">
-              Tap
-              <Share className="inline size-3.5" strokeWidth={1.75} aria-label="the Share button" />
-              then
-              <SquarePlus className="inline size-3.5" strokeWidth={1.75} aria-hidden="true" />
-              <span className="text-foreground">Add to Home Screen</span> — it
-              opens like an app and works without a connection.
-            </p>
+            <div className="mt-1 space-y-2 text-sm leading-relaxed text-muted-foreground">
+              <p>Opens like an app, and works without a connection.</p>
+              {/*
+                Numbered and located, because the previous version showed the
+                icon without saying where it is — and on iOS it is genuinely
+                hard to find. The bar hides on scroll, and the menu item sits
+                below the fold of the share sheet.
+              */}
+              <ol className="space-y-1.5">
+                <li className="flex gap-2">
+                  <span className="text-subtle-foreground">1.</span>
+                  <span>
+                    Tap
+                    <IosShareGlyph />
+                    in the bar at the{" "}
+                    <span className="text-foreground">bottom of the screen</span>.
+                    If you cannot see it, tap the very bottom or scroll up — the
+                    bar hides itself as you read.
+                  </span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="text-subtle-foreground">2.</span>
+                  <span>
+                    Scroll down the menu that appears — past the row of apps —
+                    and choose{" "}
+                    <span className="text-foreground">Add to Home Screen</span>.
+                  </span>
+                </li>
+              </ol>
+              <p className="text-xs text-subtle-foreground">
+                No Add to Home Screen in that list? You are probably in another
+                app&rsquo;s browser rather than Safari. Choose{" "}
+                <span className="text-muted-foreground">Open in Safari</span>{" "}
+                first.
+              </p>
+            </div>
           ) : (
             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
               Add it to your home screen. It opens like an app and works
@@ -123,7 +194,7 @@ export function InstallPrompt() {
           variant="ghost"
           size="icon"
           className="size-7 shrink-0"
-          onClick={() => setDismissed(true)}
+          onClick={() => setDismissedAt(Date.now())}
           aria-label="Not now"
         >
           <X className="size-3.5" strokeWidth={2} />
