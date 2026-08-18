@@ -232,6 +232,11 @@ import { compoundInterestCalculator } from "@/tools/compound-interest-calculator
 import { invoiceGenerator } from "@/tools/invoice-generator/meta";
 import { hoursCalculator } from "@/tools/hours-calculator/meta";
 import { mortgageCalculator } from "@/tools/mortgage-calculator/meta";
+import { sleepCalculator } from "@/tools/sleep-calculator/meta";
+import { fuelCostCalculator } from "@/tools/fuel-cost-calculator/meta";
+import { heartRateZones } from "@/tools/heart-rate-zones/meta";
+import { ovenTemperatureConverter } from "@/tools/oven-temperature-converter/meta";
+import { subscriptionTracker } from "@/tools/subscription-tracker/meta";
 import { paceCalculator } from "@/tools/pace-calculator/meta";
 import { vatCalculator } from "@/tools/vat-calculator/meta";
 import { loanCalculator } from "@/tools/loan-calculator/meta";
@@ -380,6 +385,8 @@ export const tools: readonly Tool[] = [
   mortgageCalculator,
   vatCalculator,
   paceCalculator,
+  sleepCalculator,
+  fuelCostCalculator,
   compoundInterestCalculator,
   taxCalculator,
   bmiCalculator,
@@ -440,6 +447,7 @@ export const tools: readonly Tool[] = [
   phCalculator,
   halfLifeCalculator,
   significantFiguresCalculator,
+  heartRateZones,
 
   // Home & lifestyle
   squareFootageCalculator,
@@ -456,6 +464,8 @@ export const tools: readonly Tool[] = [
   unitPriceCalculator,
   cookingMeasurementConverter,
   recipeScaler,
+  ovenTemperatureConverter,
+  subscriptionTracker,
   movingChecklist,
   groceryList,
   mealPlanner,

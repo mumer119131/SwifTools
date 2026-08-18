@@ -308,6 +308,18 @@ const expectations: [string, string][] = [
   // The generator keeps its own query.
   ["password generator", "password-generator"],
 
+  // Everyday tools. None of these had an answer before.
+  ["sleep calculator", "sleep-calculator"],
+  ["what time should i go to bed", "sleep-calculator"],
+  ["fuel cost", "fuel-cost-calculator"],
+  ["petrol cost calculator", "fuel-cost-calculator"],
+  ["gas mark", "oven-temperature-converter"],
+  ["fan oven temperature", "oven-temperature-converter"],
+  ["oven temperature", "oven-temperature-converter"],
+  ["subscription tracker", "subscription-tracker"],
+  ["heart rate zones", "heart-rate-zones"],
+  ["max heart rate", "heart-rate-zones"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

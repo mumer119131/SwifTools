@@ -231,7 +231,12 @@ import { barcodeGeneratorContent } from "@/tools/barcode-generator/content";
 import { hoursCalculatorContent } from "@/tools/hours-calculator/content";
 import { aspectRatioCalculatorContent } from "@/tools/aspect-ratio-calculator/content";
 import { imageColorPickerContent } from "@/tools/image-color-picker/content";
+import { fuelCostCalculatorContent } from "@/tools/fuel-cost-calculator/content";
+import { heartRateZonesContent } from "@/tools/heart-rate-zones/content";
+import { ovenTemperatureConverterContent } from "@/tools/oven-temperature-converter/content";
 import { paceCalculatorContent } from "@/tools/pace-calculator/content";
+import { sleepCalculatorContent } from "@/tools/sleep-calculator/content";
+import { subscriptionTrackerContent } from "@/tools/subscription-tracker/content";
 import { passwordStrengthCheckerContent } from "@/tools/password-strength-checker/content";
 import { mortgageCalculatorContent } from "@/tools/mortgage-calculator/content";
 import { vatCalculatorContent } from "@/tools/vat-calculator/content";
@@ -433,6 +438,11 @@ export const contentBySlug: Record<string, ToolContent> = {
   "aspect-ratio-calculator": aspectRatioCalculatorContent,
   "password-strength-checker": passwordStrengthCheckerContent,
   "pace-calculator": paceCalculatorContent,
+  "sleep-calculator": sleepCalculatorContent,
+  "fuel-cost-calculator": fuelCostCalculatorContent,
+  "oven-temperature-converter": ovenTemperatureConverterContent,
+  "subscription-tracker": subscriptionTrackerContent,
+  "heart-rate-zones": heartRateZonesContent,
   "organize-pdf": organizePdfContent,
   "sign-pdf": signPdfContent,
   "timer": timerContent,

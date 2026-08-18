@@ -144,6 +144,11 @@ const registry: Record<string, React.ComponentType> = {
   "aspect-ratio-calculator": lazyTool(() => import("@/tools/aspect-ratio-calculator/Tool")),
   "password-strength-checker": lazyTool(() => import("@/tools/password-strength-checker/Tool")),
   "pace-calculator": lazyTool(() => import("@/tools/pace-calculator/Tool")),
+  "sleep-calculator": lazyTool(() => import("@/tools/sleep-calculator/Tool")),
+  "fuel-cost-calculator": lazyTool(() => import("@/tools/fuel-cost-calculator/Tool")),
+  "oven-temperature-converter": lazyTool(() => import("@/tools/oven-temperature-converter/Tool")),
+  "subscription-tracker": lazyTool(() => import("@/tools/subscription-tracker/Tool")),
+  "heart-rate-zones": lazyTool(() => import("@/tools/heart-rate-zones/Tool")),
   "compound-interest-calculator": lazyTool(
     () => import("@/tools/compound-interest-calculator/Tool"),
   ),
