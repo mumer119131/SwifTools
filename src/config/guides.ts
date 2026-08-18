@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { FileDown, ImageIcon, LayoutGrid } from "lucide-react";
+import { FileDown, FileText, ImageIcon, KeyRound, LayoutGrid, Palette, ShieldCheck } from "lucide-react";
 
 /**
  * The guides registry.
@@ -114,6 +114,96 @@ export const guides: Guide[] = [
     updated: "2026-08-18",
     minutes: 6,
     tools: ["compress-image", "resize-image", "compress-pdf", "convert-image", "split-pdf"],
+  },
+  {
+    slug: "online-tool-privacy",
+    title: "Are online tools safe?",
+    heading: "What actually happens to a file you put into an online tool",
+    description:
+      "Most converters upload your file to a server you know nothing about. Some do not need to \u2014 here is how to tell the difference, and how to check for yourself.",
+    keywords: [
+      "are online converters safe",
+      "do online tools upload my files",
+      "is it safe to upload documents online",
+      "online pdf converter privacy",
+      "client side file processing",
+      "browser based tools privacy",
+      "what happens to files i upload",
+    ],
+    icon: ShieldCheck,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 7,
+    tools: ["exif-viewer", "compress-pdf", "merge-pdf", "compress-image", "password-generator"],
+  },
+  {
+    slug: "hashing-encoding-encryption",
+    title: "Hashing, encoding and encryption",
+    heading: "Hashing, encoding and encryption are three different things",
+    description:
+      "Base64 is not encryption, a hash is not reversible, and confusing them is how credentials end up in plain sight. What each one is actually for.",
+    keywords: [
+      "encoding vs encryption",
+      "is base64 encryption",
+      "hashing vs encryption",
+      "what is a hash",
+      "difference between hashing and encoding",
+      "is md5 secure",
+      "why can't you decrypt a hash",
+    ],
+    icon: KeyRound,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 8,
+    tools: [
+      "sha256-hash-generator",
+      "md5-hash-generator",
+      "base64-encode-decode",
+      "hmac-generator",
+      "jwt-decoder",
+      "password-generator",
+    ],
+  },
+  {
+    slug: "pdf-basics",
+    title: "Working with PDFs",
+    heading: "Why PDFs behave the way they do",
+    description:
+      "Why the text will not copy, why the file is 40MB, why editing one is awkward \u2014 and what to do about each.",
+    keywords: [
+      "how do pdfs work",
+      "why is my pdf so big",
+      "why can't i copy text from a pdf",
+      "scanned pdf vs text pdf",
+      "pdf explained",
+      "why are pdfs hard to edit",
+    ],
+    icon: FileText,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 6,
+    tools: ["merge-pdf", "split-pdf", "compress-pdf", "pdf-to-word", "pdf-to-jpg", "jpg-to-pdf"],
+  },
+  {
+    slug: "colour-formats",
+    title: "Colour on the web",
+    heading: "HEX, RGB, HSL and OKLCH: which colour format to use",
+    description:
+      "Four ways to write the same colour, and why the newest one finally makes lightness mean what you expect.",
+    keywords: [
+      "hex vs rgb",
+      "what is hsl",
+      "oklch colour",
+      "css colour formats",
+      "how do hex colours work",
+      "rgb vs hsl",
+      "which colour format should i use",
+    ],
+    icon: Palette,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 6,
+    tools: ["color-picker", "color-palette-generator", "color-mixer", "contrast-checker"],
   },
 ];
 
