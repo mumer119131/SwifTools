@@ -8,6 +8,22 @@ const nextConfig: NextConfig = {
    * markdown into pages — `src/app` contains no .mdx files.
    */
   pageExtensions: ["ts", "tsx", "md", "mdx"],
+
+  async headers() {
+    return [
+      {
+        // The service worker must never be cached. If a broken one ships, the
+        // only way to replace it is for the browser to fetch a fresh copy —
+        // and a cached worker cannot be superseded.
+        source: "/sw.js",
+        headers: [
+          { key: "Content-Type", value: "application/javascript; charset=utf-8" },
+          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
+          { key: "Service-Worker-Allowed", value: "/" },
+        ],
+      },
+    ];
+  },
 };
 
 /*

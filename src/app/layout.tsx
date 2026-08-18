@@ -16,6 +16,8 @@ import { JsonLdScript } from "@/components/shared/JsonLd";
 import { websiteLd } from "@/lib/seo";
 import { adsConfig } from "@/config/ads";
 import { Analytics } from "@/components/layout/Analytics";
+import { InstallPrompt } from "@/components/layout/InstallPrompt";
+import { ServiceWorker } from "@/components/layout/ServiceWorker";
 import { analyticsConfig, gtagBootstrap } from "@/config/analytics";
 
 /**
@@ -165,6 +167,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           />
         ) : null}
         <Analytics />
+        <ServiceWorker />
+        <InstallPrompt />
 
         {/*
           Loaded only when a publisher ID is configured, so a default build

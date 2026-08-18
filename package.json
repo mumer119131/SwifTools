@@ -20,6 +20,7 @@
     "check:barcode": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-barcode.ts",
     "check:sign-pdf": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-sign-pdf.ts",
     "check:timer": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-timer.ts",
+    "check:pwa": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-pwa.ts",
     "check:a11y": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-a11y.ts",
     "check:blog": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-blog.ts",
     "check:guides": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-guides.ts",
