@@ -60,6 +60,50 @@ assert("old caches are deleted on activate", /caches\.delete/.test(worker));
 // Without a way to withdraw it, a worker on thousands of devices is permanent.
 assert("there is a kill switch", worker.includes("unregister") && worker.includes("sw-kill"));
 
+/* ------------------------------------------ the install offer's memory */
+
+/*
+ * Asking someone to install an app they already installed is the most
+ * irritating thing a PWA can do, and it is easy to ship: the obvious
+ * `display-mode: standalone` check is only true *while running inside the
+ * installed app*, so a later visit in an ordinary browser tab — which is what
+ * arriving from a search result looks like — asks again.
+ *
+ * Four signals are needed, and none of them is optional.
+ */
+const prompt = readFileSync("src/components/layout/InstallPrompt.tsx", "utf8");
+
+assert(
+  "installation is remembered across visits, not just detected",
+  prompt.includes("pockettoolz:installed"),
+);
+assert(
+  "the appinstalled event is handled",
+  /addEventListener\("appinstalled"/.test(prompt),
+);
+assert(
+  "running standalone records the install for later browser visits",
+  /if \(standalone\) \{[\s\S]{0,120}setInstalled\(true\)/.test(prompt),
+);
+assert(
+  "accepting the native prompt is treated as permanent",
+  /outcome === "accepted"[\s\S]{0,40}setInstalled\(true\)/.test(prompt),
+);
+// Safari fires no install event, and a home-screen app there has storage
+// separate from the browser — so the user is the only possible source.
+assert(
+  "there is a manual way to say it is already installed",
+  prompt.includes("Already added it"),
+);
+assert(
+  "an installed app is never offered the prompt",
+  /!installed &&/.test(prompt),
+);
+assert(
+  "declining is a snooze rather than permanent",
+  prompt.includes("setDismissedAt(Date.now())") && prompt.includes("SNOOZE_MS"),
+);
+
 /* --------------------------------------------------------- as served */
 
 async function get(path: string): Promise<Response | null> {

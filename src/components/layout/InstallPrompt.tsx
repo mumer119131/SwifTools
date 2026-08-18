@@ -25,6 +25,17 @@ interface InstallEvent extends Event {
  */
 const DISMISSED_KEY = "pockettoolz:install-dismissed-at";
 
+/**
+ * Set once we have evidence the app is installed, and never unset.
+ *
+ * The `display-mode: standalone` check alone is not enough, because it is only
+ * true *while running inside the installed app*. Someone who installs it and
+ * then arrives from a search result — in an ordinary browser tab — looks
+ * exactly like someone who never installed anything, and gets asked again.
+ * That was the bug.
+ */
+const INSTALLED_KEY = "pockettoolz:installed";
+
 /** Long enough not to nag, short enough that a change of mind is possible. */
 const SNOOZE_MS = 60 * 24 * 60 * 60 * 1000;
 
@@ -70,18 +81,36 @@ function IosShareGlyph() {
  */
 export function InstallPrompt() {
   const [dismissedAt, setDismissedAt] = useLocalStorage<number>(DISMISSED_KEY, 0);
+  const [installed, setInstalled] = useLocalStorage<boolean>(INSTALLED_KEY, false);
   const [event, setEvent] = React.useState<InstallEvent | null>(null);
   const [showIos, setShowIos] = React.useState(false);
   const [ready, setReady] = React.useState(false);
   const [readyAt, setReadyAt] = React.useState(0);
 
   React.useEffect(() => {
-    // Already installed — nothing to offer.
+    /*
+     * Running inside the installed app. Record it as well as returning: this
+     * is the only automatic evidence available on Android and desktop, and
+     * remembering it means a later visit in an ordinary browser tab knows not
+     * to ask.
+     */
     const standalone =
       window.matchMedia?.("(display-mode: standalone)").matches ||
       // Safari's non-standard equivalent.
       (navigator as { standalone?: boolean }).standalone === true;
-    if (standalone) return;
+
+    if (standalone) {
+      setInstalled(true);
+      return;
+    }
+
+    // Fired by Chromium the moment an install completes, which is the most
+    // reliable signal there is. Not fired by Safari at all.
+    const onInstalled = () => {
+      setInstalled(true);
+      setEvent(null);
+    };
+    window.addEventListener("appinstalled", onInstalled);
 
     const onPrompt = (incoming: Event) => {
       // Keep the event so the dialogue can be raised from a real click later;
@@ -103,23 +132,27 @@ export function InstallPrompt() {
 
     return () => {
       window.removeEventListener("beforeinstallprompt", onPrompt);
+      window.removeEventListener("appinstalled", onInstalled);
       window.clearTimeout(timer);
     };
-  }, []);
+  }, [setInstalled]);
 
   // `Date.now()` is not read during render — the snooze is compared against the
   // moment the component decided it was ready, which is stable.
   const snoozed = dismissedAt > 0 && readyAt > 0 && readyAt - dismissedAt < SNOOZE_MS;
-  const visible = !snoozed && ready && (event !== null || showIos);
+  const visible = !installed && !snoozed && ready && (event !== null || showIos);
   if (!visible) return null;
 
   async function install() {
     if (!event) return;
     await event.prompt();
-    await event.userChoice;
-    // Either way the offer is spent: the event cannot be reused.
+    const { outcome } = await event.userChoice;
+
+    // The event cannot be reused either way, but the two outcomes mean
+    // different things: accepting is permanent, declining is a snooze.
     setEvent(null);
-    setDismissedAt(Date.now());
+    if (outcome === "accepted") setInstalled(true);
+    else setDismissedAt(Date.now());
   }
 
   return (
@@ -183,11 +216,26 @@ export function InstallPrompt() {
             </p>
           )}
 
-          {!showIos ? (
-            <Button size="sm" className="mt-3" onClick={() => void install()}>
-              Install
-            </Button>
-          ) : null}
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            {!showIos ? (
+              <Button size="sm" onClick={() => void install()}>
+                Install
+              </Button>
+            ) : null}
+            {/*
+              The only way to know on iOS. Safari fires no install event, and a
+              home-screen web app there has its own storage separate from the
+              browser's — so nothing that happens inside the installed app can
+              tell this tab about it. The user has to.
+            */}
+            <button
+              type="button"
+              onClick={() => setInstalled(true)}
+              className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
+            >
+              Already added it
+            </button>
+          </div>
         </div>
 
         <Button
