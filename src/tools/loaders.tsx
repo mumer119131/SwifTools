@@ -66,6 +66,10 @@ const registry: Record<string, React.ComponentType> = {
   "case-converter": lazyTool(() => import("@/tools/case-converter/Tool")),
   "remove-duplicate-lines": lazyTool(() => import("@/tools/remove-duplicate-lines/Tool")),
   "text-diff": lazyTool(() => import("@/tools/text-diff/Tool")),
+  "find-and-replace": lazyTool(() => import("@/tools/find-and-replace/Tool")),
+  "sort-lines": lazyTool(() => import("@/tools/sort-lines/Tool")),
+  "remove-line-breaks": lazyTool(() => import("@/tools/remove-line-breaks/Tool")),
+  "extract-from-text": lazyTool(() => import("@/tools/extract-from-text/Tool")),
 
   // Developer
   "json-formatter": lazyTool(() => import("@/tools/json-formatter/Tool")),

@@ -81,6 +81,10 @@ import { watermarkImage } from "@/tools/watermark-image/meta";
 
 // Text
 import { caseConverter } from "@/tools/case-converter/meta";
+import { extractFromText } from "@/tools/extract-from-text/meta";
+import { findAndReplace } from "@/tools/find-and-replace/meta";
+import { removeLineBreaks } from "@/tools/remove-line-breaks/meta";
+import { sortLines } from "@/tools/sort-lines/meta";
 import { characterCounter } from "@/tools/character-counter/meta";
 import { removeDuplicateLines } from "@/tools/remove-duplicate-lines/meta";
 import { textDiff } from "@/tools/text-diff/meta";
@@ -283,6 +287,10 @@ export const tools: readonly Tool[] = [
   caseConverter,
   removeDuplicateLines,
   textDiff,
+  findAndReplace,
+  sortLines,
+  removeLineBreaks,
+  extractFromText,
 
   // Developer
   jsonFormatter,

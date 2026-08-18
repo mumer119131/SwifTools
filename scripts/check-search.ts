@@ -179,6 +179,15 @@ const expectations: [string, string][] = [
   ["svg to png", "svg-to-png"],
   ["avif to jpg", "avif-to-jpg"],
 
+  // Text tools. "find and replace" and "extract emails" returned nothing at
+  // all before these existed; "sort lines" returned remove-duplicate-lines.
+  ["find and replace", "find-and-replace"],
+  ["sort lines", "sort-lines"],
+  ["alphabetize", "sort-lines"],
+  ["remove line breaks", "remove-line-breaks"],
+  ["extract emails", "extract-from-text"],
+  ["email extractor", "extract-from-text"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
