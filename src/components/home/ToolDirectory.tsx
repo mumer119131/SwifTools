@@ -88,9 +88,19 @@ export function ToolDirectory() {
         </div>
       </div>
 
-      <p aria-live="polite" className="sr-only">
-        {visible.length} tools shown
-      </p>
+      {/*
+        The cards render an h3, and the page's only other heading is its h1 —
+        without something at h2 the hierarchy jumps a level, which is a real
+        problem for anyone navigating by heading rather than a lint rule about
+        one. It is not shown visually because the filter chips above already
+        say what is being displayed; a screen reader has no such context, so
+        this names the current view and doubles as a jump target.
+      */}
+      <h2 aria-live="polite" className="sr-only">
+        {filter === "all"
+          ? `All tools — ${visible.length} shown`
+          : `${populatedCategories.find((category) => category.slug === filter)?.label ?? filter} tools — ${visible.length} shown`}
+      </h2>
 
       {visible.length > 0 ? (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

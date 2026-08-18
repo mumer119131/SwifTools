@@ -23,7 +23,7 @@
   /* Text */
   --foreground: oklch(0.1408 0.0044 285.8);
   --muted-foreground: oklch(0.4959 0.0043 286);
-  --subtle-foreground: oklch(0.6448 0.0038 286);
+  --subtle-foreground: oklch(0.5570 0.0038 286);
 
   /* Chrome — monochrome by design */
   --primary: oklch(0.1408 0.0044 285.8);
@@ -82,7 +82,7 @@
 
   --foreground: oklch(0.9761 0.0013 286);
   --muted-foreground: oklch(0.6448 0.0106 264.5);
-  --subtle-foreground: oklch(0.5089 0.0095 264.5);
+  --subtle-foreground: oklch(0.5900 0.0095 264.5);
 
   --primary: oklch(0.9761 0.0013 286);
   --primary-foreground: oklch(0.1448 0.0032 264.5);
