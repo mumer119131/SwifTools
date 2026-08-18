@@ -40,7 +40,7 @@ const live = tools.filter((tool) => tool.status === "live");
 // them anyway — a meta file written against a stale example, say.
 const PROSE_FIELDS = ["notes", "faq", "steps"];
 const carrying = tools.filter((tool) =>
-  PROSE_FIELDS.some((field) => field in (tool as Record<string, unknown>)),
+  PROSE_FIELDS.some((field) => field in (tool as unknown as Record<string, unknown>)),
 );
 assert(
   "no registry entry carries prose",
