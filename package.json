@@ -13,6 +13,7 @@
     "check:hashes": "node --experimental-strip-types scripts/check-hashes.ts",
     "check:search": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-search.ts",
     "check:units": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-units.ts",
+    "check:developer": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-developer.ts",
     "check:image-batch": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-image-batch.ts",
     "check:exif": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-exif.ts",
     "check:image-pairs": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-image-pairs.ts",
@@ -60,8 +61,10 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "sonner": "^2.0.7",
+    "sql-formatter": "^15.8.2",
     "tailwind-merge": "^3.6.0",
-    "terser": "^5.49.1"
+    "terser": "^5.49.1",
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",

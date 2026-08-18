@@ -9,6 +9,7 @@ export const schemaGenerator: Tool = {
   description: "Build valid JSON-LD structured data for articles, products, FAQs, events and more.",
   keywords: [
     "schema generator",
+    "json-ld",
     "json-ld generator",
     "structured data generator",
     "schema markup",

@@ -110,6 +110,12 @@ import { urlSlugGenerator } from "@/tools/url-slug-generator/meta";
 import { codeToImage } from "@/tools/code-to-image/meta";
 import { boxShadowGenerator } from "@/tools/box-shadow-generator/meta";
 import { csvToJson } from "@/tools/csv-to-json/meta";
+import { cronExpressionBuilder } from "@/tools/cron-expression-builder/meta";
+import { hmacGenerator } from "@/tools/hmac-generator/meta";
+import { jsonToTypescript } from "@/tools/json-to-typescript/meta";
+import { sqlFormatter } from "@/tools/sql-formatter/meta";
+import { subnetCalculator } from "@/tools/subnet-calculator/meta";
+import { yamlToJson } from "@/tools/yaml-to-json/meta";
 import { cssGradientGenerator } from "@/tools/css-gradient-generator/meta";
 import { cssFormatter } from "@/tools/css-formatter/meta";
 import { cssMinifier } from "@/tools/css-minifier/meta";
@@ -324,6 +330,12 @@ export const tools: readonly Tool[] = [
   cssGradientGenerator,
   boxShadowGenerator,
   csvToJson,
+  jsonToTypescript,
+  yamlToJson,
+  sqlFormatter,
+  subnetCalculator,
+  cronExpressionBuilder,
+  hmacGenerator,
   reactNativeShadowGenerator,
   sha256HashGenerator,
   md5HashGenerator,

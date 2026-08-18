@@ -216,6 +216,23 @@ const expectations: [string, string][] = [
   ["twitter header size", "social-media-resizer"],
   ["linkedin banner size", "social-media-resizer"],
 
+  // Developer batch. "subnet calculator", "cron expression" and "hmac"
+  // returned nothing usable before these existed.
+  ["subnet calculator", "subnet-calculator"],
+  ["cidr", "subnet-calculator"],
+  ["netmask", "subnet-calculator"],
+  ["cron", "cron-expression-builder"],
+  ["cron expression", "cron-expression-builder"],
+  ["crontab", "cron-expression-builder"],
+  ["hmac", "hmac-generator"],
+  ["webhook signature", "hmac-generator"],
+  ["yaml to json", "yaml-to-json"],
+  ["json to yaml", "yaml-to-json"],
+  ["sql formatter", "sql-formatter"],
+  ["format sql", "sql-formatter"],
+  ["json to typescript", "json-to-typescript"],
+  ["typescript interface generator", "json-to-typescript"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
