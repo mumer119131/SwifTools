@@ -10,7 +10,9 @@ import OnlineToolPrivacyGuide from "@/guides/online-tool-privacy/content";
 import PdfBasicsGuide from "@/guides/pdf-basics/content";
 import RandomnessGuide from "@/guides/randomness/content";
 import RegularExpressionsGuide from "@/guides/regular-expressions/content";
+import SocialMediaMockupsGuide from "@/guides/social-media-mockups/content";
 import TechnicalSeoGuide from "@/guides/technical-seo/content";
+import TimestampsAndTimezonesGuide from "@/guides/timestamps-and-timezones/content";
 import ReduceFileSizeGuide from "@/guides/reduce-file-size/content";
 import SocialSizesGuide from "@/guides/social-media-image-sizes/content";
 
@@ -35,4 +37,6 @@ export const guideContent: Record<string, ComponentType> = {
   "randomness": RandomnessGuide,
   "electronics-basics": ElectronicsBasicsGuide,
   "technical-seo": TechnicalSeoGuide,
+  "social-media-mockups": SocialMediaMockupsGuide,
+  "timestamps-and-timezones": TimestampsAndTimezonesGuide,
 };

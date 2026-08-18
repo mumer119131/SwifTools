@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { CircuitBoard, Dices, FileDown, FileText, ImageIcon, KeyRound, LayoutGrid, Palette, Regex, Ruler, Search, ShieldCheck, Scale } from "lucide-react";
+import { CircuitBoard, Clock, Dices, FileDown, FileText, ImageIcon, KeyRound, LayoutGrid, MessageSquare, Palette, Regex, Ruler, Search, ShieldCheck, Scale } from "lucide-react";
 
 /**
  * The guides registry.
@@ -360,6 +360,58 @@ export const guides: Guide[] = [
       "sitemap-generator",
       "hreflang-generator",
       "utm-builder",
+    ],
+  },
+  {
+    slug: "social-media-mockups",
+    title: "Social media mockups",
+    heading: "Making social media mockups, and the line not to cross",
+    description:
+      "Why designers fake a feed, how to make one that reads convincingly in a presentation, and where a mockup stops being a mockup.",
+    keywords: [
+      "social media mockup",
+      "fake tweet for a presentation",
+      "designing social proof mockups",
+      "how to mock up a social post",
+      "chat mockup for a tutorial",
+      "social media mockup ethics",
+    ],
+    icon: MessageSquare,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 6,
+    tools: [
+      "tweet-generator",
+      "tweet-to-image",
+      "instagram-post-generator",
+      "whatsapp-chat-generator",
+      "imessage-chat-generator",
+    ],
+  },
+  {
+    slug: "timestamps-and-timezones",
+    title: "Timestamps and timezones",
+    heading: "Unix time, UTC and why your dates are an hour out",
+    description:
+      "What a timestamp actually counts, why UTC is not a timezone you should ever store in, and the four bugs that catch everyone.",
+    keywords: [
+      "unix timestamp explained",
+      "utc vs gmt",
+      "why is my date an hour out",
+      "how to store dates in a database",
+      "iso 8601 format",
+      "daylight saving time bugs",
+      "epoch time explained",
+    ],
+    icon: Clock,
+    published: "2026-08-18",
+    updated: "2026-08-18",
+    minutes: 8,
+    tools: [
+      "unix-timestamp-converter",
+      "timezone-converter",
+      "date-difference-calculator",
+      "cron-expression-builder",
     ],
   },
 ];
