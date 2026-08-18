@@ -233,6 +233,17 @@ const expectations: [string, string][] = [
   ["json to typescript", "json-to-typescript"],
   ["typescript interface generator", "json-to-typescript"],
 
+  // Timer and stopwatch. "timer" and "stopwatch" previously returned the
+  // Pomodoro timer, which is a specific technique rather than a plain timer.
+  ["timer", "timer"],
+  ["online timer", "timer"],
+  ["stopwatch", "timer"],
+  ["countdown timer", "timer"],
+  ["5 minute timer", "timer"],
+  ["set a timer", "timer"],
+  // The Pomodoro tool must still win its own name.
+  ["pomodoro timer", "pomodoro-timer"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

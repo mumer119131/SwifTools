@@ -257,6 +257,7 @@ import { fakeDataGenerator } from "@/tools/fake-data-generator/meta";
 import { loremIpsumGenerator } from "@/tools/lorem-ipsum-generator/meta";
 import { passwordGenerator } from "@/tools/password-generator/meta";
 import { pomodoroTimer } from "@/tools/pomodoro-timer/meta";
+import { timer } from "@/tools/timer/meta";
 import { qrCodeGenerator } from "@/tools/qr-code-generator/meta";
 import { screenResolutionChecker } from "@/tools/screen-resolution-checker/meta";
 
@@ -397,6 +398,7 @@ export const tools: readonly Tool[] = [
   qrCodeGenerator,
   fakeDataGenerator,
   loremIpsumGenerator,
+  timer,
   pomodoroTimer,
   screenResolutionChecker,
 

@@ -268,6 +268,7 @@ const registry: Record<string, React.ComponentType> = {
   "fake-data-generator": lazyTool(() => import("@/tools/fake-data-generator/Tool")),
   "lorem-ipsum-generator": lazyTool(() => import("@/tools/lorem-ipsum-generator/Tool")),
   "pomodoro-timer": lazyTool(() => import("@/tools/pomodoro-timer/Tool")),
+  "timer": lazyTool(() => import("@/tools/timer/Tool")),
   "screen-resolution-checker": lazyTool(() => import("@/tools/screen-resolution-checker/Tool")),
 };
 
