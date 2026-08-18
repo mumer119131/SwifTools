@@ -260,6 +260,17 @@ const expectations: [string, string][] = [
   // QR must still win its own name.
   ["qr code", "qr-code-generator"],
 
+  // Page organising and timesheets. "rotate pdf" and "delete pages from
+  // pdf" previously returned split-pdf; "hours calculator" returned the
+  // age calculator.
+  ["rotate pdf", "organize-pdf"],
+  ["delete pages from pdf", "organize-pdf"],
+  ["reorder pdf pages", "organize-pdf"],
+  ["hours calculator", "hours-calculator"],
+  ["timesheet", "hours-calculator"],
+  ["time card calculator", "hours-calculator"],
+  ["overtime calculator", "hours-calculator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

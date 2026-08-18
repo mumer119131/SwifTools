@@ -43,6 +43,7 @@ const registry: Record<string, React.ComponentType> = {
   "merge-pdf": lazyTool(() => import("@/tools/merge-pdf/Tool")),
   "split-pdf": lazyTool(() => import("@/tools/split-pdf/Tool")),
   "sign-pdf": lazyTool(() => import("@/tools/sign-pdf/Tool")),
+  "organize-pdf": lazyTool(() => import("@/tools/organize-pdf/Tool")),
   "compress-pdf": lazyTool(() => import("@/tools/compress-pdf/Tool")),
   "pdf-to-word": lazyTool(() => import("@/tools/pdf-to-word/Tool")),
   "pdf-to-jpg": lazyTool(() => import("@/tools/pdf-to-jpg/Tool")),
@@ -135,6 +136,7 @@ const registry: Record<string, React.ComponentType> = {
 
   // Calculator
   "loan-calculator": lazyTool(() => import("@/tools/loan-calculator/Tool")),
+  "hours-calculator": lazyTool(() => import("@/tools/hours-calculator/Tool")),
   "compound-interest-calculator": lazyTool(
     () => import("@/tools/compound-interest-calculator/Tool"),
   ),

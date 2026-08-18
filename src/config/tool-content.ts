@@ -228,6 +228,8 @@ import { yamlToJsonContent } from "@/tools/yaml-to-json/content";
 import { youtubeThumbnailGrabberContent } from "@/tools/youtube-thumbnail-grabber/content";
 import { imagePairContent } from "@/tools/image-pairs/content";
 import { barcodeGeneratorContent } from "@/tools/barcode-generator/content";
+import { hoursCalculatorContent } from "@/tools/hours-calculator/content";
+import { organizePdfContent } from "@/tools/organize-pdf/content";
 import { signPdfContent } from "@/tools/sign-pdf/content";
 import { timerContent } from "@/tools/timer/content";
 import { unitPairContent } from "@/tools/unit-pairs/content";
@@ -416,6 +418,8 @@ export const contentBySlug: Record<string, ToolContent> = {
   "youtube-thumbnail-grabber": youtubeThumbnailGrabberContent,
   // The unit pair pages are generated, so their content is too.
   "barcode-generator": barcodeGeneratorContent,
+  "hours-calculator": hoursCalculatorContent,
+  "organize-pdf": organizePdfContent,
   "sign-pdf": signPdfContent,
   "timer": timerContent,
   ...imagePairContent,

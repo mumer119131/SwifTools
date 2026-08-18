@@ -55,6 +55,7 @@ import { jpgToPdf } from "@/tools/jpg-to-pdf/meta";
 import { mergePdf } from "@/tools/merge-pdf/meta";
 import { pdfToJpg } from "@/tools/pdf-to-jpg/meta";
 import { pdfToWord } from "@/tools/pdf-to-word/meta";
+import { organizePdf } from "@/tools/organize-pdf/meta";
 import { signPdfTool } from "@/tools/sign-pdf/meta";
 import { splitPdf } from "@/tools/split-pdf/meta";
 import { wordToPdf } from "@/tools/word-to-pdf/meta";
@@ -226,6 +227,7 @@ import { bmiCalculator } from "@/tools/bmi-calculator/meta";
 import { calorieCalculator } from "@/tools/calorie-calculator/meta";
 import { compoundInterestCalculator } from "@/tools/compound-interest-calculator/meta";
 import { invoiceGenerator } from "@/tools/invoice-generator/meta";
+import { hoursCalculator } from "@/tools/hours-calculator/meta";
 import { loanCalculator } from "@/tools/loan-calculator/meta";
 import { percentageCalculator } from "@/tools/percentage-calculator/meta";
 import { taxCalculator } from "@/tools/tax-calculator/meta";
@@ -272,6 +274,7 @@ export const tools: readonly Tool[] = [
   mergePdf,
   splitPdf,
   signPdfTool,
+  organizePdf,
   compressPdf,
   pdfToWord,
   pdfToJpg,
@@ -363,6 +366,7 @@ export const tools: readonly Tool[] = [
 
   // Calculator
   loanCalculator,
+  hoursCalculator,
   compoundInterestCalculator,
   taxCalculator,
   bmiCalculator,
