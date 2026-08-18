@@ -1,6 +1,7 @@
 import { Lock, Server, Zap } from "lucide-react";
 
 import { getCategory } from "@/config/categories";
+import { RecordVisit } from "@/components/shared/RecordVisit";
 import { getToolContent } from "@/config/tool-content";
 import { getRelatedTools, type Tool } from "@/config/tools";
 import { Breadcrumbs, type Crumb } from "@/components/shared/Breadcrumbs";
@@ -36,6 +37,11 @@ export function ToolShell({ tool, children }: ToolShellProps) {
 
   return (
     <div className={`accent-${tool.category}`}>
+      {/* Renders nothing; only notes the visit so the homepage can offer a way
+          back. One string of client JavaScript, so the shell stays a server
+          component and the prose below never ships as script. */}
+      <RecordVisit slug={tool.slug} />
+
       <div className="mx-auto w-full max-w-6xl px-5 py-8 sm:px-6 lg:px-8 lg:py-12">
         <Breadcrumbs items={crumbs} className="mb-8" />
 

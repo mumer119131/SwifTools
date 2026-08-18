@@ -9,6 +9,7 @@ import {
   publishedTools,
   toolCountByCategory,
 } from "@/config/tools";
+import { RecentTools } from "@/components/home/RecentTools";
 import { SearchTrigger } from "@/components/layout/SearchCommand";
 import { ToolCard } from "@/components/shared/ToolCard";
 import { JsonLdScript } from "@/components/shared/JsonLd";
@@ -63,6 +64,9 @@ export default function HomePage() {
 
   return (
     <>
+      {/* Only renders for someone who has been here before. */}
+      <RecentTools />
+
       {/* ------------------------------------------------------------- Hero */}
       <section className="relative overflow-hidden border-b border-border">
         <div className="ambient-wash" aria-hidden="true" />

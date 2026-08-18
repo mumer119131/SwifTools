@@ -24,6 +24,7 @@ import {
   presetLabel,
   remainingFrom,
 } from "@/tools/timer/logic";
+import { pushRecent } from "@/lib/recent-tools";
 
 let failures = 0;
 
@@ -147,9 +148,45 @@ for (const preset of PRESETS) {
   );
 }
 
+/* -------------------------------------------------- recently used tools */
+
+// The rail on the homepage is the only continuity a site without accounts can
+// offer, and its behaviour is invisible until it is wrong: a tool opened twice
+// must move rather than duplicate, and the list must not grow without bound.
+
+assert("recording onto an empty list", pushRecent([], "timer").join() === "timer");
+
+assert(
+  "the newest goes first",
+  pushRecent(["a", "b"], "c").join() === "c,a,b",
+  pushRecent(["a", "b"], "c").join(),
+);
+
+assert(
+  "re-opening a tool moves it rather than duplicating it",
+  pushRecent(["a", "b", "c"], "c").join() === "c,a,b",
+  pushRecent(["a", "b", "c"], "c").join(),
+);
+
+assert(
+  "the list is capped and the oldest falls off",
+  pushRecent(["1", "2", "3", "4"], "5", 4).join() === "5,1,2,3",
+  pushRecent(["1", "2", "3", "4"], "5", 4).join(),
+);
+
+// Identity matters: returning a new array every time would re-render the whole
+// rail on every page view for no change.
+{
+  const list = ["timer", "merge-pdf"];
+  assert("re-recording the current head returns the same array", pushRecent(list, "timer") === list);
+  assert("recording something new returns a new array", pushRecent(list, "x") !== list);
+}
+
+assert("an empty slug is ignored", pushRecent(["a"], "").join() === "a");
+
 console.log(
   failures === 0
-    ? "\nTimer checks passed."
+    ? "\nTimer and recent-tools checks passed."
     : `\n${failures} timer checks FAILED.`,
 );
 
