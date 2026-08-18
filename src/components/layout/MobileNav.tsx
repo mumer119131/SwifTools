@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { BookOpen, ChevronDown } from "lucide-react";
 
 import {
   getToolsByCategory,
@@ -29,6 +29,22 @@ export function MobileNav({ pathname }: { pathname: string }) {
 
   return (
     <nav aria-label="All tools">
+      {/* Guides sit above the categories rather than inside them: they are not
+          a category of tool, and on a phone the list below is long enough that
+          anything after it goes unseen. */}
+      <Link
+        href="/guides"
+        aria-current={pathname.startsWith("/guides") ? "page" : undefined}
+        className={cn(
+          "mb-2 flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm",
+          "transition-colors duration-[120ms] hover:bg-surface-hover",
+          pathname.startsWith("/guides") ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        <BookOpen className="size-4 shrink-0" strokeWidth={1.75} />
+        Guides
+      </Link>
+
       <ul className="space-y-0.5">
         {populatedCategories.map((category) => {
           const Icon = category.icon;

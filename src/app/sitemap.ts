@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { absoluteUrl } from "@/config/site";
+import { guides, guideHref } from "@/config/guides";
 import { populatedCategories, toolHref, tools } from "@/config/tools";
 import toolDates from "@/config/tool-dates.json";
 
@@ -42,6 +43,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       // The full catalogue now lives here rather than on the homepage.
       priority: 0.9,
     },
+    {
+      url: absoluteUrl("/guides"),
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    // Guides carry their own dates: they are written once and revised
+    // occasionally, so reporting the build time would be a lie a crawler
+    // eventually learns to ignore.
+    ...guides.map((guide) => ({
+      url: absoluteUrl(guideHref(guide)),
+      lastModified: new Date(guide.updated),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
     ...populatedCategories.map((category) => ({
       url: absoluteUrl(`/${category.slug}`),
       lastModified,

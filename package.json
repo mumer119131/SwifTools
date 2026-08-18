@@ -14,6 +14,7 @@
     "check:search": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-search.ts",
     "check:units": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-units.ts",
     "generate:favicon": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/generate-favicon.ts",
+    "check:guides": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-guides.ts",
     "check:favicon": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-favicon.ts",
     "check:content": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-content.ts",
     "check:related": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-related.ts",
