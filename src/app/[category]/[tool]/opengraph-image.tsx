@@ -86,9 +86,10 @@ export default async function ToolOpenGraphImage({
 
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-            <rect x="2" y="3" width="20" height="4" rx="2" fill="#f7f8f8" />
-            <rect x="4.5" y="10" width="15" height="4" rx="2" fill="#f7f8f8" />
-            <rect x="7" y="17" width="10" height="4" rx="2" fill="#f7f8f8" />
+            <rect x="3" y="3" width="7.5" height="7.5" rx="2.2" fill="#f7f8f8" />
+            <rect x="13.5" y="3" width="7.5" height="7.5" rx="2.2" fill="#f7f8f8" />
+            <rect x="3" y="13.5" width="7.5" height="7.5" rx="2.2" fill="#f7f8f8" />
+            <rect x="13.5" y="13.5" width="7.5" height="7.5" rx="3.75" fill="#f7f8f8" opacity="0.55" />
           </svg>
           <span style={{ fontSize: 30, fontWeight: 600, color: "#f7f8f8", letterSpacing: -0.5 }}>
             {siteConfig.name}
