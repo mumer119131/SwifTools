@@ -7,7 +7,9 @@ export const loanCalculator: Tool = {
   name: "Loan & EMI Calculator",
   category: "calculator",
   description: "Work out monthly payments, total interest and a full amortisation schedule.",
-  keywords: ["loan calculator", "emi calculator", "mortgage calculator", "amortisation schedule"],
+  // "mortgage calculator" moved to the mortgage tool, which answers the
+  // question that query is actually asking — deposit, LTV and overpayments.
+  keywords: ["loan calculator", "emi calculator", "car loan calculator", "amortisation schedule"],
   icon: Landmark,
   processing: "client",
   status: "live",

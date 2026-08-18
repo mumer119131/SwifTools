@@ -25,6 +25,7 @@ import {
   rotatePage,
   toggleDelete,
 } from "@/tools/organize-pdf/logic";
+import { calculate, formatTerm, ltvBand, monthlyPayment } from "@/tools/mortgage-calculator/logic";
 import {
   blankEntry,
   calculateEntry,
@@ -234,9 +235,88 @@ function entry(start: string, end: string, breakMinutes = 0): Entry {
   assert("no overtime below the threshold", under.overtimeMinutes === 0 && under.pay === 30);
 }
 
+/* ======================================================== mortgages */
+
+console.log("\nMortgage arithmetic");
+{
+  const t = assert;
+  const near=(a:number,b:number,tol=0.02)=>Math.abs(a-b)<tol;
+
+  // Published annuity example: £200,000 at 6% over 30 years is £1,199.10/month.
+  t(`annuity 200k/6%/30y = 1199.10 (${monthlyPayment(200000,0.06/12,360).toFixed(2)})`,
+    near(monthlyPayment(200000,0.06/12,360),1199.10,0.05));
+  // A second: 100k at 5% over 15 years = 790.79
+  t(`annuity 100k/5%/15y = 790.79 (${monthlyPayment(100000,0.05/12,180).toFixed(2)})`,
+    near(monthlyPayment(100000,0.05/12,180),790.79,0.05));
+  // Zero rate is plain division.
+  t("zero rate divides evenly", monthlyPayment(120000,0,120) === 1000);
+
+  const base = {price:300000,deposit:60000,annualRate:5,years:25,annualTax:0,annualInsurance:0,monthlyOther:0,monthlyOverpayment:0};
+  const r = calculate(base)!;
+  t("principal is price minus deposit", r.principal === 240000);
+  t(`LTV is 80% (${r.ltv})`, near(r.ltv,80));
+  // 1403.02, confirmed independently: amortising 300 payments of this amount
+  // against the balance clears it to zero, which no wrong figure would.
+  t(`payment ≈ 1403.02 (${r.monthlyPayment.toFixed(2)})`, near(r.monthlyPayment,1403.02,0.05));
+  t("total paid = principal + interest", near(r.totalPaid, r.principal + r.totalInterest, 0.01));
+  t(`interest is substantial (${r.totalInterest.toFixed(0)})`, r.totalInterest > 180000 && r.totalInterest < 190000);
+  t("no overpayment block when zero", r.overpaid === null);
+
+  // Running costs must not touch the loan figures, only the monthly outlay.
+  const withCosts = calculate({...base, annualTax:2400, annualInsurance:600, monthlyOther:50})!;
+  t("running costs leave the payment alone", near(withCosts.monthlyPayment, r.monthlyPayment, 0.001));
+  t(`monthly total adds 300 (${withCosts.monthlyTotal.toFixed(2)})`,
+    near(withCosts.monthlyTotal, r.monthlyPayment + 250 + 50, 0.01));
+
+  // Overpayment: the headline feature.
+  const over = calculate({...base, monthlyOverpayment:200})!;
+  t("overpaying produces a block", over.overpaid !== null);
+  t(`overpaying shortens the term (saved ${over.overpaid!.monthsSaved} months)`, over.overpaid!.monthsSaved > 40);
+  t("overpaying saves interest", over.overpaid!.interestSaved > 30000);
+  t("clears sooner than the full term", over.overpaid!.monthsToClear < 300);
+  t("saved interest is consistent",
+    near(over.overpaid!.interestSaved, r.totalInterest - over.overpaid!.totalInterest, 0.5));
+
+  // A bigger overpayment must always do at least as well.
+  const more = calculate({...base, monthlyOverpayment:500})!;
+  t("more overpayment clears sooner", more.overpaid!.monthsToClear < over.overpaid!.monthsToClear);
+  t("more overpayment saves more", more.overpaid!.interestSaved > over.overpaid!.interestSaved);
+
+  // Zero-rate mortgage with overpayment must still terminate.
+  const zero = calculate({...base, annualRate:0, monthlyOverpayment:100})!;
+  t("zero-rate loan clears", Number.isFinite(zero.overpaid!.monthsToClear));
+  t("zero-rate loan has no interest", zero.totalInterest === 0);
+
+  // Rejections.
+  for (const [label, patch] of [
+    ["zero price", {price:0}],
+    ["negative price", {price:-1}],
+    ["deposit equal to price", {deposit:300000}],
+    ["deposit above price", {deposit:400000}],
+    ["negative deposit", {deposit:-1}],
+    ["negative rate", {annualRate:-1}],
+    ["absurd rate", {annualRate:150}],
+    ["zero term", {years:0}],
+    ["absurd term", {years:99}],
+  ] as const) {
+    t(`rejects ${label}`, calculate({...base, ...patch}) === null);
+  }
+
+  t("formats a whole year", formatTerm(24) === "2 years");
+  t("formats a mixed term", formatTerm(295) === "24 years 7 months");
+  t("formats months alone", formatTerm(7) === "7 months");
+  t("formats one month", formatTerm(1) === "1 month");
+  t("formats one year", formatTerm(12) === "1 year");
+
+  t("80% sits in its own band", ltvBand(80).label === "Up to 80%");
+  t("81% steps up", ltvBand(81).label === "Up to 90%");
+  t("60% is the best band", ltvBand(60).label === "60% or less");
+  t("above 95 is flagged", ltvBand(97).label === "Above 95%");
+}
+
 console.log(
   failures === 0
-    ? "\nPDF organiser and timesheet checks passed."
+    ? "\nPDF organiser, timesheet and mortgage checks passed."
     : `\n${failures} checks FAILED.`,
 );
 

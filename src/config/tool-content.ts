@@ -229,6 +229,7 @@ import { youtubeThumbnailGrabberContent } from "@/tools/youtube-thumbnail-grabbe
 import { imagePairContent } from "@/tools/image-pairs/content";
 import { barcodeGeneratorContent } from "@/tools/barcode-generator/content";
 import { hoursCalculatorContent } from "@/tools/hours-calculator/content";
+import { mortgageCalculatorContent } from "@/tools/mortgage-calculator/content";
 import { organizePdfContent } from "@/tools/organize-pdf/content";
 import { signPdfContent } from "@/tools/sign-pdf/content";
 import { timerContent } from "@/tools/timer/content";
@@ -419,6 +420,7 @@ export const contentBySlug: Record<string, ToolContent> = {
   // The unit pair pages are generated, so their content is too.
   "barcode-generator": barcodeGeneratorContent,
   "hours-calculator": hoursCalculatorContent,
+  "mortgage-calculator": mortgageCalculatorContent,
   "organize-pdf": organizePdfContent,
   "sign-pdf": signPdfContent,
   "timer": timerContent,

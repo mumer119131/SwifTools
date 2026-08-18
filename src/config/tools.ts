@@ -228,6 +228,7 @@ import { calorieCalculator } from "@/tools/calorie-calculator/meta";
 import { compoundInterestCalculator } from "@/tools/compound-interest-calculator/meta";
 import { invoiceGenerator } from "@/tools/invoice-generator/meta";
 import { hoursCalculator } from "@/tools/hours-calculator/meta";
+import { mortgageCalculator } from "@/tools/mortgage-calculator/meta";
 import { loanCalculator } from "@/tools/loan-calculator/meta";
 import { percentageCalculator } from "@/tools/percentage-calculator/meta";
 import { taxCalculator } from "@/tools/tax-calculator/meta";
@@ -367,6 +368,7 @@ export const tools: readonly Tool[] = [
   // Calculator
   loanCalculator,
   hoursCalculator,
+  mortgageCalculator,
   compoundInterestCalculator,
   taxCalculator,
   bmiCalculator,

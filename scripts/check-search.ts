@@ -271,6 +271,15 @@ const expectations: [string, string][] = [
   ["time card calculator", "hours-calculator"],
   ["overtime calculator", "hours-calculator"],
 
+  // Mortgages. The loan calculator used to claim this query; it answers a
+  // different question, so the keyword moved with the tool.
+  ["mortgage calculator", "mortgage-calculator"],
+  ["mortgage overpayment", "mortgage-calculator"],
+  ["loan to value", "mortgage-calculator"],
+  // The loan calculator keeps the generic ones.
+  ["loan calculator", "loan-calculator"],
+  ["emi", "loan-calculator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
