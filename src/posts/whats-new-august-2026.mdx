@@ -1,0 +1,96 @@
+{/*
+  Plain JavaScript, not TypeScript: MDX parses its exports with acorn, which
+  does not understand `import type` or `satisfies`. The shape is enforced by
+  the `*.mdx` module declaration in src/types instead, so a missing or
+  misspelled field is still a compile error.
+*/}
+
+export const meta = {
+  slug: "whats-new-august-2026",
+  title: "What's new: eighteen tools, faster pages, and a guides section",
+  summary:
+    "A month of additions — EXIF stripping, a subnet calculator, a cron builder — plus a third off the JavaScript every page loads.",
+  date: "2026-08-18",
+  keywords: [
+    "pockettoolz changelog",
+    "new free online tools",
+    "pockettoolz update august 2026",
+  ],
+  minutes: 4,
+  tools: ["exif-viewer", "subnet-calculator", "cron-expression-builder", "social-media-resizer"],
+};
+
+A busy month. Eighteen new tools, a section of guides, and a performance
+change that took a third off the JavaScript every page loads.
+
+## Privacy tools that make the point
+
+The **[EXIF viewer and remover](/image/exif-viewer)** is the one worth
+opening first. Every photo your phone takes carries a block of metadata:
+the camera, the exposure, the date, and very often the exact coordinates
+where it was taken, accurate to a few metres. That data survives being
+emailed, put in a document, or uploaded to most file hosts.
+
+It strips that metadata by removing whole marker segments from the JPEG
+byte stream rather than redrawing the image through a canvas. The
+distinction matters more than it sounds: a canvas round-trip does clear
+the metadata, and quietly recompresses your photograph while doing it.
+Cutting the segments out leaves the compressed image data bit-for-bit
+identical, so the privacy operation costs you nothing in quality.
+
+And it runs in your browser, which is the only defensible arrangement for
+this particular job — a tool that asks you to upload a photo in order to
+remove its location data has already done the thing you were trying to
+prevent.
+
+## For developers
+
+Six additions, three of which involve arithmetic that is easy to get
+quietly wrong:
+
+- **[Subnet calculator](/developer/subnet-calculator)** — network,
+  broadcast, host range and usable addresses for any IPv4 block. It gets
+  `/31` and `/32` right, which the usual minus-two rule does not: a `/31`
+  has no network or broadcast address at all, and both of its addresses
+  are usable.
+- **[Cron expression builder](/developer/cron-expression-builder)** —
+  reads a schedule back in plain English and shows exactly when it will
+  next fire. It is explicit about the rule almost everyone gets wrong:
+  when both day fields are restricted, cron treats them as OR, not AND.
+- **[HMAC generator](/developer/hmac-generator)** — for signing and for
+  checking webhook signatures, verified against the published RFC 4231
+  test vectors.
+- **[JSON to TypeScript](/developer/json-to-typescript)**, a
+  **[SQL formatter](/developer/sql-formatter)** and
+  **[YAML to JSON](/developer/yaml-to-json)**.
+
+## For images
+
+Alongside the EXIF tool: a **[social media
+resizer](/image/social-media-resizer)** that crops one image to every
+platform size at once — with an anchor control, because a centre crop
+from landscape to a story routinely takes the top off someone's head.
+Plus **[rotate and flip](/image/rotate-image)** and **[image to
+Base64](/image/image-to-base64)**.
+
+## Guides
+
+There is now a [guides section](/guides): seven pieces answering the
+questions that come before the tool. Which image format to use, what size
+a social post should be, how to get a file under a limit, and what
+actually happens to a file you put into an online tool.
+
+That last one is the one to read if you have ever wondered whether a free
+converter was uploading your documents. It explains how to check —
+including a fifteen-second test that cannot be faked.
+
+## Faster pages
+
+The site was shipping about 80,000 words of explanatory copy to your
+browser as JavaScript. It had already been rendered into the HTML, and no
+script ever read a word of it — it was simply attached to the same
+objects the search palette needed for names and keywords.
+
+Moving it out cut the JavaScript on a first visit from 363KB to 226KB.
+Nothing about the pages changed; there is just a good deal less to
+download before they work.

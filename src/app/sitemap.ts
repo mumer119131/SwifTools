@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { absoluteUrl } from "@/config/site";
 import { guides, guideHref } from "@/config/guides";
+import { postHref, posts } from "@/posts";
 import { populatedCategories, toolHref, tools } from "@/config/tools";
 import toolDates from "@/config/tool-dates.json";
 
@@ -57,6 +58,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(guide.updated),
       changeFrequency: "monthly" as const,
       priority: 0.7,
+    })),
+    ...(posts.length > 0
+      ? [
+          {
+            url: absoluteUrl("/blog"),
+            lastModified: new Date(posts[0].date),
+            changeFrequency: "weekly" as const,
+            priority: 0.6,
+          },
+        ]
+      : []),
+    ...posts.map((post) => ({
+      url: absoluteUrl(postHref(post)),
+      lastModified: new Date(post.updated ?? post.date),
+      changeFrequency: "yearly" as const,
+      priority: 0.5,
     })),
     ...populatedCategories.map((category) => ({
       url: absoluteUrl(`/${category.slug}`),

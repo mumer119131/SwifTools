@@ -38,6 +38,18 @@ export function Header() {
           {/* A flat link rather than a second menu: there are three guides, and
               hiding them behind a dropdown would be hiding them. */}
           <Link
+            href="/blog"
+            className={cn(
+              "rounded-md px-3 py-2 text-sm transition-colors",
+              "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]",
+              pathname.startsWith("/blog")
+                ? "text-foreground"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            Blog
+          </Link>
+          <Link
             href="/guides"
             className={cn(
               "rounded-md px-3 py-2 text-sm transition-colors",

@@ -12,6 +12,7 @@ const legalLinks = [
 const siteLinks = [
   { label: `All ${browsableTools.length} tools`, href: "/tools" },
   { label: "Guides", href: "/guides" },
+  { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy", href: "/privacy" },

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { BookOpen, ChevronDown } from "lucide-react";
+import { BookOpen, ChevronDown, Newspaper } from "lucide-react";
 
 import {
   getToolsByCategory,
@@ -43,6 +43,19 @@ export function MobileNav({ pathname }: { pathname: string }) {
       >
         <BookOpen className="size-4 shrink-0" strokeWidth={1.75} />
         Guides
+      </Link>
+
+      <Link
+        href="/blog"
+        aria-current={pathname.startsWith("/blog") ? "page" : undefined}
+        className={cn(
+          "mb-2 flex min-h-11 items-center gap-2.5 rounded-md px-3 text-sm",
+          "transition-colors duration-[120ms] hover:bg-surface-hover",
+          pathname.startsWith("/blog") ? "text-foreground" : "text-muted-foreground",
+        )}
+      >
+        <Newspaper className="size-4 shrink-0" strokeWidth={1.75} />
+        Blog
       </Link>
 
       <ul className="space-y-0.5">
