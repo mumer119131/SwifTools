@@ -6,6 +6,7 @@ import { Clock } from "lucide-react";
 
 import { EmptyState } from "@/components/shared/EmptyState";
 import { getPair } from "@/lib/units";
+import { getFormatPair } from "@/lib/image-formats";
 import { ToolErrorBoundary } from "@/components/shared/ToolErrorBoundary";
 import { Skeleton } from "@/components/ui/misc";
 
@@ -267,11 +268,25 @@ const UnitPairTool = dynamic(() => import("@/tools/unit-pairs/Tool"), {
   loading: ToolSkeleton,
 });
 
+/** Sixteen image conversion routes, one implementation, selected by slug. */
+const ImagePairTool = dynamic(() => import("@/tools/image-pairs/Tool"), {
+  ssr: false,
+  loading: ToolSkeleton,
+});
+
 export function ToolRuntime({ slug, name }: { slug: string; name: string }) {
   if (getPair(slug)) {
     return (
       <ToolErrorBoundary toolName={name}>
         <UnitPairTool slug={slug} />
+      </ToolErrorBoundary>
+    );
+  }
+
+  if (getFormatPair(slug)) {
+    return (
+      <ToolErrorBoundary toolName={name}>
+        <ImagePairTool slug={slug} />
       </ToolErrorBoundary>
     );
   }

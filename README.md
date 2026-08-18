@@ -27,6 +27,7 @@ pnpm dev          # http://localhost:3000
 | `pnpm check:home` | Every material and cost calculator, against hand-worked answers |
 | `pnpm check:fun` | Chi-squared uniformity of the randomisers, plus puzzle validity |
 | `pnpm check:vault` | The password manager's encryption, tampering and key-derivation |
+| `pnpm check:image-pairs` | Every conversion targets a format the browser can actually encode |
 | `pnpm check:batch` | CSV quoting, WCAG contrast, calendar arithmetic, the ICO encoder |
 | `pnpm check:store-images` | Play Store size rules, and that no NaN reaches a canvas draw call |
 | `pnpm check:seo` | Unique titles and descriptions, server-rendered copy, FAQ quality |

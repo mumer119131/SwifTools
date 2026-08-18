@@ -43,7 +43,6 @@ const expectations: [string, string][] = [
   ["emi", "loan-calculator"],
 
   // Multi-word intent.
-  ["png to jpg", "convert-image"],
   ["pdf to word", "pdf-to-word"],
   ["word to pdf", "word-to-pdf"],
   ["remove background", "remove-background"],
@@ -168,6 +167,17 @@ const expectations: [string, string][] = [
   ["tip calculator", "tip-calculator"],
   ["split the bill", "tip-calculator"],
   ["days between dates", "date-difference-calculator"],
+
+  // Image format pairs. Every one of these used to land on the generic
+  // convert-image tool, which can never rank for a specific format query.
+  // "png to jpg" used to be asserted against convert-image, as the best answer
+  // available at the time. A dedicated page is a better one.
+  ["png to jpg", "png-to-jpg"],
+  ["png to webp", "png-to-webp"],
+  ["webp to png", "webp-to-png"],
+  ["heic to jpg", "heic-to-jpg"],
+  ["svg to png", "svg-to-png"],
+  ["avif to jpg", "avif-to-jpg"],
 
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],

@@ -128,6 +128,7 @@ import { speedConverter } from "@/tools/speed-converter/meta";
 import { temperatureConverter } from "@/tools/temperature-converter/meta";
 import { timeConverter } from "@/tools/time-converter/meta";
 import { unitPairTools } from "@/tools/unit-pairs/meta";
+import { imagePairTools } from "@/tools/image-pairs/meta";
 import { volumeConverter } from "@/tools/volume-converter/meta";
 import { weightConverter } from "@/tools/weight-converter/meta";
 
@@ -453,6 +454,7 @@ export const tools: readonly Tool[] = [
   // Direct conversion pages — generated, and search-only so they stay out of
   // the browse surfaces while remaining indexed and findable.
   ...unitPairTools,
+  ...imagePairTools,
 ];
 
 /* --------------------------------------------------------------------------
