@@ -42,6 +42,7 @@ const registry: Record<string, React.ComponentType> = {
   // PDF
   "merge-pdf": lazyTool(() => import("@/tools/merge-pdf/Tool")),
   "split-pdf": lazyTool(() => import("@/tools/split-pdf/Tool")),
+  "sign-pdf": lazyTool(() => import("@/tools/sign-pdf/Tool")),
   "compress-pdf": lazyTool(() => import("@/tools/compress-pdf/Tool")),
   "pdf-to-word": lazyTool(() => import("@/tools/pdf-to-word/Tool")),
   "pdf-to-jpg": lazyTool(() => import("@/tools/pdf-to-jpg/Tool")),

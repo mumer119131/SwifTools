@@ -244,6 +244,12 @@ const expectations: [string, string][] = [
   // The Pomodoro tool must still win its own name.
   ["pomodoro timer", "pomodoro-timer"],
 
+  // Signing. "sign pdf" previously returned split-pdf on a fuzzy match.
+  ["sign pdf", "sign-pdf"],
+  ["sign pdf online", "sign-pdf"],
+  ["add signature to pdf", "sign-pdf"],
+  ["e-sign", "sign-pdf"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

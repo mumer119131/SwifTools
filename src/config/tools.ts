@@ -55,6 +55,7 @@ import { jpgToPdf } from "@/tools/jpg-to-pdf/meta";
 import { mergePdf } from "@/tools/merge-pdf/meta";
 import { pdfToJpg } from "@/tools/pdf-to-jpg/meta";
 import { pdfToWord } from "@/tools/pdf-to-word/meta";
+import { signPdfTool } from "@/tools/sign-pdf/meta";
 import { splitPdf } from "@/tools/split-pdf/meta";
 import { wordToPdf } from "@/tools/word-to-pdf/meta";
 
@@ -269,6 +270,7 @@ export const tools: readonly Tool[] = [
   // PDF
   mergePdf,
   splitPdf,
+  signPdfTool,
   compressPdf,
   pdfToWord,
   pdfToJpg,
