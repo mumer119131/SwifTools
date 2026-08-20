@@ -218,6 +218,11 @@ import { voltageDividerCalculator } from "@/tools/voltage-divider-calculator/met
 // Converter
 import { currencyConverter } from "@/tools/currency-converter/meta";
 import { unixTimestampConverter } from "@/tools/unix-timestamp-converter/meta";
+import { romanNumeralConverter } from "@/tools/roman-numeral-converter/meta";
+import { shoeSizeConverter } from "@/tools/shoe-size-converter/meta";
+import { httpStatusCodes } from "@/tools/http-status-codes/meta";
+import { cookingTimeCalculator } from "@/tools/cooking-time-calculator/meta";
+import { stripHtml } from "@/tools/strip-html/meta";
 import { numberBaseConverter } from "@/tools/number-base-converter/meta";
 import { tipCalculator } from "@/tools/tip-calculator/meta";
 import { dateDifferenceCalculator } from "@/tools/date-difference-calculator/meta";
@@ -318,6 +323,7 @@ export const tools: readonly Tool[] = [
   sortLines,
   removeLineBreaks,
   extractFromText,
+  stripHtml,
 
   // Developer
   jsonFormatter,
@@ -344,6 +350,7 @@ export const tools: readonly Tool[] = [
   sqlFormatter,
   subnetCalculator,
   aspectRatioCalculator,
+  httpStatusCodes,
   cronExpressionBuilder,
   hmacGenerator,
   reactNativeShadowGenerator,
@@ -378,6 +385,8 @@ export const tools: readonly Tool[] = [
   timezoneConverter,
   unixTimestampConverter,
   numberBaseConverter,
+  romanNumeralConverter,
+  shoeSizeConverter,
 
   // Calculator
   loanCalculator,
@@ -465,6 +474,7 @@ export const tools: readonly Tool[] = [
   cookingMeasurementConverter,
   recipeScaler,
   ovenTemperatureConverter,
+  cookingTimeCalculator,
   subscriptionTracker,
   movingChecklist,
   groceryList,

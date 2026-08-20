@@ -235,7 +235,12 @@ import { fuelCostCalculatorContent } from "@/tools/fuel-cost-calculator/content"
 import { heartRateZonesContent } from "@/tools/heart-rate-zones/content";
 import { ovenTemperatureConverterContent } from "@/tools/oven-temperature-converter/content";
 import { paceCalculatorContent } from "@/tools/pace-calculator/content";
+import { cookingTimeCalculatorContent } from "@/tools/cooking-time-calculator/content";
+import { httpStatusCodesContent } from "@/tools/http-status-codes/content";
+import { romanNumeralConverterContent } from "@/tools/roman-numeral-converter/content";
+import { shoeSizeConverterContent } from "@/tools/shoe-size-converter/content";
 import { sleepCalculatorContent } from "@/tools/sleep-calculator/content";
+import { stripHtmlContent } from "@/tools/strip-html/content";
 import { subscriptionTrackerContent } from "@/tools/subscription-tracker/content";
 import { passwordStrengthCheckerContent } from "@/tools/password-strength-checker/content";
 import { mortgageCalculatorContent } from "@/tools/mortgage-calculator/content";
@@ -439,6 +444,11 @@ export const contentBySlug: Record<string, ToolContent> = {
   "password-strength-checker": passwordStrengthCheckerContent,
   "pace-calculator": paceCalculatorContent,
   "sleep-calculator": sleepCalculatorContent,
+  "roman-numeral-converter": romanNumeralConverterContent,
+  "shoe-size-converter": shoeSizeConverterContent,
+  "http-status-codes": httpStatusCodesContent,
+  "cooking-time-calculator": cookingTimeCalculatorContent,
+  "strip-html": stripHtmlContent,
   "fuel-cost-calculator": fuelCostCalculatorContent,
   "oven-temperature-converter": ovenTemperatureConverterContent,
   "subscription-tracker": subscriptionTrackerContent,

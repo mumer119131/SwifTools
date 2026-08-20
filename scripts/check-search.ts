@@ -320,6 +320,19 @@ const expectations: [string, string][] = [
   ["heart rate zones", "heart-rate-zones"],
   ["max heart rate", "heart-rate-zones"],
 
+  // Reference batch. None of these had an answer before.
+  ["roman numerals", "roman-numeral-converter"],
+  ["mcmxciv", "roman-numeral-converter"],
+  ["shoe size", "shoe-size-converter"],
+  ["uk to us shoe size", "shoe-size-converter"],
+  ["http status codes", "http-status-codes"],
+  ["301 vs 302", "http-status-codes"],
+  ["what does 404 mean", "http-status-codes"],
+  ["roasting time", "cooking-time-calculator"],
+  ["turkey cooking time", "cooking-time-calculator"],
+  ["strip html", "strip-html"],
+  ["html to text", "strip-html"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
