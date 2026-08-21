@@ -333,6 +333,20 @@ const expectations: [string, string][] = [
   ["strip html", "strip-html"],
   ["html to text", "strip-html"],
 
+  // The six-tool batch. None had an answer before.
+  ["due date calculator", "due-date-calculator"],
+  ["how many weeks pregnant", "due-date-calculator"],
+  ["body fat calculator", "body-fat-calculator"],
+  ["body fat percentage", "body-fat-calculator"],
+  ["json diff", "json-diff"],
+  ["compare json", "json-diff"],
+  ["photo collage", "photo-collage"],
+  ["combine photos into one", "photo-collage"],
+  ["circle crop", "circle-crop"],
+  ["crop image to circle", "circle-crop"],
+  ["unicode lookup", "unicode-lookup"],
+  ["em dash character", "unicode-lookup"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

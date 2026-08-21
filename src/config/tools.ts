@@ -242,6 +242,12 @@ import { fuelCostCalculator } from "@/tools/fuel-cost-calculator/meta";
 import { heartRateZones } from "@/tools/heart-rate-zones/meta";
 import { ovenTemperatureConverter } from "@/tools/oven-temperature-converter/meta";
 import { subscriptionTracker } from "@/tools/subscription-tracker/meta";
+import { dueDateCalculator } from "@/tools/due-date-calculator/meta";
+import { bodyFatCalculator } from "@/tools/body-fat-calculator/meta";
+import { jsonDiff } from "@/tools/json-diff/meta";
+import { photoCollage } from "@/tools/photo-collage/meta";
+import { circleCrop } from "@/tools/circle-crop/meta";
+import { unicodeLookup } from "@/tools/unicode-lookup/meta";
 import { paceCalculator } from "@/tools/pace-calculator/meta";
 import { vatCalculator } from "@/tools/vat-calculator/meta";
 import { loanCalculator } from "@/tools/loan-calculator/meta";
@@ -312,6 +318,8 @@ export const tools: readonly Tool[] = [
   faviconGenerator,
   exifViewer,
   imageToBase64,
+  photoCollage,
+  circleCrop,
 
   // Text
   wordCounter,
@@ -324,6 +332,7 @@ export const tools: readonly Tool[] = [
   removeLineBreaks,
   extractFromText,
   stripHtml,
+  unicodeLookup,
 
   // Developer
   jsonFormatter,
@@ -345,6 +354,7 @@ export const tools: readonly Tool[] = [
   cssGradientGenerator,
   boxShadowGenerator,
   csvToJson,
+  jsonDiff,
   jsonToTypescript,
   yamlToJson,
   sqlFormatter,
@@ -395,6 +405,8 @@ export const tools: readonly Tool[] = [
   vatCalculator,
   paceCalculator,
   sleepCalculator,
+  dueDateCalculator,
+  bodyFatCalculator,
   fuelCostCalculator,
   compoundInterestCalculator,
   taxCalculator,

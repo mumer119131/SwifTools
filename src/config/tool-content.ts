@@ -239,7 +239,13 @@ import { cookingTimeCalculatorContent } from "@/tools/cooking-time-calculator/co
 import { httpStatusCodesContent } from "@/tools/http-status-codes/content";
 import { romanNumeralConverterContent } from "@/tools/roman-numeral-converter/content";
 import { shoeSizeConverterContent } from "@/tools/shoe-size-converter/content";
+import { bodyFatCalculatorContent } from "@/tools/body-fat-calculator/content";
+import { circleCropContent } from "@/tools/circle-crop/content";
+import { dueDateCalculatorContent } from "@/tools/due-date-calculator/content";
+import { jsonDiffContent } from "@/tools/json-diff/content";
+import { photoCollageContent } from "@/tools/photo-collage/content";
 import { sleepCalculatorContent } from "@/tools/sleep-calculator/content";
+import { unicodeLookupContent } from "@/tools/unicode-lookup/content";
 import { stripHtmlContent } from "@/tools/strip-html/content";
 import { subscriptionTrackerContent } from "@/tools/subscription-tracker/content";
 import { passwordStrengthCheckerContent } from "@/tools/password-strength-checker/content";
@@ -444,6 +450,12 @@ export const contentBySlug: Record<string, ToolContent> = {
   "password-strength-checker": passwordStrengthCheckerContent,
   "pace-calculator": paceCalculatorContent,
   "sleep-calculator": sleepCalculatorContent,
+  "due-date-calculator": dueDateCalculatorContent,
+  "body-fat-calculator": bodyFatCalculatorContent,
+  "json-diff": jsonDiffContent,
+  "photo-collage": photoCollageContent,
+  "circle-crop": circleCropContent,
+  "unicode-lookup": unicodeLookupContent,
   "roman-numeral-converter": romanNumeralConverterContent,
   "shoe-size-converter": shoeSizeConverterContent,
   "http-status-codes": httpStatusCodesContent,
