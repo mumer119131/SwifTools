@@ -30,23 +30,44 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
   const pairFallback = modifiedAt("unit-pairs", lastModified);
 
+  /**
+   * A listing page changed when its newest entry did.
+   *
+   * Reporting the build time instead tells a crawler that every category page
+   * changes on every deploy, which is false and a claim it learns to discount —
+   * taking the pages that genuinely did change down with it. Deriving the date
+   * from the contents means the signal stays meaningful.
+   */
+  const newestIn = (slugs: string[]): Date => {
+    const dates = slugs
+      .map((slug) => modifiedAt(slug, new Date(0)))
+      .filter((date) => date.getTime() > 0);
+    return dates.length > 0
+      ? new Date(Math.max(...dates.map((date) => date.getTime())))
+      : lastModified;
+  };
+
+  const newestOverall = newestIn(tools.map((tool) => tool.slug));
+
   return [
     {
       url: absoluteUrl("/"),
-      lastModified,
+      lastModified: newestOverall,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: absoluteUrl("/tools"),
-      lastModified,
+      lastModified: newestOverall,
       changeFrequency: "weekly" as const,
       // The full catalogue now lives here rather than on the homepage.
       priority: 0.9,
     },
     {
       url: absoluteUrl("/guides"),
-      lastModified,
+      lastModified: new Date(
+        Math.max(...guides.map((guide) => new Date(guide.updated).getTime())),
+      ),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     },
@@ -77,7 +98,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...populatedCategories.map((category) => ({
       url: absoluteUrl(`/${category.slug}`),
-      lastModified,
+      lastModified: newestIn(
+        tools.filter((tool) => tool.category === category.slug).map((tool) => tool.slug),
+      ),
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
