@@ -244,7 +244,12 @@ import { circleCropContent } from "@/tools/circle-crop/content";
 import { dueDateCalculatorContent } from "@/tools/due-date-calculator/content";
 import { jsonDiffContent } from "@/tools/json-diff/content";
 import { photoCollageContent } from "@/tools/photo-collage/content";
+import { clothingSizeConverterContent } from "@/tools/clothing-size-converter/content";
+import { dpiCalculatorContent } from "@/tools/dpi-calculator/content";
+import { gpaCalculatorContent } from "@/tools/gpa-calculator/content";
+import { redactImageContent } from "@/tools/redact-image/content";
 import { sleepCalculatorContent } from "@/tools/sleep-calculator/content";
+import { viewingDistanceCalculatorContent } from "@/tools/viewing-distance-calculator/content";
 import { unicodeLookupContent } from "@/tools/unicode-lookup/content";
 import { stripHtmlContent } from "@/tools/strip-html/content";
 import { subscriptionTrackerContent } from "@/tools/subscription-tracker/content";
@@ -450,6 +455,11 @@ export const contentBySlug: Record<string, ToolContent> = {
   "password-strength-checker": passwordStrengthCheckerContent,
   "pace-calculator": paceCalculatorContent,
   "sleep-calculator": sleepCalculatorContent,
+  "redact-image": redactImageContent,
+  "dpi-calculator": dpiCalculatorContent,
+  "viewing-distance-calculator": viewingDistanceCalculatorContent,
+  "clothing-size-converter": clothingSizeConverterContent,
+  "gpa-calculator": gpaCalculatorContent,
   "due-date-calculator": dueDateCalculatorContent,
   "body-fat-calculator": bodyFatCalculatorContent,
   "json-diff": jsonDiffContent,

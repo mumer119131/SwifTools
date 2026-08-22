@@ -248,6 +248,11 @@ import { jsonDiff } from "@/tools/json-diff/meta";
 import { photoCollage } from "@/tools/photo-collage/meta";
 import { circleCrop } from "@/tools/circle-crop/meta";
 import { unicodeLookup } from "@/tools/unicode-lookup/meta";
+import { redactImage } from "@/tools/redact-image/meta";
+import { dpiCalculator } from "@/tools/dpi-calculator/meta";
+import { viewingDistanceCalculator } from "@/tools/viewing-distance-calculator/meta";
+import { clothingSizeConverter } from "@/tools/clothing-size-converter/meta";
+import { gpaCalculator } from "@/tools/gpa-calculator/meta";
 import { paceCalculator } from "@/tools/pace-calculator/meta";
 import { vatCalculator } from "@/tools/vat-calculator/meta";
 import { loanCalculator } from "@/tools/loan-calculator/meta";
@@ -320,6 +325,8 @@ export const tools: readonly Tool[] = [
   imageToBase64,
   photoCollage,
   circleCrop,
+  redactImage,
+  dpiCalculator,
 
   // Text
   wordCounter,
@@ -397,6 +404,7 @@ export const tools: readonly Tool[] = [
   numberBaseConverter,
   romanNumeralConverter,
   shoeSizeConverter,
+  clothingSizeConverter,
 
   // Calculator
   loanCalculator,
@@ -407,6 +415,7 @@ export const tools: readonly Tool[] = [
   sleepCalculator,
   dueDateCalculator,
   bodyFatCalculator,
+  gpaCalculator,
   fuelCostCalculator,
   compoundInterestCalculator,
   taxCalculator,
@@ -487,6 +496,7 @@ export const tools: readonly Tool[] = [
   recipeScaler,
   ovenTemperatureConverter,
   cookingTimeCalculator,
+  viewingDistanceCalculator,
   subscriptionTracker,
   movingChecklist,
   groceryList,

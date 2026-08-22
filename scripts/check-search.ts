@@ -347,6 +347,19 @@ const expectations: [string, string][] = [
   ["unicode lookup", "unicode-lookup"],
   ["em dash character", "unicode-lookup"],
 
+  // The redaction, print, screen, clothing and GPA batch.
+  ["blur face", "redact-image"],
+  ["pixelate image", "redact-image"],
+  ["redact image", "redact-image"],
+  ["dpi calculator", "dpi-calculator"],
+  ["pixels to inches", "dpi-calculator"],
+  ["tv viewing distance", "viewing-distance-calculator"],
+  ["what size tv should i buy", "viewing-distance-calculator"],
+  ["clothing size converter", "clothing-size-converter"],
+  ["dress size conversion", "clothing-size-converter"],
+  ["gpa calculator", "gpa-calculator"],
+  ["weighted gpa", "gpa-calculator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
