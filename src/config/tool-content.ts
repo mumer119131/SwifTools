@@ -181,6 +181,9 @@ import { sitemapGeneratorContent } from "@/tools/sitemap-generator/content";
 import { socialMediaResizerContent } from "@/tools/social-media-resizer/content";
 import { solarSavingsCalculatorContent } from "@/tools/solar-savings-calculator/content";
 import { sortLinesContent } from "@/tools/sort-lines/content";
+import { angleConverterContent } from "@/tools/angle-converter/content";
+import { energyConverterContent } from "@/tools/energy-converter/content";
+import { powerConverterContent } from "@/tools/power-converter/content";
 import { speedConverterContent } from "@/tools/speed-converter/content";
 import { splitPdfContent } from "@/tools/split-pdf/content";
 import { sqlFormatterContent } from "@/tools/sql-formatter/content";
@@ -411,6 +414,9 @@ export const contentBySlug: Record<string, ToolContent> = {
   "social-media-resizer": socialMediaResizerContent,
   "solar-savings-calculator": solarSavingsCalculatorContent,
   "sort-lines": sortLinesContent,
+  "angle-converter": angleConverterContent,
+  "energy-converter": energyConverterContent,
+  "power-converter": powerConverterContent,
   "speed-converter": speedConverterContent,
   "split-pdf": splitPdfContent,
   "sql-formatter": sqlFormatterContent,

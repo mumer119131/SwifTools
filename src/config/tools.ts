@@ -132,6 +132,9 @@ import { colorPaletteGenerator } from "@/tools/color-palette-generator/meta";
 import { areaConverter } from "@/tools/area-converter/meta";
 import { dataConverter } from "@/tools/data-converter/meta";
 import { lengthConverter } from "@/tools/length-converter/meta";
+import { angleConverter } from "@/tools/angle-converter/meta";
+import { energyConverter } from "@/tools/energy-converter/meta";
+import { powerConverter } from "@/tools/power-converter/meta";
 import { speedConverter } from "@/tools/speed-converter/meta";
 import { temperatureConverter } from "@/tools/temperature-converter/meta";
 import { timeConverter } from "@/tools/time-converter/meta";
@@ -405,6 +408,9 @@ export const tools: readonly Tool[] = [
   temperatureConverter,
   volumeConverter,
   areaConverter,
+  powerConverter,
+  energyConverter,
+  angleConverter,
   speedConverter,
   dataConverter,
   timeConverter,

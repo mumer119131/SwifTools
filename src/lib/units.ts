@@ -182,6 +182,57 @@ export const categories: readonly UnitCategory[] = [
       unit("yr", "Year (365.2425 d)", "yr", 31556952, "years", "Years", ["yr", "year", "years"]),
     ],
   },
+  {
+    id: "power",
+    label: "Power",
+    slug: "power",
+    baseSymbol: "W",
+    description: "Watts, kilowatts, horsepower and BTU per hour.",
+    units: [
+      unit("mw", "Milliwatt", "mW", 0.001, "milliwatts", "Milliwatts", ["mw", "milliwatt", "milliwatts"]),
+      unit("w", "Watt", "W", 1, "watts", "Watts", ["w", "watt", "watts"]),
+      unit("kw", "Kilowatt", "kW", 1000, "kw", "Kilowatts", ["kw", "kilowatt", "kilowatts"]),
+      unit("mgw", "Megawatt", "MW", 1_000_000, "megawatts", "Megawatts", ["mw", "megawatt", "megawatts"]),
+      // Mechanical horsepower, which is what car figures use outside Europe.
+      unit("hp", "Horsepower", "hp", 745.6998715822702, "hp", "Horsepower", ["hp", "horsepower", "bhp", "mechanical horsepower"]),
+      // Metric horsepower, quoted as PS or CV — about 1.4% smaller.
+      unit("ps", "Metric horsepower", "PS", 735.49875, "ps", "Metric horsepower", ["ps", "cv", "metric horsepower", "pferdestarke"]),
+      unit("btuh", "BTU per hour", "BTU/h", 0.29307107017222, "btu-per-hour", "BTU per hour", ["btu/h", "btu per hour", "btuh"]),
+    ],
+  },
+  {
+    id: "energy",
+    label: "Energy",
+    slug: "energy",
+    baseSymbol: "J",
+    description: "Joules, calories, kilowatt-hours and BTU.",
+    units: [
+      unit("j", "Joule", "J", 1, "joules", "Joules", ["j", "joule", "joules"]),
+      unit("kj", "Kilojoule", "kJ", 1000, "kj", "Kilojoules", ["kj", "kilojoule", "kilojoules"]),
+      unit("mj", "Megajoule", "MJ", 1_000_000, "megajoules", "Megajoules", ["mj", "megajoule", "megajoules"]),
+      // The small calorie. Food labels use the large one, below.
+      unit("cal", "Calorie", "cal", 4.184, "calories", "Calories", ["cal", "calorie", "calories", "small calorie"]),
+      unit("kcal", "Kilocalorie", "kcal", 4184, "kcal", "Kilocalories", ["kcal", "kilocalorie", "food calorie", "large calorie", "Calorie"]),
+      unit("wh", "Watt-hour", "Wh", 3600, "watt-hours", "Watt-hours", ["wh", "watt hour", "watt-hours"]),
+      unit("kwh", "Kilowatt-hour", "kWh", 3_600_000, "kwh", "Kilowatt-hours", ["kwh", "kilowatt hour", "kilowatt-hours", "unit of electricity"]),
+      unit("btu", "BTU", "BTU", 1055.05585262, "btu", "BTU", ["btu", "british thermal unit"]),
+    ],
+  },
+  {
+    id: "angle",
+    label: "Angle",
+    slug: "angle",
+    baseSymbol: "rad",
+    description: "Degrees, radians, gradians and turns.",
+    units: [
+      unit("rad", "Radian", "rad", 1, "radians", "Radians", ["rad", "radian", "radians"]),
+      unit("deg", "Degree", "°", Math.PI / 180, "degrees", "Degrees", ["deg", "degree", "degrees", "°"]),
+      unit("grad", "Gradian", "gon", Math.PI / 200, "gradians", "Gradians", ["grad", "gradian", "gradians", "gon"]),
+      unit("turn", "Turn", "turn", 2 * Math.PI, "turns", "Turns", ["turn", "turns", "revolution", "revolutions"]),
+      unit("arcmin", "Arcminute", "′", Math.PI / 10_800, "arcminutes", "Arcminutes", ["arcmin", "arcminute", "minute of arc"]),
+      unit("arcsec", "Arcsecond", "″", Math.PI / 648_000, "arcseconds", "Arcseconds", ["arcsec", "arcsecond", "second of arc"]),
+    ],
+  },
 ];
 
 /* ------------------------------------------------------------- temperature */
@@ -265,6 +316,23 @@ export interface UnitPair {
  */
 const POPULAR: [string, string, string][] = [
   // [categoryId, fromId, toId]
+  ["power", "hp", "kw"],
+  ["power", "kw", "w"],
+  ["power", "hp", "w"],
+  ["power", "hp", "ps"],
+  ["power", "kw", "btuh"],
+
+  ["energy", "kwh", "j"],
+  ["energy", "cal", "j"],
+  ["energy", "kcal", "kj"],
+  ["energy", "kwh", "btu"],
+  ["energy", "wh", "kwh"],
+  ["energy", "kj", "cal"],
+
+  ["angle", "deg", "rad"],
+  ["angle", "deg", "grad"],
+  ["angle", "turn", "deg"],
+
   ["weight", "kg", "lb"],
   ["weight", "g", "oz"],
   ["weight", "kg", "st"],

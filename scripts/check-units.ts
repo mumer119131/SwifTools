@@ -30,6 +30,29 @@ const conversions: [string, string, string, number, number, number][] = [
   ["weight", "st", "kg", 1, 6.35029318, 1e-9],
   ["weight", "kg", "g", 2.5, 2500, 1e-9],
 
+  // Power. Two horsepowers, differing by ~1.4% — the pair most often confused.
+  ["power", "hp", "kw", 1, 0.7456998715822702, 1e-12],
+  ["power", "hp", "w", 1, 745.6998715823, 1e-6],
+  ["power", "hp", "ps", 1, 1.0138696553, 1e-6],
+  ["power", "kw", "hp", 100, 134.1022089595, 1e-6],
+  ["power", "kw", "btuh", 3.5168528421, 12000, 1e-4],
+
+  // Energy. The calorie is the scientific one (4.184 J); food Calories are kcal.
+  ["energy", "kwh", "j", 1, 3.6e6, 1e-6],
+  ["energy", "cal", "j", 1, 4.184, 1e-12],
+  ["energy", "kcal", "kj", 100, 418.4, 1e-9],
+  ["energy", "kwh", "btu", 1, 3412.1416331279, 1e-6],
+  ["energy", "wh", "kwh", 1000, 1, 1e-12],
+  ["energy", "btu", "j", 1, 1055.05585262, 1e-6],
+
+  // Angle. Exact by definition, so the tolerances are tight.
+  ["angle", "deg", "rad", 180, Math.PI, 1e-12],
+  ["angle", "rad", "deg", 1, 57.2957795131, 1e-9],
+  ["angle", "deg", "grad", 90, 100, 1e-12],
+  ["angle", "turn", "deg", 1, 360, 1e-12],
+  ["angle", "deg", "arcmin", 1, 60, 1e-12],
+  ["angle", "deg", "arcsec", 1, 3600, 1e-9],
+
   ["length", "in", "cm", 1, 2.54, 1e-12],
   ["length", "cm", "in", 2.54, 1, 1e-12],
   ["length", "ft", "m", 1, 0.3048, 1e-12],
