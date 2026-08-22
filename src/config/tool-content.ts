@@ -254,6 +254,12 @@ import { specificHeatCalculatorContent } from "@/tools/specific-heat-calculator/
 import { hookesLawCalculatorContent } from "@/tools/hookes-law-calculator/content";
 import { torqueCalculatorContent } from "@/tools/torque-calculator/content";
 import { resistorNetworkCalculatorContent } from "@/tools/resistor-network-calculator/content";
+import { dilutionCalculatorContent } from "@/tools/dilution-calculator/content";
+import { gravitationalForceCalculatorContent } from "@/tools/gravitational-force-calculator/content";
+import { workDoneCalculatorContent } from "@/tools/work-done-calculator/content";
+import { projectileMotionCalculatorContent } from "@/tools/projectile-motion-calculator/content";
+import { standardDeviationCalculatorContent } from "@/tools/standard-deviation-calculator/content";
+import { decibelCalculatorContent } from "@/tools/decibel-calculator/content";
 import { sleepCalculatorContent } from "@/tools/sleep-calculator/content";
 import { viewingDistanceCalculatorContent } from "@/tools/viewing-distance-calculator/content";
 import { unicodeLookupContent } from "@/tools/unicode-lookup/content";
@@ -461,6 +467,12 @@ export const contentBySlug: Record<string, ToolContent> = {
   "password-strength-checker": passwordStrengthCheckerContent,
   "pace-calculator": paceCalculatorContent,
   "sleep-calculator": sleepCalculatorContent,
+  "dilution-calculator": dilutionCalculatorContent,
+  "gravitational-force-calculator": gravitationalForceCalculatorContent,
+  "work-done-calculator": workDoneCalculatorContent,
+  "projectile-motion-calculator": projectileMotionCalculatorContent,
+  "standard-deviation-calculator": standardDeviationCalculatorContent,
+  "decibel-calculator": decibelCalculatorContent,
   "momentum-calculator": momentumCalculatorContent,
   "ideal-gas-law-calculator": idealGasLawCalculatorContent,
   "specific-heat-calculator": specificHeatCalculatorContent,

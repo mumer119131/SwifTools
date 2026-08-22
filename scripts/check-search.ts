@@ -375,6 +375,16 @@ const expectations: [string, string][] = [
   ["ohms law", "ohms-law-calculator"],
   ["voltage divider", "voltage-divider-calculator"],
 
+  // Second science batch.
+  ["dilution calculator", "dilution-calculator"],
+  ["c1v1 = c2v2", "dilution-calculator"],
+  ["gravitational force", "gravitational-force-calculator"],
+  ["work done calculator", "work-done-calculator"],
+  ["projectile motion", "projectile-motion-calculator"],
+  ["standard deviation calculator", "standard-deviation-calculator"],
+  ["variance calculator", "standard-deviation-calculator"],
+  ["decibel calculator", "decibel-calculator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],

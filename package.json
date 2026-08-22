@@ -41,6 +41,7 @@
     "check:vault": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-vault.ts",
     "check:fun": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-fun.ts",
     "check:home": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-home.ts",
+    "check:science-batch2": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-science-batch2.ts",
     "check:science-batch": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-science-batch.ts",
     "check:science": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-science.ts",
     "dates": "node --experimental-strip-types scripts/tool-dates.ts",

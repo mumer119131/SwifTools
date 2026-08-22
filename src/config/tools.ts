@@ -207,6 +207,12 @@ import { specificHeatCalculator } from "@/tools/specific-heat-calculator/meta";
 import { hookesLawCalculator } from "@/tools/hookes-law-calculator/meta";
 import { torqueCalculator } from "@/tools/torque-calculator/meta";
 import { resistorNetworkCalculator } from "@/tools/resistor-network-calculator/meta";
+import { dilutionCalculator } from "@/tools/dilution-calculator/meta";
+import { gravitationalForceCalculator } from "@/tools/gravitational-force-calculator/meta";
+import { workDoneCalculator } from "@/tools/work-done-calculator/meta";
+import { projectileMotionCalculator } from "@/tools/projectile-motion-calculator/meta";
+import { standardDeviationCalculator } from "@/tools/standard-deviation-calculator/meta";
+import { decibelCalculator } from "@/tools/decibel-calculator/meta";
 import { forceCalculator } from "@/tools/force-calculator/meta";
 import { frequencyCalculator } from "@/tools/frequency-calculator/meta";
 import { halfLifeCalculator } from "@/tools/half-life-calculator/meta";
@@ -475,6 +481,12 @@ export const tools: readonly Tool[] = [
   capacitorCalculator,
   frequencyCalculator,
   forceCalculator,
+  dilutionCalculator,
+  gravitationalForceCalculator,
+  workDoneCalculator,
+  projectileMotionCalculator,
+  standardDeviationCalculator,
+  decibelCalculator,
   momentumCalculator,
   idealGasLawCalculator,
   specificHeatCalculator,
