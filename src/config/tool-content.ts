@@ -248,6 +248,12 @@ import { clothingSizeConverterContent } from "@/tools/clothing-size-converter/co
 import { dpiCalculatorContent } from "@/tools/dpi-calculator/content";
 import { gpaCalculatorContent } from "@/tools/gpa-calculator/content";
 import { redactImageContent } from "@/tools/redact-image/content";
+import { momentumCalculatorContent } from "@/tools/momentum-calculator/content";
+import { idealGasLawCalculatorContent } from "@/tools/ideal-gas-law-calculator/content";
+import { specificHeatCalculatorContent } from "@/tools/specific-heat-calculator/content";
+import { hookesLawCalculatorContent } from "@/tools/hookes-law-calculator/content";
+import { torqueCalculatorContent } from "@/tools/torque-calculator/content";
+import { resistorNetworkCalculatorContent } from "@/tools/resistor-network-calculator/content";
 import { sleepCalculatorContent } from "@/tools/sleep-calculator/content";
 import { viewingDistanceCalculatorContent } from "@/tools/viewing-distance-calculator/content";
 import { unicodeLookupContent } from "@/tools/unicode-lookup/content";
@@ -455,6 +461,12 @@ export const contentBySlug: Record<string, ToolContent> = {
   "password-strength-checker": passwordStrengthCheckerContent,
   "pace-calculator": paceCalculatorContent,
   "sleep-calculator": sleepCalculatorContent,
+  "momentum-calculator": momentumCalculatorContent,
+  "ideal-gas-law-calculator": idealGasLawCalculatorContent,
+  "specific-heat-calculator": specificHeatCalculatorContent,
+  "hookes-law-calculator": hookesLawCalculatorContent,
+  "torque-calculator": torqueCalculatorContent,
+  "resistor-network-calculator": resistorNetworkCalculatorContent,
   "redact-image": redactImageContent,
   "dpi-calculator": dpiCalculatorContent,
   "viewing-distance-calculator": viewingDistanceCalculatorContent,

@@ -201,6 +201,12 @@ import { waterBillCalculator } from "@/tools/water-bill-calculator/meta";
 // Science & engineering
 import { capacitorCalculator } from "@/tools/capacitor-calculator/meta";
 import { densityCalculator } from "@/tools/density-calculator/meta";
+import { momentumCalculator } from "@/tools/momentum-calculator/meta";
+import { idealGasLawCalculator } from "@/tools/ideal-gas-law-calculator/meta";
+import { specificHeatCalculator } from "@/tools/specific-heat-calculator/meta";
+import { hookesLawCalculator } from "@/tools/hookes-law-calculator/meta";
+import { torqueCalculator } from "@/tools/torque-calculator/meta";
+import { resistorNetworkCalculator } from "@/tools/resistor-network-calculator/meta";
 import { forceCalculator } from "@/tools/force-calculator/meta";
 import { frequencyCalculator } from "@/tools/frequency-calculator/meta";
 import { halfLifeCalculator } from "@/tools/half-life-calculator/meta";
@@ -469,6 +475,12 @@ export const tools: readonly Tool[] = [
   capacitorCalculator,
   frequencyCalculator,
   forceCalculator,
+  momentumCalculator,
+  idealGasLawCalculator,
+  specificHeatCalculator,
+  hookesLawCalculator,
+  torqueCalculator,
+  resistorNetworkCalculator,
   kineticEnergyCalculator,
   densityCalculator,
   pressureCalculator,

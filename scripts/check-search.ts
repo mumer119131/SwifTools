@@ -360,6 +360,21 @@ const expectations: [string, string][] = [
   ["gpa calculator", "gpa-calculator"],
   ["weighted gpa", "gpa-calculator"],
 
+  // The science batch, added after Search Console showed this category is
+  // what a new domain actually surfaces with.
+  ["momentum calculator", "momentum-calculator"],
+  ["ideal gas law", "ideal-gas-law-calculator"],
+  ["pv=nrt", "ideal-gas-law-calculator"],
+  ["specific heat calculator", "specific-heat-calculator"],
+  ["hookes law", "hookes-law-calculator"],
+  ["spring constant", "hookes-law-calculator"],
+  ["torque calculator", "torque-calculator"],
+  ["parallel resistor calculator", "resistor-network-calculator"],
+  ["resistors in parallel", "resistor-network-calculator"],
+  // The existing electronics tools keep their own queries.
+  ["ohms law", "ohms-law-calculator"],
+  ["voltage divider", "voltage-divider-calculator"],
+
   // The per-type landing pages still win their own generic queries.
   ["weight converter", "weight-converter"],
   ["temperature converter", "temperature-converter"],
