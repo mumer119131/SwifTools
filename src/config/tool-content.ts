@@ -239,6 +239,9 @@ import { heartRateZonesContent } from "@/tools/heart-rate-zones/content";
 import { ovenTemperatureConverterContent } from "@/tools/oven-temperature-converter/content";
 import { paceCalculatorContent } from "@/tools/pace-calculator/content";
 import { cookingTimeCalculatorContent } from "@/tools/cooking-time-calculator/content";
+import { dnsLookupContent } from "@/tools/dns-lookup/content";
+import { httpHeaderCheckerContent } from "@/tools/http-header-checker/content";
+import { whatIsMyIpContent } from "@/tools/what-is-my-ip/content";
 import { httpStatusCodesContent } from "@/tools/http-status-codes/content";
 import { romanNumeralConverterContent } from "@/tools/roman-numeral-converter/content";
 import { shoeSizeConverterContent } from "@/tools/shoe-size-converter/content";
@@ -498,6 +501,9 @@ export const contentBySlug: Record<string, ToolContent> = {
   "unicode-lookup": unicodeLookupContent,
   "roman-numeral-converter": romanNumeralConverterContent,
   "shoe-size-converter": shoeSizeConverterContent,
+  "dns-lookup": dnsLookupContent,
+  "http-header-checker": httpHeaderCheckerContent,
+  "what-is-my-ip": whatIsMyIpContent,
   "http-status-codes": httpStatusCodesContent,
   "cooking-time-calculator": cookingTimeCalculatorContent,
   "strip-html": stripHtmlContent,

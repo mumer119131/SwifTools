@@ -235,6 +235,9 @@ import { currencyConverter } from "@/tools/currency-converter/meta";
 import { unixTimestampConverter } from "@/tools/unix-timestamp-converter/meta";
 import { romanNumeralConverter } from "@/tools/roman-numeral-converter/meta";
 import { shoeSizeConverter } from "@/tools/shoe-size-converter/meta";
+import { dnsLookup } from "@/tools/dns-lookup/meta";
+import { httpHeaderChecker } from "@/tools/http-header-checker/meta";
+import { whatIsMyIp } from "@/tools/what-is-my-ip/meta";
 import { httpStatusCodes } from "@/tools/http-status-codes/meta";
 import { cookingTimeCalculator } from "@/tools/cooking-time-calculator/meta";
 import { stripHtml } from "@/tools/strip-html/meta";
@@ -382,6 +385,9 @@ export const tools: readonly Tool[] = [
   sqlFormatter,
   subnetCalculator,
   aspectRatioCalculator,
+  whatIsMyIp,
+  dnsLookup,
+  httpHeaderChecker,
   httpStatusCodes,
   cronExpressionBuilder,
   hmacGenerator,
