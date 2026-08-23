@@ -6,6 +6,17 @@ export type FontData = Record<string, Glyph>;
 export const CHARSET =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,!?:;'\"-+/()[]#@&*%<>= ";
 
+/**
+ * Blank columns and rows left between glyphs, in glyph pixels.
+ *
+ * Without it a 5-wide glyph sits in a 5-wide cell, so letters that use their
+ * outer columns — which is most of them — touch their neighbours and the sheet
+ * reads as one smear. The preview used to paper over this by adding a CSS gap
+ * the font data did not have, which meant the preview and the export disagreed
+ * about the same font. Both now use this one number.
+ */
+export const GUTTER = 1;
+
 export const MIN_DIMENSION = 3;
 export const MAX_DIMENSION = 16;
 
@@ -97,7 +108,12 @@ export function resizeGlyph(
   return next;
 }
 
-/** Draws the whole set onto a canvas as a sprite sheet, 16 glyphs per row. */
+/**
+ * Draws the whole set onto a canvas as a sprite sheet, 16 glyphs per row.
+ *
+ * Each glyph is drawn at the top-left of a cell that is one glyph pixel wider
+ * and taller than the glyph itself, leaving a gutter on the right and bottom.
+ */
 export function drawSheet(
   canvas: HTMLCanvasElement,
   font: FontData,
@@ -109,8 +125,13 @@ export function drawSheet(
   const columns = 16;
   const rows = Math.ceil(characters.length / columns);
 
-  canvas.width = columns * width * scale;
-  canvas.height = rows * height * scale;
+  // One uniform pitch including the gutter, so a consumer slicing the sheet can
+  // multiply by the cell size rather than track where the gaps fall.
+  const cellWidth = (width + GUTTER) * scale;
+  const cellHeight = (height + GUTTER) * scale;
+
+  canvas.width = columns * cellWidth;
+  canvas.height = rows * cellHeight;
 
   const context = canvas.getContext("2d");
   if (!context) return;
@@ -122,8 +143,8 @@ export function drawSheet(
     const glyph = font[character];
     if (!glyph) return;
 
-    const originX = (index % columns) * width * scale;
-    const originY = Math.floor(index / columns) * height * scale;
+    const originX = (index % columns) * cellWidth;
+    const originY = Math.floor(index / columns) * cellHeight;
 
     for (let row = 0; row < height; row += 1) {
       for (let col = 0; col < width; col += 1) {

@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import {
   CHARSET,
   blankGlyph,
+  GUTTER,
   MAX_DIMENSION,
   MIN_DIMENSION,
   drawSheet,
@@ -237,7 +238,9 @@ export default function PixelFontMakerTool() {
           </div>
 
           <div className="surface-card overflow-x-auto p-5">
-            <div className="flex items-end gap-1">
+            {/* Spaced by the same GUTTER the sheet uses, in preview cells, so
+                the preview and the exported sheet describe the same font. */}
+            <div className="flex items-end" style={{ gap: `${GUTTER * 6}px` }}>
               {[...preview].map((character, index) => {
                 const entry = font[character];
                 if (!entry) return null;
@@ -292,8 +295,10 @@ export default function PixelFontMakerTool() {
           aria-label="Sprite sheet preview"
         />
         <FieldHint>
-          16 glyphs per row, in character-set order, at 4× scale. Each cell is{" "}
-          {width * 4} × {height * 4} pixels.
+          16 glyphs per row, in character-set order, at 4× scale. Each glyph is{" "}
+          {width * 4} × {height * 4} pixels inside a {(width + GUTTER) * 4} ×{" "}
+          {(height + GUTTER) * 4} cell, leaving a {GUTTER * 4}-pixel gutter so letters do not
+          touch. Slice the sheet on the cell size.
         </FieldHint>
       </section>
 

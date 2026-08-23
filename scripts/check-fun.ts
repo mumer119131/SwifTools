@@ -32,6 +32,8 @@ import { mark as markQuiz } from "@/tools/quiz-builder/logic";
 import { QUESTIONS as TRIVIA, filter as triviaFilter } from "@/tools/trivia-questions/logic";
 import {
   CHARSET as PIXEL_CHARSET,
+  GUTTER,
+  drawSheet,
   parseDimension,
   resizeGlyph,
   seedFont,
@@ -613,6 +615,43 @@ check("reject 200 dice", parseNotation("200d6"), null);
     "artwork survives being widened to a two-digit size",
     [...seeded.A].every((cell, i) => widened[Math.floor(i / 5) * typed + (i % 5)] === cell),
   );
+
+  /*
+   * Glyphs used to sit in cells exactly their own size, so any letter using its
+   * outer columns touched its neighbour and the sheet read as one smear. The
+   * gutter is asserted by drawing the real sheet and checking no filled pixel
+   * lands on a cell boundary — the property that actually matters, rather than
+   * the arithmetic that is supposed to produce it.
+   */
+  const filled = new Set<string>();
+  const canvas = {
+    width: 0,
+    height: 0,
+    getContext: () => ({
+      fillStyle: "",
+      clearRect: () => {},
+      fillRect: (x: number, y: number, w: number, h: number) => {
+        for (let i = 0; i < w; i += 1) {
+          for (let j = 0; j < h; j += 1) filled.add(`${x + i},${y + j}`);
+        }
+      },
+    }),
+  } as unknown as HTMLCanvasElement;
+
+  const scale = 4;
+  drawSheet(canvas, seeded, 5, 7, scale);
+
+  check("sheet is sized for the gutter", canvas.width, 16 * (5 + GUTTER) * scale);
+  assert("the gutter is at least one pixel", GUTTER >= 1);
+
+  const pitch = (5 + GUTTER) * scale;
+  let onBoundary = 0;
+  for (let column = 1; column < 16; column += 1) {
+    for (let y = 0; y < canvas.height; y += 1) {
+      if (filled.has(`${column * pitch - 1},${y}`)) onBoundary += 1;
+    }
+  }
+  check("no glyph touches its neighbour", onBoundary, 0);
 }
 
 console.log(failures === 0 ? "\nAll fun checks passed." : `\n${failures} fun checks FAILED.`);
