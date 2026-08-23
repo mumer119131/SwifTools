@@ -2,6 +2,9 @@ import type { ComponentType } from "react";
 
 import ChemistryCalculationsGuide from "@/guides/chemistry-calculations/content";
 import ColourFormatsGuide from "@/guides/colour-formats/content";
+import HouseholdRunningCostsGuide from "@/guides/household-running-costs/content";
+import KitchenConversionsGuide from "@/guides/kitchen-conversions/content";
+import MechanicsFormulasGuide from "@/guides/mechanics-formulas/content";
 import DataFormatsGuide from "@/guides/data-formats/content";
 import DnsRecordsGuide from "@/guides/dns-records/content";
 import ElectronicsBasicsGuide from "@/guides/electronics-basics/content";
@@ -36,6 +39,9 @@ export const guideContent: Record<string, ComponentType> = {
   "chemistry-calculations": ChemistryCalculationsGuide,
   "data-formats": DataFormatsGuide,
   "dns-records": DnsRecordsGuide,
+  "household-running-costs": HouseholdRunningCostsGuide,
+  "kitchen-conversions": KitchenConversionsGuide,
+  "mechanics-formulas": MechanicsFormulasGuide,
   "colour-formats": ColourFormatsGuide,
   "metric-imperial": MetricImperialGuide,
   "measuring-a-room": MeasuringARoomGuide,

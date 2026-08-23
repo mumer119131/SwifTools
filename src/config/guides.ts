@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Braces, CircuitBoard, Clock, Dices, FileDown, FileText, FlaskConical, ImageIcon, KeyRound, LayoutGrid, MessageSquare, Network, Palette, Regex, Ruler, Search, ShieldCheck, Scale } from "lucide-react";
+import { Braces, ChefHat, CircuitBoard, Clock, Dices, FileDown, FileText, FlaskConical, ImageIcon, KeyRound, LayoutGrid, MessageSquare, Network, Palette, PiggyBank, Rocket, Regex, Ruler, Search, ShieldCheck, Scale } from "lucide-react";
 
 /**
  * The guides registry.
@@ -500,6 +500,90 @@ export const guides: Guide[] = [
       "ideal-gas-law-calculator",
       "significant-figures-calculator",
       "density-calculator",
+    ],
+  },
+  {
+    slug: "mechanics-formulas",
+    title: "Mechanics formulas",
+    heading: "Force, energy and momentum: the mechanics formulas that recur",
+    description:
+      "F = ma, kinetic energy, momentum, work, torque, springs and projectiles — and why noticing which quantity is squared decides the answer.",
+    keywords: [
+      "physics formulas explained",
+      "difference between work and power",
+      "kinetic energy vs momentum",
+      "why does speed matter in a crash",
+      "what is a newton",
+      "inverse square law explained",
+      "projectile motion explained",
+    ],
+    icon: Rocket,
+    published: "2026-08-22",
+    updated: "2026-08-22",
+    minutes: 10,
+    tools: [
+      "force-calculator",
+      "kinetic-energy-calculator",
+      "momentum-calculator",
+      "work-done-calculator",
+      "torque-calculator",
+      "hookes-law-calculator",
+      "projectile-motion-calculator",
+      "gravitational-force-calculator",
+    ],
+  },
+  {
+    slug: "kitchen-conversions",
+    title: "Kitchen conversions",
+    heading: "Cups, ovens and scaling: the conversions recipes get wrong",
+    description:
+      "Why a cup of flour has no fixed weight, what a fan oven really runs at, and the three things that do not scale when you double a recipe.",
+    keywords: [
+      "why weigh baking ingredients",
+      "fan oven vs conventional",
+      "how to double a recipe",
+      "cup measurements explained",
+      "us vs uk tablespoon",
+      "does cooking time double",
+      "cake tin size conversion",
+    ],
+    icon: ChefHat,
+    published: "2026-08-22",
+    updated: "2026-08-22",
+    minutes: 8,
+    tools: [
+      "cooking-measurement-converter",
+      "oven-temperature-converter",
+      "recipe-scaler",
+      "cooking-time-calculator",
+    ],
+  },
+  {
+    slug: "household-running-costs",
+    title: "Household running costs",
+    heading: "What things actually cost to run, and where the money goes",
+    description:
+      "Kilowatt-hours and standing charges, metered versus unmetered water, why solar payback depends on when you use power, and the costs people miss.",
+    keywords: [
+      "how to work out appliance running cost",
+      "what is a kilowatt hour",
+      "what is a standing charge",
+      "metered vs unmetered water",
+      "does solar pay for itself",
+      "which appliances cost most to run",
+      "how to compare tariffs",
+    ],
+    icon: PiggyBank,
+    published: "2026-08-22",
+    updated: "2026-08-22",
+    minutes: 9,
+    tools: [
+      "electricity-cost-calculator",
+      "water-bill-calculator",
+      "solar-savings-calculator",
+      "subscription-tracker",
+      "unit-price-calculator",
+      "fuel-cost-calculator",
     ],
   },
 ];
