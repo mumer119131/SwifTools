@@ -13,7 +13,10 @@ import { cn } from "@/lib/utils";
 import {
   CHARSET,
   blankGlyph,
+  MAX_DIMENSION,
+  MIN_DIMENSION,
   drawSheet,
+  parseDimension,
   resizeGlyph,
   seedFont,
   type FontData,
@@ -54,7 +57,32 @@ export default function PixelFontMakerTool() {
     }));
   }
 
+  /**
+   * Applies a typed dimension once the field is left, rather than on each
+   * keystroke. Resizing crops glyphs, and cropping on every keystroke destroyed
+   * artwork before the user had finished typing a two-digit number.
+   *
+   * The box is uncontrolled so a half-typed value is never fought over; on blur
+   * it is rewritten to whatever was actually committed, which also puts back a
+   * sensible number after someone clears it or types nonsense.
+   */
+  function commitSize(
+    event: React.FocusEvent<HTMLInputElement>,
+    axis: "width" | "height",
+  ) {
+    const parsed = parseDimension(event.target.value);
+    const next = parsed ?? (axis === "width" ? width : height);
+
+    if (axis === "width") changeSize(next, height);
+    else changeSize(width, next);
+
+    event.target.value = String(next);
+  }
+
   function changeSize(nextWidth: number, nextHeight: number) {
+    // Nothing to do, and skipping keeps an unchanged size from rewriting glyphs.
+    if (nextWidth === width && nextHeight === height) return;
+
     setStore((current) => ({
       width: nextWidth,
       height: nextHeight,
@@ -74,14 +102,16 @@ export default function PixelFontMakerTool() {
           <Label htmlFor="pf-width">Glyph width</Label>
           <Input
             id="pf-width"
+            key={`w-${width}`}
             type="number"
             inputMode="numeric"
-            min={3}
-            max={16}
-            value={width}
-            onChange={(event) =>
-              changeSize(Math.max(3, Math.min(16, Number(event.target.value) || 5)), height)
-            }
+            min={MIN_DIMENSION}
+            max={MAX_DIMENSION}
+            defaultValue={width}
+            onBlur={(event) => commitSize(event, "width")}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") event.currentTarget.blur();
+            }}
             className="w-24"
           />
         </div>
@@ -89,17 +119,22 @@ export default function PixelFontMakerTool() {
           <Label htmlFor="pf-height">Glyph height</Label>
           <Input
             id="pf-height"
+            key={`h-${height}`}
             type="number"
             inputMode="numeric"
-            min={3}
-            max={16}
-            value={height}
-            onChange={(event) =>
-              changeSize(width, Math.max(3, Math.min(16, Number(event.target.value) || 7)))
-            }
+            min={MIN_DIMENSION}
+            max={MAX_DIMENSION}
+            defaultValue={height}
+            onBlur={(event) => commitSize(event, "height")}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") event.currentTarget.blur();
+            }}
             className="w-24"
           />
-          <FieldHint>Existing glyphs are kept, cropped if you shrink the grid.</FieldHint>
+          <FieldHint>
+            Applied when you finish typing. Existing glyphs are kept, cropped if you shrink the
+            grid.
+          </FieldHint>
         </div>
 
         <Button

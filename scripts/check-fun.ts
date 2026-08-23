@@ -30,7 +30,12 @@ import { summarise as budget } from "@/tools/budget-tracker/logic";
 import { streaks } from "@/tools/habit-tracker/logic";
 import { mark as markQuiz } from "@/tools/quiz-builder/logic";
 import { QUESTIONS as TRIVIA, filter as triviaFilter } from "@/tools/trivia-questions/logic";
-import { CHARSET as PIXEL_CHARSET, resizeGlyph, seedFont } from "@/tools/pixel-font-maker/logic";
+import {
+  CHARSET as PIXEL_CHARSET,
+  parseDimension,
+  resizeGlyph,
+  seedFont,
+} from "@/tools/pixel-font-maker/logic";
 
 let failures = 0;
 
@@ -583,6 +588,31 @@ check("reject 200 dice", parseNotation("200d6"), null);
   check("charset fully seeded", Object.keys(seeded).length, new Set([...PIXEL_CHARSET]).size);
   assert("every glyph is the right length", Object.values(seeded).every((g) => g.length === 35));
   assert("A is drawn in the seed", seeded.A.some((cell) => cell === 1));
+
+  /*
+   * The size boxes used to clamp on every keystroke, so typing "12" passed
+   * through 1, clamped to 3, and cropped every glyph to three columns before
+   * the second digit arrived — destroying artwork that widening back could
+   * only replace with blanks. Anything not yet a usable number must now return
+   * null so the caller leaves the font alone.
+   */
+  check("a complete number is taken", parseDimension("12"), 12);
+  check("a small number still clamps up", parseDimension("1"), 3);
+  check("a large number clamps down", parseDimension("99"), 16);
+  check("an empty field changes nothing", parseDimension(""), null);
+  check("whitespace changes nothing", parseDimension("   "), null);
+  check("letters change nothing", parseDimension("abc"), null);
+  check("a negative changes nothing", parseDimension("-5"), null);
+  check("a decimal changes nothing", parseDimension("1.5"), null);
+  check("exponent notation changes nothing", parseDimension("1e3"), null);
+
+  // The whole point: typing a two-digit width must not damage the glyphs.
+  const typed = parseDimension("12") ?? 5;
+  const widened = resizeGlyph(seeded.A, 5, 7, typed, 7);
+  assert(
+    "artwork survives being widened to a two-digit size",
+    [...seeded.A].every((cell, i) => widened[Math.floor(i / 5) * typed + (i % 5)] === cell),
+  );
 }
 
 console.log(failures === 0 ? "\nAll fun checks passed." : `\n${failures} fun checks FAILED.`);

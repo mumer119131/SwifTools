@@ -6,6 +6,29 @@ export type FontData = Record<string, Glyph>;
 export const CHARSET =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,!?:;'\"-+/()[]#@&*%<>= ";
 
+export const MIN_DIMENSION = 3;
+export const MAX_DIMENSION = 16;
+
+/**
+ * Reads a grid dimension typed into the size boxes.
+ *
+ * Returns null for anything not yet a usable number, which is the important
+ * case: clamping mid-typing used to resize the font on every keystroke, so
+ * typing "12" passed through 1 — clamped to 3 — and cropped every glyph to
+ * three columns before the second digit arrived. The columns were gone, and
+ * widening back only padded blanks. Callers commit on blur instead, and a null
+ * means "leave the font alone".
+ */
+export function parseDimension(raw: string): number | null {
+  const trimmed = raw.trim();
+  if (!/^\d+$/.test(trimmed)) return null;
+
+  const value = Number(trimmed);
+  if (!Number.isFinite(value)) return null;
+
+  return Math.max(MIN_DIMENSION, Math.min(MAX_DIMENSION, value));
+}
+
 export function blankGlyph(width: number, height: number): Glyph {
   return new Array(width * height).fill(0);
 }
