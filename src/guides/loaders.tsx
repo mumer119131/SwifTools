@@ -1,6 +1,9 @@
 import type { ComponentType } from "react";
 
+import ChemistryCalculationsGuide from "@/guides/chemistry-calculations/content";
 import ColourFormatsGuide from "@/guides/colour-formats/content";
+import DataFormatsGuide from "@/guides/data-formats/content";
+import DnsRecordsGuide from "@/guides/dns-records/content";
 import ElectronicsBasicsGuide from "@/guides/electronics-basics/content";
 import HashingEncodingEncryptionGuide from "@/guides/hashing-encoding-encryption/content";
 import ImageFormatsGuide from "@/guides/image-formats/content";
@@ -30,6 +33,9 @@ export const guideContent: Record<string, ComponentType> = {
   "online-tool-privacy": OnlineToolPrivacyGuide,
   "hashing-encoding-encryption": HashingEncodingEncryptionGuide,
   "pdf-basics": PdfBasicsGuide,
+  "chemistry-calculations": ChemistryCalculationsGuide,
+  "data-formats": DataFormatsGuide,
+  "dns-records": DnsRecordsGuide,
   "colour-formats": ColourFormatsGuide,
   "metric-imperial": MetricImperialGuide,
   "measuring-a-room": MeasuringARoomGuide,

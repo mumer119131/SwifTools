@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { CircuitBoard, Clock, Dices, FileDown, FileText, ImageIcon, KeyRound, LayoutGrid, MessageSquare, Palette, Regex, Ruler, Search, ShieldCheck, Scale } from "lucide-react";
+import { Braces, CircuitBoard, Clock, Dices, FileDown, FileText, FlaskConical, ImageIcon, KeyRound, LayoutGrid, MessageSquare, Network, Palette, Regex, Ruler, Search, ShieldCheck, Scale } from "lucide-react";
 
 /**
  * The guides registry.
@@ -412,6 +412,94 @@ export const guides: Guide[] = [
       "timezone-converter",
       "date-difference-calculator",
       "cron-expression-builder",
+    ],
+  },
+  {
+    slug: "dns-records",
+    title: "How DNS works",
+    heading: "DNS records explained: A, CNAME, MX, TXT and the rest",
+    description:
+      "What each record type is for, why a CNAME cannot sit on your bare domain, and why the change you made an hour ago still has not taken effect.",
+    keywords: [
+      "what is dns",
+      "how dns works",
+      "dns records explained",
+      "what is an a record",
+      "a record vs cname",
+      "what does an mx record do",
+      "dns ttl explained",
+      "types of dns record",
+    ],
+    icon: Network,
+    published: "2026-08-22",
+    updated: "2026-08-22",
+    minutes: 9,
+    tools: [
+      "dns-lookup",
+      "http-header-checker",
+      "http-status-codes",
+      "subnet-calculator",
+      "what-is-my-ip",
+    ],
+  },
+  {
+    slug: "data-formats",
+    title: "JSON, YAML and CSV",
+    heading: "JSON, YAML or CSV: which one, and what each gets wrong",
+    description:
+      "Why JSON is strict on purpose, the YAML values that silently change meaning, and the number precision bug that quietly corrupts large IDs.",
+    keywords: [
+      "json vs yaml",
+      "what is json",
+      "yaml vs csv",
+      "when to use yaml",
+      "json syntax rules",
+      "why is my json invalid",
+      "json number precision",
+      "csv quoting rules",
+    ],
+    icon: Braces,
+    published: "2026-08-22",
+    updated: "2026-08-22",
+    minutes: 10,
+    tools: [
+      "json-formatter",
+      "json-tree-viewer",
+      "json-diff",
+      "json-to-typescript",
+      "csv-to-json",
+      "yaml-to-json",
+      "sql-formatter",
+    ],
+  },
+  {
+    slug: "chemistry-calculations",
+    title: "Chemistry calculations",
+    heading: "Moles, molarity and pH: the calculations that come up most",
+    description:
+      "The mole, molar mass, dilution, limiting reagents, pH as a logarithm, and the significant-figure rule most people merge with the wrong one.",
+    keywords: [
+      "what is a mole in chemistry",
+      "how to calculate molar mass",
+      "molarity vs molality",
+      "what does ph measure",
+      "limiting reagent explained",
+      "significant figures rules",
+      "avogadro's number explained",
+      "theoretical yield vs percent yield",
+    ],
+    icon: FlaskConical,
+    published: "2026-08-22",
+    updated: "2026-08-22",
+    minutes: 11,
+    tools: [
+      "ph-calculator",
+      "molecular-weight-calculator",
+      "stoichiometry-calculator",
+      "dilution-calculator",
+      "ideal-gas-law-calculator",
+      "significant-figures-calculator",
+      "density-calculator",
     ],
   },
 ];
