@@ -104,6 +104,15 @@ const expectations: [string, string][] = [
   ["how much paint do i need", "paint-calculator"],
   ["how many tiles", "tile-calculator"],
   ["cubic yards of concrete", "concrete-calculator"],
+  // Single tokens where a whole first word must beat a longer tool's prefix.
+  // "ph" is all of "pH Calculator" but two letters of "Photo Collage"; "crop"
+  // is the first word of "Crop Image" and a trailing one in "Circle Crop".
+  ["ph", "ph-calculator"],
+  ["what", "what-is-my-ip"],
+  ["time", "time-converter"],
+  ["water", "water-bill-calculator"],
+  ["roast", "roast-generator"],
+  ["crop", "crop-image"],
   ["what is my ip", "what-is-my-ip"],
   ["my ip address", "what-is-my-ip"],
   ["whats my ip", "what-is-my-ip"],

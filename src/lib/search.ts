@@ -26,6 +26,21 @@ export interface SearchResult {
 /** Points per match kind. The gaps are wide so tiers can never interleave. */
 const SCORE = {
   nameExact: 1000,
+  /**
+   * The token is the whole first word of the name, not a fragment of one.
+   *
+   * Better evidence than a prefix: "ph" is the entire first word of "pH
+   * Calculator" but only two letters of "Photo Collage", and "roast" is the
+   * whole of "Roast Generator". The gap to nameStartsWith exceeds the
+   * popular-tool bonus on purpose, so a popular tool matching on a fragment
+   * cannot outrank one matching the whole word.
+   *
+   * Restricted to the *first* word deliberately. Accepting any word collapsed
+   * "crop" onto both "Crop Image" and "Circle Crop", and the popular flag then
+   * handed it to the variant rather than the general tool. Where a word sits
+   * in a name carries real information about what the tool is for.
+   */
+  nameFirstWordExact: 950,
   nameStartsWith: 850,
   initials: 820,
   nameWordStartsWith: 700,
@@ -118,6 +133,7 @@ function buildIndex(tools: readonly Tool[]): Indexed[] {
 /** Scores one token against one tool, returning the best single match found. */
 function scoreToken(entry: Indexed, token: string): { score: number; reason: string | null } {
   if (entry.name === token) return { score: SCORE.nameExact, reason: null };
+  if (entry.nameWords[0] === token) return { score: SCORE.nameFirstWordExact, reason: null };
   if (entry.name.startsWith(token)) return { score: SCORE.nameStartsWith, reason: null };
 
   // "wc" finds Word Counter — only worth it for genuinely short queries, or
