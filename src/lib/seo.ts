@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { absoluteUrl, pageTitle, siteConfig } from "@/config/site";
 import { getCategory } from "@/config/categories";
 import { getToolContent } from "@/config/tool-content";
-import { toolHref, type Tool } from "@/config/tools";
+import { isIndexable, toolHref, type Tool } from "@/config/tools";
 
 /**
  * Shared Open Graph / Twitter block so every page advertises itself the same way.
@@ -78,6 +78,9 @@ export function buildToolMetadata(tool: Tool): Metadata {
     title: segment,
     description,
     keywords: [...tool.keywords, tool.name.toLowerCase(), "free", "online", "no signup"],
+    // follow, not none: the page still passes value through its links, and it
+    // stays perfectly usable for anyone who reaches it.
+    ...(isIndexable(tool) ? {} : { robots: { index: false, follow: true } }),
     // Tool pages generate their own card from opengraph-image.tsx.
     ...socialCard(pageTitle(segment), description, toolHref(tool), true),
   };

@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl } from "@/config/site";
 import { guides, guideHref } from "@/config/guides";
 import { postHref, posts } from "@/posts";
-import { populatedCategories, toolHref, tools } from "@/config/tools";
+import { isIndexable, populatedCategories, toolHref, tools } from "@/config/tools";
 import toolDates from "@/config/tool-dates.json";
 
 /**
@@ -104,7 +104,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: 0.8,
     })),
-    ...tools.map((tool) => ({
+    // A page carrying noindex has no business in the sitemap.
+    ...tools.filter(isIndexable).map((tool) => ({
       url: absoluteUrl(toolHref(tool)),
       lastModified: modifiedAt(tool.slug, tool.searchOnly ? pairFallback : lastModified),
       changeFrequency: "monthly" as const,

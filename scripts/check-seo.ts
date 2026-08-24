@@ -16,7 +16,14 @@
 
 import process from "node:process";
 
-import { browsableTools, publishedTools, tools } from "@/config/tools";
+import {
+  INDEX_UNIT_PAIRS,
+  browsableTools,
+  isIndexable,
+  isUnitPair,
+  publishedTools,
+  tools,
+} from "@/config/tools";
 import { getCategory } from "@/config/categories";
 import { getToolContent } from "@/config/tool-content";
 import { buildToolMetadata } from "@/lib/seo";
@@ -192,6 +199,51 @@ if (noSteps.length > 0) {
 const totalNoteWords = needsContent.reduce(
   (sum, tool) => sum + (getToolContent(tool.slug).notes?.join(" ").split(/\s+/).length ?? 0),
   0,
+);
+
+/* ------------------------------------------- indexing stays self-consistent */
+
+/*
+ * The sitemap and the robots meta must agree. A URL listed in the sitemap while
+ * telling crawlers not to index it is a contradiction that spends crawl budget
+ * to reach a page it is then told to discard, so both read isIndexable and this
+ * asserts they cannot drift.
+ */
+for (const tool of tools) {
+  const robots = buildToolMetadata(tool)?.robots;
+  const noindex =
+    typeof robots === "object" && robots !== null && "index" in robots
+      ? robots.index === false
+      : false;
+
+  if (noindex !== !isIndexable(tool)) {
+    fail(
+      `${tool.slug}: robots meta and sitemap eligibility disagree ` +
+        `(indexable=${isIndexable(tool)}, noindex=${noindex})`,
+    );
+  }
+}
+
+const unitPairs = tools.filter(isUnitPair);
+if (unitPairs.length === 0) fail("the unit pair family is no longer recognised");
+
+const strayPairs = unitPairs.filter((tool) => isIndexable(tool) !== INDEX_UNIT_PAIRS);
+if (strayPairs.length > 0) {
+  fail(
+    `${strayPairs.length} unit pairs ignore INDEX_UNIT_PAIRS=${INDEX_UNIT_PAIRS}: ` +
+      strayPairs.slice(0, 3).map((tool) => tool.slug).join(", "),
+  );
+}
+
+// Whatever the flag says, a real tool page must always be indexable.
+const hidden = browsableTools.filter((tool) => !isIndexable(tool));
+if (hidden.length > 0) {
+  fail(`browsable tools excluded from indexing: ${hidden.map((t) => t.slug).join(", ")}`);
+}
+
+console.log(
+  `  ok    indexing is self-consistent — ${tools.filter(isIndexable).length} indexable, ` +
+    `${unitPairs.length} unit pairs ${INDEX_UNIT_PAIRS ? "included" : "held back"}`,
 );
 
 console.log(

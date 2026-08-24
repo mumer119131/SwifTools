@@ -596,6 +596,40 @@ export const publishedTools = tools.filter((tool) => tool.status === "live");
  * `generateStaticParams` all use the full `tools` list instead — a search-only
  * tool is hidden from browsing, not from the web.
  */
+/**
+ * Whether the generated unit pair pages are offered to search engines.
+ *
+ * Turned off while AdSense reviews the site. The 110 pair pages are built from
+ * one template with the unit names substituted, so two pages on entirely
+ * different subjects share about 86% of their words against 26% for a real
+ * tool page — and at 31% of the sitemap that is a third of the site reading as
+ * near-duplicate generated content, which is what "insufficient content" in a
+ * review means.
+ *
+ * They stay live, linked and usable; they are simply not offered for indexing.
+ * Turn this back on once each pair carries content that is genuinely its own —
+ * worked examples, where the units come from — rather than more substitution,
+ * which would make the duplication worse rather than better.
+ */
+export const INDEX_UNIT_PAIRS = false;
+
+const unitPairSlugs = new Set(unitPairTools.map((tool) => tool.slug));
+
+/** True for one of the generated unit pair pages. */
+export function isUnitPair(tool: Pick<Tool, "slug">): boolean {
+  return unitPairSlugs.has(tool.slug);
+}
+
+/**
+ * Whether a page should be offered to search engines — in the sitemap, and
+ * without a noindex. Both callers read this so the two can never disagree:
+ * a page listed in the sitemap while telling crawlers not to index it is a
+ * contradiction that wastes crawl budget.
+ */
+export function isIndexable(tool: Pick<Tool, "slug">): boolean {
+  return INDEX_UNIT_PAIRS || !isUnitPair(tool);
+}
+
 export const browsableTools = tools.filter((tool) => !tool.searchOnly);
 
 /**
