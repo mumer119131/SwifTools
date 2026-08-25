@@ -68,14 +68,54 @@ export interface DatedStamp {
 }
 
 /** Fonts offered for a typed signature. Names as pdf-lib knows them. */
+/**
+ * The typed-signature styles.
+ *
+ * Each entry carries both the PDF font it writes and the CSS that stands in for
+ * it on screen, together in one place. Held apart, the preview silently ignored
+ * the choice and rendered every style in the browser's default face while the
+ * PDF embedded the right one — the output was correct and the screen was not.
+ *
+ * These are the PDF standard 14 fonts, which every reader has, so the on-screen
+ * stack names the same families and falls back by category.
+ */
 export const SIGNATURE_FONTS = [
-  { id: StandardFonts.TimesRomanItalic, label: "Times Italic" },
-  { id: StandardFonts.HelveticaOblique, label: "Helvetica Oblique" },
-  { id: StandardFonts.TimesRoman, label: "Times" },
-  { id: StandardFonts.Courier, label: "Courier" },
+  {
+    id: StandardFonts.TimesRomanItalic,
+    label: "Times Italic",
+    fontFamily: '"Times New Roman", Times, serif',
+    fontStyle: "italic",
+  },
+  {
+    id: StandardFonts.HelveticaOblique,
+    label: "Helvetica Oblique",
+    fontFamily: "Helvetica, Arial, sans-serif",
+    fontStyle: "italic",
+  },
+  {
+    id: StandardFonts.TimesRoman,
+    label: "Times",
+    fontFamily: '"Times New Roman", Times, serif',
+    fontStyle: "normal",
+  },
+  {
+    id: StandardFonts.Courier,
+    label: "Courier",
+    fontFamily: '"Courier New", Courier, monospace',
+    fontStyle: "normal",
+  },
 ] as const;
 
 export type SignatureFont = (typeof SIGNATURE_FONTS)[number]["id"];
+
+/** The CSS that stands in for a PDF font on screen. */
+export function signatureFontCss(id: SignatureFont): {
+  fontFamily: string;
+  fontStyle: string;
+} {
+  const entry = SIGNATURE_FONTS.find((font) => font.id === id) ?? SIGNATURE_FONTS[0];
+  return { fontFamily: entry.fontFamily, fontStyle: entry.fontStyle };
+}
 
 export interface PageSize {
   width: number;

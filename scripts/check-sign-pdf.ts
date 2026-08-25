@@ -23,6 +23,7 @@ import {
   signPdf,
   SIGNATURE_FONTS,
   signatureBox,
+  signatureFontCss,
 } from "@/tools/sign-pdf/logic";
 
 let failures = 0;
@@ -304,6 +305,49 @@ assert("several signature fonts are offered", SIGNATURE_FONTS.length >= 3);
     "a drag keeps the grabbed point under the pointer",
     Math.abs(moved.left + dx - target.x) < 1e-9 && Math.abs(moved.top + dy - target.y) < 1e-9,
   );
+}
+
+/* ------------------------------------ each style is distinct on both sides */
+
+/*
+ * The Style dropdown was inert on screen: the PDF embedded the right face but
+ * the preview drew every one of them in the browser default, because the CSS
+ * lived nowhere. Each entry now carries both, and these assert the two stay in
+ * step and that no two styles collapse into the same rendering.
+ */
+{
+  const cssKeys = new Set<string>();
+  const pdfFonts = new Set<string>();
+
+  for (const entry of SIGNATURE_FONTS) {
+    const css = signatureFontCss(entry.id);
+
+    assert(
+      `${entry.label} has an on-screen face`,
+      css.fontFamily.length > 0 && css.fontStyle.length > 0,
+    );
+    assert(
+      `${entry.label} resolves to its own entry`,
+      css.fontFamily === entry.fontFamily && css.fontStyle === entry.fontStyle,
+    );
+
+    cssKeys.add(`${css.fontFamily}|${css.fontStyle}`);
+    pdfFonts.add(String(entry.id));
+  }
+
+  assert(
+    `all ${SIGNATURE_FONTS.length} styles look different on screen`,
+    cssKeys.size === SIGNATURE_FONTS.length,
+    `${cssKeys.size} distinct`,
+  );
+  assert(
+    `all ${SIGNATURE_FONTS.length} styles write a different PDF font`,
+    pdfFonts.size === SIGNATURE_FONTS.length,
+  );
+
+  // An unknown id must still render something rather than nothing.
+  const unknown = signatureFontCss("Not-A-Font" as never);
+  assert("an unknown style falls back to a real face", unknown.fontFamily.length > 0);
 }
 
 console.log(

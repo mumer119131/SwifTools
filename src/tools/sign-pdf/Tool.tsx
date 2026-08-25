@@ -21,6 +21,7 @@ import { closePdf, openPdf, renderPage } from "@/lib/pdf";
 import { baseName, cn } from "@/lib/utils";
 import {
   SIGNATURE_FONTS,
+  signatureFontCss,
   clampPlacement,
   signatureBox,
   defaultStampText,
@@ -64,9 +65,37 @@ export default function SignPdfTool() {
   /** Page width over height, needed to turn a width fraction into a height. */
   const [pageRatio, setPageRatio] = React.useState(210 / 297);
 
+  const typedCss = signatureFontCss(font);
+
+  /**
+   * How tall the typed signature is relative to its width.
+   *
+   * signPdf picks the point size that makes the text span the chosen width, so
+   * the height that follows depends on the text and the face — a short name in
+   * Courier is far taller in proportion than a long one in Times. A fixed guess
+   * drew a box the wrong height for nearly every input, so this measures the
+   * same ratio the PDF will produce.
+   */
+  const typedAspect = React.useMemo(() => {
+    const fallback = 0.28;
+    if (typeof document === "undefined" || typed.trim() === "") return fallback;
+
+    const context = document.createElement("canvas").getContext("2d");
+    if (!context) return fallback;
+
+    context.font = `${typedCss.fontStyle} 100px ${typedCss.fontFamily}`;
+    const metrics = context.measureText(typed);
+    if (!(metrics.width > 0)) return fallback;
+
+    // Ink extent rather than the em box, matching how pdf-lib reports height.
+    const ascent = metrics.actualBoundingBoxAscent || 72;
+    const descent = metrics.actualBoundingBoxDescent || 20;
+    return (ascent + descent) / metrics.width;
+  }, [typed, typedCss.fontFamily, typedCss.fontStyle]);
+
   /* Where the signature will sit. Derived here rather than inside the markup
      so the drag handlers measure the same rectangle the page draws. */
-  const signatureAspect = source === "draw" ? (ink?.aspect ?? 0.35) : 0.28;
+  const signatureAspect = source === "draw" ? (ink?.aspect ?? 0.35) : typedAspect;
   const box = signatureBox(placement, signatureAspect, pageRatio);
 
   /* Offset from the box's top-left to where the pointer grabbed it, so a drag
@@ -385,6 +414,8 @@ export default function SignPdfTool() {
                             textLength="100"
                             lengthAdjust="spacingAndGlyphs"
                             fill="#0b1020"
+                            fontFamily={typedCss.fontFamily}
+                            fontStyle={typedCss.fontStyle}
                           >
                             {typed}
                           </text>
@@ -440,6 +471,7 @@ export default function SignPdfTool() {
                   <Input
                     id="typed"
                     value={typed}
+                    style={{ fontFamily: typedCss.fontFamily, fontStyle: typedCss.fontStyle }}
                     onChange={(event) => setTyped(event.target.value)}
                     placeholder="A. Lovelace"
                   />
@@ -453,7 +485,16 @@ export default function SignPdfTool() {
                     <SelectContent>
                       {SIGNATURE_FONTS.map((entry) => (
                         <SelectItem key={entry.id} value={entry.id}>
-                          {entry.label}
+                          {/* Each option set in its own face, so the choice can
+                              be seen rather than read. */}
+                          <span
+                            style={{
+                              fontFamily: entry.fontFamily,
+                              fontStyle: entry.fontStyle,
+                            }}
+                          >
+                            {entry.label}
+                          </span>
                         </SelectItem>
                       ))}
                     </SelectContent>
