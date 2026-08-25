@@ -62,15 +62,26 @@ export function buildToolMetadata(tool: Tool): Metadata {
   const category = getCategory(tool.category);
 
   /*
-   * Google truncates a title around 60 characters, and the layout template
-   * appends " | <site name>" after this. A long tool name plus the full
-   * "Free Online X Tool" suffix pushes past that, so the suffix shortens for
-   * names that would otherwise be clipped — the tool's own name is the part
-   * worth keeping.
+   * Google truncates a title around 60 characters, and `pageTitle` appends
+   * " | <site name>" after this one. The budget below subtracts that, which the
+   * previous threshold of 52 did not — so 82 of 232 titles ran past 60 and were
+   * clipped in results, the longest at 72.
+   *
+   * Three forms, longest first, and the first that fits wins. The old pair had
+   * no fallback for a long name: "Series and Parallel Resistor Calculator" was
+   * already using the short suffix and still overflowed. The tool's own name is
+   * the part worth keeping, so it is what survives.
    */
-  const full = `${tool.name} — Free Online ${category?.label ?? ""} Tool`.replace(/\s+/g, " ").trim();
-  const short = `${tool.name} — Free Online Tool`;
-  const segment = full.length > 52 ? short : full;
+  const brandCost = pageTitle("x").length - 1;
+  const budget = 60 - brandCost;
+
+  const forms = [
+    `${tool.name} — Free Online ${category?.label ?? ""} Tool`.replace(/\s+/g, " ").trim(),
+    `${tool.name} — Free Online Tool`,
+    tool.name,
+  ];
+
+  const segment = forms.find((form) => form.length <= budget) ?? tool.name;
 
   const description = tool.description;
 

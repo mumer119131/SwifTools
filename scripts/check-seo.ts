@@ -21,6 +21,7 @@ import {
   browsableTools,
   isIndexable,
   isUnitPair,
+  populatedCategories,
   publishedTools,
   tools,
 } from "@/config/tools";
@@ -28,6 +29,8 @@ import { getCategory } from "@/config/categories";
 import { getToolContent } from "@/config/tool-content";
 import { buildToolMetadata } from "@/lib/seo";
 import { pageTitle } from "@/config/site";
+import { guides } from "@/config/guides";
+import { buildCategoryMetadata } from "@/lib/seo";
 
 let failures = 0;
 let warnings = 0;
@@ -200,6 +203,45 @@ const totalNoteWords = needsContent.reduce(
   (sum, tool) => sum + (getToolContent(tool.slug).notes?.join(" ").split(/\s+/).length ?? 0),
   0,
 );
+
+/* ------------------------------------------ titles survive Google's clipping */
+
+/*
+ * Google clips a title around 60 characters. The tool builder chooses between
+ * three forms to stay inside that, but the budget has to subtract what
+ * pageTitle appends — an earlier threshold did not, and 82 of 232 titles were
+ * being clipped, the longest at 72. Measured on the rendered title rather than
+ * the segment, because the segment alone is not what appears in results.
+ */
+const TITLE_LIMIT = 60;
+
+for (const tool of publishedTools) {
+  const rendered = pageTitle(String(buildToolMetadata(tool).title));
+  if (rendered.length > TITLE_LIMIT) {
+    fail(`${tool.slug}: title is ${rendered.length} chars and will be clipped — ${rendered}`);
+  }
+  // The tool's own name is the part worth keeping; losing it defeats the point.
+  if (!rendered.startsWith(tool.name)) {
+    fail(`${tool.slug}: title no longer leads with the tool name — ${rendered}`);
+  }
+}
+
+for (const guide of guides) {
+  const rendered = pageTitle(guide.title);
+  if (rendered.length > TITLE_LIMIT) {
+    fail(`guide ${guide.slug}: title is ${rendered.length} chars — ${rendered}`);
+  }
+}
+
+for (const category of populatedCategories) {
+  const metadata = buildCategoryMetadata(category.slug);
+  const rendered = pageTitle(String(metadata?.title ?? ""));
+  if (rendered.length > TITLE_LIMIT) {
+    fail(`category ${category.slug}: title is ${rendered.length} chars — ${rendered}`);
+  }
+}
+
+console.log(`  ok    every title fits inside ${TITLE_LIMIT} characters`);
 
 /* ------------------------------------------- indexing stays self-consistent */
 
