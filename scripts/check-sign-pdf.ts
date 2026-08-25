@@ -177,7 +177,9 @@ assert("signing with nothing throws", empty);
 const off = clampPlacement({ x: 1.5, y: -3, width: 2, pageNumber: 1 });
 assert(`x is clamped inside the page (${off.x.toFixed(2)})`, off.x >= 0 && off.x <= 1);
 assert("width is capped", off.width <= 0.8 && off.width >= 0.05);
-assert("y stays on the page", off.y >= 0.02 && off.y <= 1);
+// y is the top edge now, so 0 means flush with the top of the page. The old
+// floor of 0.02 belonged to the days when y was the signature's bottom.
+assert(`y stays on the page (${off.y.toFixed(2)})`, off.y >= 0 && off.y <= 1);
 
 const fine = clampPlacement({ x: 0.3, y: 0.5, width: 0.25, pageNumber: 1 });
 assert(
@@ -247,6 +249,60 @@ assert("several signature fonts are offered", SIGNATURE_FONTS.length >= 3);
     "preview and PDF describe the same rectangle",
     Math.abs(pdfTopFraction - box.top) < 1e-9 &&
       Math.abs(pdfBottomFraction - (box.top + box.height)) < 1e-9,
+  );
+}
+
+/* --------------------------------------------- dragging stays on the page */
+
+/*
+ * The signature is dragged by pointer, so the clamp is what stops it being
+ * dropped off the edge. y is the TOP edge and the signature grows downward,
+ * which is why the clamp needs its height: the previous upper bound of 1
+ * allowed a placement whose whole signature fell below the page.
+ */
+{
+  const pageRatio = 595 / 842;
+  const base = { x: 0.6, y: 0.4, width: 0.25, pageNumber: 1 };
+  const height = signatureBox(base, 0.35, pageRatio).height;
+
+  for (const y of [-0.5, 0, 0.5, 0.95, 1, 2]) {
+    const clamped = clampPlacement({ ...base, y }, height);
+    assert(
+      `a top edge of ${y} keeps the whole signature on the page`,
+      clamped.y >= 0 && clamped.y + height <= 1 + 1e-9,
+      `y=${clamped.y}, bottom=${clamped.y + height}`,
+    );
+  }
+
+  for (const x of [-1, 0, 0.9, 5]) {
+    const clamped = clampPlacement({ ...base, x }, height);
+    assert(
+      `a left edge of ${x} keeps the signature on the page`,
+      clamped.x >= 0 && clamped.x + clamped.width <= 1 + 1e-9,
+    );
+  }
+
+  // A signature taller than the page can only sit flush with the top.
+  const huge = clampPlacement({ ...base, y: 0.5 }, 1.5);
+  assert("an oversized signature pins to the top", huge.y === 0);
+
+  /*
+   * Dragging holds the point that was grabbed: the new top-left is the pointer
+   * minus the offset it was picked up at, so the signature does not snap its
+   * corner to the cursor.
+   */
+  const grabbed = signatureBox(base, 0.35, pageRatio);
+  const dx = grabbed.width * 0.3;
+  const dy = grabbed.height * 0.6;
+  const target = { x: 0.2, y: 0.7 };
+  const dragged = clampPlacement(
+    { ...base, x: target.x - dx, y: target.y - dy },
+    height,
+  );
+  const moved = signatureBox(dragged, 0.35, pageRatio);
+  assert(
+    "a drag keeps the grabbed point under the pointer",
+    Math.abs(moved.left + dx - target.x) < 1e-9 && Math.abs(moved.top + dy - target.y) < 1e-9,
   );
 }
 

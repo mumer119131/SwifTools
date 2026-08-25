@@ -64,6 +64,16 @@ export default function SignPdfTool() {
   /** Page width over height, needed to turn a width fraction into a height. */
   const [pageRatio, setPageRatio] = React.useState(210 / 297);
 
+  /* Where the signature will sit. Derived here rather than inside the markup
+     so the drag handlers measure the same rectangle the page draws. */
+  const signatureAspect = source === "draw" ? (ink?.aspect ?? 0.35) : 0.28;
+  const box = signatureBox(placement, signatureAspect, pageRatio);
+
+  /* Offset from the box's top-left to where the pointer grabbed it, so a drag
+     holds the signature at the point picked up instead of snapping it. */
+  const dragRef = React.useRef<{ dx: number; dy: number } | null>(null);
+
+
   /* ------------------------------------------------------ load the PDF */
 
   async function load(next: File[]) {
@@ -188,15 +198,51 @@ export default function SignPdfTool() {
 
   /* --------------------------------------------------------- placing */
 
-  function placeAt(event: React.MouseEvent<HTMLDivElement>) {
+  /** The pointer's position on the page, as fractions of it. */
+  function pointFraction(event: React.PointerEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect();
+    return {
+      x: (event.clientX - rect.left) / rect.width,
+      y: (event.clientY - rect.top) / rect.height,
+    };
+  }
+
+  function pagePointerDown(event: React.PointerEvent<HTMLDivElement>) {
+    const point = pointFraction(event);
+    const insideBox =
+      point.x >= box.left &&
+      point.x <= box.left + box.width &&
+      point.y >= box.top &&
+      point.y <= box.top + box.height;
+
+    // Grabbing the signature keeps hold of the spot picked up; pressing
+    // anywhere else moves it there first, then drags from its top-left.
+    dragRef.current = insideBox
+      ? { dx: point.x - box.left, dy: point.y - box.top }
+      : { dx: 0, dy: 0 };
+
+    if (!insideBox) {
+      setPlacement((current) => clampPlacement({ ...current, ...point }, box.height));
+    }
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function pagePointerMove(event: React.PointerEvent<HTMLDivElement>) {
+    const grab = dragRef.current;
+    if (!grab) return;
+
+    const point = pointFraction(event);
     setPlacement((current) =>
-      clampPlacement({
-        ...current,
-        x: (event.clientX - rect.left) / rect.width,
-        y: (event.clientY - rect.top) / rect.height,
-      }),
+      clampPlacement({ ...current, x: point.x - grab.dx, y: point.y - grab.dy }, box.height),
     );
+  }
+
+  function pagePointerUp(event: React.PointerEvent<HTMLDivElement>) {
+    dragRef.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
   }
 
   /* ----------------------------------------------------------- apply */
@@ -292,22 +338,20 @@ export default function SignPdfTool() {
 
             {preview ? (
               <div
-                onClick={placeAt}
-                className="surface-card relative cursor-crosshair overflow-hidden"
+                onPointerDown={pagePointerDown}
+                onPointerMove={pagePointerMove}
+                onPointerUp={pagePointerUp}
+                onPointerCancel={pagePointerUp}
+                // Stops a drag turning into a text selection or a page scroll.
+                className="surface-card relative touch-none select-none overflow-hidden"
                 role="presentation"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={preview} alt={`Page ${placement.pageNumber}`} className="w-full" />
                 {(() => {
-                  /* Typed signatures have no bitmap to measure, so they fall
-                     back to a representative line height; a drawn one uses its
-                     real proportions. */
-                  const aspect = source === "draw" ? (ink?.aspect ?? 0.35) : 0.28;
-                  const box = signatureBox(placement, aspect, pageRatio);
-
                   return (
                     <div
-                      className="pointer-events-none absolute border border-dashed border-[var(--accent-pdf)]"
+                      className="absolute cursor-grab border border-dashed border-[var(--accent-pdf)] active:cursor-grabbing"
                       style={{
                         left: `${box.left * 100}%`,
                         top: `${box.top * 100}%`,
@@ -356,8 +400,9 @@ export default function SignPdfTool() {
               </div>
             )}
             <p className="text-xs text-muted-foreground">
-              Click anywhere on the page to move the signature there. The box
-              shows exactly where and how large it will be.
+              Drag the signature to position it, or press anywhere on the page
+              to send it there. The box shows exactly where and how large it
+              will be.
             </p>
           </div>
 

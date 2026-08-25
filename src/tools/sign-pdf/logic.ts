@@ -231,14 +231,26 @@ export function trimTransparent(canvas: HTMLCanvasElement): HTMLCanvasElement | 
  * bound — `1 - 2` is `-1` — and pushes the signature off the left edge while
  * appearing to constrain it.
  */
-export function clampPlacement(placement: Placement): Placement {
+/**
+ * Keeps a placement on the page.
+ *
+ * `boxHeight` is the signature's height as a fraction of the page. It matters
+ * because `y` is the signature's TOP edge and it grows downward: without it the
+ * old upper bound of 1 allowed a placement whose entire signature fell off the
+ * bottom. Defaulted so a caller that has not measured the signature yet still
+ * gets a sane clamp.
+ */
+export function clampPlacement(placement: Placement, boxHeight = 0): Placement {
   const width = Math.min(Math.max(placement.width, 0.05), 0.8);
+
+  // A signature taller than the page can only sit at the top.
+  const lowestTop = Math.max(0, 1 - boxHeight);
 
   return {
     ...placement,
     width,
     x: Math.min(Math.max(placement.x, 0), 1 - width),
-    y: Math.min(Math.max(placement.y, 0.02), 1),
+    y: Math.min(Math.max(placement.y, 0), lowestTop),
   };
 }
 
