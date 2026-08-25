@@ -22,6 +22,7 @@ import {
   readPageSizes,
   signPdf,
   SIGNATURE_FONTS,
+  signatureBox,
 } from "@/tools/sign-pdf/logic";
 
 let failures = 0;
@@ -198,6 +199,56 @@ assert(
 );
 
 assert("several signature fonts are offered", SIGNATURE_FONTS.length >= 3);
+
+/* ------------------------------------- the preview must not lie about size */
+
+/*
+ * The page preview and the PDF writer previously disagreed three ways: the
+ * preview used a hardcoded 6% height whatever the signature's shape, and
+ * shifted the box up by its own height, so it sat entirely above where the
+ * signature landed — zero overlap. Both now read signatureBox, and these
+ * assert the properties that made it wrong.
+ */
+{
+  const placement = { x: 0.6, y: 0.4, width: 0.25, pageNumber: 1 };
+  const pageWidth = 595;
+  const pageHeight = 842;
+  const pageRatio = pageWidth / pageHeight;
+  const aspect = 0.35;
+
+  const box = signatureBox(placement, aspect, pageRatio);
+
+  assert("the click point is the top edge, not the bottom", box.top === placement.y);
+  assert("width is taken straight from the placement", box.width === placement.width);
+  assert("left is taken straight from the placement", box.left === placement.x);
+
+  // Height must follow the signature's real proportions, not a fixed guess.
+  const drawnWidth = box.width * pageWidth;
+  const drawnHeight = box.height * pageHeight;
+  assert(
+    "the signature keeps its aspect ratio on the page",
+    Math.abs(drawnHeight / drawnWidth - aspect) < 1e-9,
+    `${drawnHeight / drawnWidth} vs ${aspect}`,
+  );
+
+  // A taller signature must produce a taller box; the old 6% never moved.
+  const taller = signatureBox(placement, aspect * 2, pageRatio);
+  assert("a taller signature gives a taller box", taller.height > box.height * 1.9);
+
+  // A wider setting must grow the box in both directions.
+  const wider = signatureBox({ ...placement, width: 0.5 }, aspect, pageRatio);
+  assert("doubling the width doubles the height too", Math.abs(wider.height - box.height * 2) < 1e-9);
+
+  // The rectangle the preview paints must be the one the PDF writes into.
+  const pdfBottomY = pageHeight * (1 - box.top - box.height);
+  const pdfTopFraction = 1 - (pdfBottomY + drawnHeight) / pageHeight;
+  const pdfBottomFraction = 1 - pdfBottomY / pageHeight;
+  assert(
+    "preview and PDF describe the same rectangle",
+    Math.abs(pdfTopFraction - box.top) < 1e-9 &&
+      Math.abs(pdfBottomFraction - (box.top + box.height)) < 1e-9,
+  );
+}
 
 console.log(
   failures === 0

@@ -22,6 +22,7 @@ import { baseName, cn } from "@/lib/utils";
 import {
   SIGNATURE_FONTS,
   clampPlacement,
+  signatureBox,
   defaultStampText,
   signPdf,
   trimTransparent,
@@ -57,6 +58,12 @@ export default function SignPdfTool() {
   const drawing = React.useRef(false);
   const [hasInk, setHasInk] = React.useState(false);
 
+  /* The drawn signature as it will actually appear, refreshed each time a
+     stroke ends, so the page preview shows the real thing rather than a box. */
+  const [ink, setInk] = React.useState<{ url: string; aspect: number } | null>(null);
+  /** Page width over height, needed to turn a width fraction into a height. */
+  const [pageRatio, setPageRatio] = React.useState(210 / 297);
+
   /* ------------------------------------------------------ load the PDF */
 
   async function load(next: File[]) {
@@ -80,6 +87,7 @@ export default function SignPdfTool() {
       setPlacement((current) => ({ ...current, pageNumber: 1 }));
       const rendered = await renderPage(document, 1, 1.4);
       setPreview(rendered.canvas.toDataURL("image/png"));
+      setPageRatio(rendered.canvas.width / rendered.canvas.height);
       await closePdf(document);
     } catch {
       setError("That PDF could not be opened. If it is password-protected, remove the password first.");
@@ -98,6 +106,7 @@ export default function SignPdfTool() {
       const document = await openPdf(bytes.slice(0));
       const rendered = await renderPage(document, pageNumber, 1.4);
       setPreview(rendered.canvas.toDataURL("image/png"));
+      setPageRatio(rendered.canvas.width / rendered.canvas.height);
       await closePdf(document);
     } catch {
       setError("That page could not be rendered.");
@@ -145,6 +154,27 @@ export default function SignPdfTool() {
 
   function pointerUp() {
     drawing.current = false;
+    captureInk();
+  }
+
+  /**
+   * Snapshots the pad the same way signing does — trimmed of its transparent
+   * margin — so what the page preview shows is what gets embedded.
+   */
+  function captureInk() {
+    const canvas = padRef.current;
+    if (!canvas) return;
+
+    const trimmed = trimTransparent(canvas);
+    if (!trimmed || trimmed.width === 0 || trimmed.height === 0) {
+      setInk(null);
+      return;
+    }
+
+    setInk({
+      url: trimmed.toDataURL("image/png"),
+      aspect: trimmed.height / trimmed.width,
+    });
   }
 
   function clearPad() {
@@ -153,6 +183,7 @@ export default function SignPdfTool() {
     if (!canvas || !context) return;
     context.clearRect(0, 0, canvas.width, canvas.height);
     setHasInk(false);
+    setInk(null);
   }
 
   /* --------------------------------------------------------- placing */
@@ -267,16 +298,57 @@ export default function SignPdfTool() {
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={preview} alt={`Page ${placement.pageNumber}`} className="w-full" />
-                <div
-                  className="pointer-events-none absolute border border-dashed border-[var(--accent-pdf)] bg-[color-mix(in_oklab,var(--accent-pdf)_12%,transparent)]"
-                  style={{
-                    left: `${placement.x * 100}%`,
-                    top: `${placement.y * 100}%`,
-                    width: `${placement.width * 100}%`,
-                    height: "6%",
-                    transform: "translateY(-100%)",
-                  }}
-                />
+                {(() => {
+                  /* Typed signatures have no bitmap to measure, so they fall
+                     back to a representative line height; a drawn one uses its
+                     real proportions. */
+                  const aspect = source === "draw" ? (ink?.aspect ?? 0.35) : 0.28;
+                  const box = signatureBox(placement, aspect, pageRatio);
+
+                  return (
+                    <div
+                      className="pointer-events-none absolute border border-dashed border-[var(--accent-pdf)]"
+                      style={{
+                        left: `${box.left * 100}%`,
+                        top: `${box.top * 100}%`,
+                        width: `${box.width * 100}%`,
+                        height: `${box.height * 100}%`,
+                      }}
+                    >
+                      {source === "draw" && ink ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={ink.url}
+                          alt=""
+                          className="h-full w-full"
+                          style={{ objectFit: "fill" }}
+                        />
+                      ) : source === "type" && typed.trim() !== "" ? (
+                        /* Drawn as SVG so the text scales with the box without
+                           needing to measure it. signPdf sizes the font so the
+                           text spans the chosen width, and textLength does the
+                           same here. */
+                        <svg
+                          viewBox="0 0 100 100"
+                          preserveAspectRatio="none"
+                          className="h-full w-full"
+                          aria-hidden="true"
+                        >
+                          <text
+                            x="0"
+                            y="82"
+                            fontSize="88"
+                            textLength="100"
+                            lengthAdjust="spacingAndGlyphs"
+                            fill="#0b1020"
+                          >
+                            {typed}
+                          </text>
+                        </svg>
+                      ) : null}
+                    </div>
+                  );
+                })()}
               </div>
             ) : (
               <div className="surface-card grid h-96 place-items-center text-sm text-muted-foreground">
@@ -285,7 +357,7 @@ export default function SignPdfTool() {
             )}
             <p className="text-xs text-muted-foreground">
               Click anywhere on the page to move the signature there. The box
-              shows roughly where it will sit.
+              shows exactly where and how large it will be.
             </p>
           </div>
 

@@ -25,6 +25,41 @@ export interface Placement {
   pageNumber: number;
 }
 
+/** Where the signature sits, as fractions of the page from its top-left. */
+export interface SignatureBox {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
+/**
+ * The rectangle the signature will occupy.
+ *
+ * Shared by the page preview and the code that writes the PDF, because they
+ * previously disagreed in three ways at once: the preview used a hardcoded 6%
+ * height regardless of the signature's shape, and it shifted the box up by its
+ * own height — so it sat entirely above where the signature actually landed,
+ * with no overlap at all. `placement.y` is the TOP edge, and the signature
+ * grows downward from it.
+ *
+ * `signatureAspect` is the image's height divided by its width;
+ * `pageRatio` is the page's width divided by its height, which is what converts
+ * a width fraction into a height fraction on a non-square page.
+ */
+export function signatureBox(
+  placement: Placement,
+  signatureAspect: number,
+  pageRatio: number,
+): SignatureBox {
+  return {
+    left: placement.x,
+    top: placement.y,
+    width: placement.width,
+    height: placement.width * signatureAspect * pageRatio,
+  };
+}
+
 export interface DatedStamp {
   /** Printed under the signature, e.g. "Signed 18 August 2026". */
   text: string;
@@ -86,6 +121,7 @@ export async function signPdf({
   const { width: pageWidth, height: pageHeight } = page.getSize();
 
   const drawWidth = pageWidth * placement.width;
+  const pageRatio = pageWidth / pageHeight;
 
   // The preview is measured from the top; PDF coordinates run from the bottom.
   const left = pageWidth * placement.x;
@@ -95,12 +131,14 @@ export async function signPdf({
 
   if (signature && signature.length > 0) {
     const image = await document.embedPng(signature);
-    // Preserve the signature's aspect ratio; only the width is chosen.
-    drawnHeight = drawWidth * (image.height / image.width);
+    // Through signatureBox, so the preview cannot describe a different
+    // rectangle from the one actually drawn.
+    const box = signatureBox(placement, image.height / image.width, pageRatio);
+    drawnHeight = box.height * pageHeight;
     page.drawImage(image, {
-      x: left,
-      y: topFromBottom - drawnHeight,
-      width: drawWidth,
+      x: box.left * pageWidth,
+      y: pageHeight * (1 - box.top - box.height),
+      width: box.width * pageWidth,
       height: drawnHeight,
     });
   } else if (typed && typed.text.trim() !== "") {
