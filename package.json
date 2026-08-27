@@ -46,7 +46,8 @@
     "check:science": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-science.ts",
     "dates": "node --experimental-strip-types scripts/tool-dates.ts",
     "new:tool": "node --experimental-strip-types scripts/new-tool.ts",
-    "check:net": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-net.ts"
+    "check:net": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-net.ts",
+    "check:markdown-medium": "node --experimental-strip-types --import ./scripts/alias-hook.mjs scripts/check-markdown-medium.ts"
   },
   "packageManager": "pnpm@11.10.0",
   "dependencies": {

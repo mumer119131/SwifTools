@@ -84,6 +84,7 @@ const registry: Record<string, React.ComponentType> = {
   "html-formatter": lazyTool(() => import("@/tools/html-formatter/Tool")),
   "regex-tester": lazyTool(() => import("@/tools/regex-tester/Tool")),
   "uuid-generator": lazyTool(() => import("@/tools/uuid-generator/Tool")),
+  "markdown-to-medium": lazyTool(() => import("@/tools/markdown-to-medium/Tool")),
   "markdown-to-html": lazyTool(() => import("@/tools/markdown-to-html/Tool")),
   "html-encode-decode": lazyTool(() => import("@/tools/html-encode-decode/Tool")),
   "url-slug-generator": lazyTool(() => import("@/tools/url-slug-generator/Tool")),

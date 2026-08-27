@@ -113,6 +113,12 @@ const expectations: [string, string][] = [
   ["water", "water-bill-calculator"],
   ["roast", "roast-generator"],
   ["crop", "crop-image"],
+  ["markdown to medium", "markdown-to-medium"],
+  ["paste markdown into medium", "markdown-to-medium"],
+  ["does medium support markdown", "markdown-to-medium"],
+  // Must not steal the plain converter's query.
+  ["markdown to html", "markdown-to-html"],
+  ["md to html", "markdown-to-html"],
   ["what is my ip", "what-is-my-ip"],
   ["my ip address", "what-is-my-ip"],
   ["whats my ip", "what-is-my-ip"],

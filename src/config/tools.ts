@@ -92,6 +92,7 @@ import { colorPicker } from "@/tools/color-picker/meta";
 import { imageColorPicker } from "@/tools/image-color-picker/meta";
 import { htmlFormatter } from "@/tools/html-formatter/meta";
 import { jsonFormatter } from "@/tools/json-formatter/meta";
+import { markdownToMedium } from "@/tools/markdown-to-medium/meta";
 import { markdownToHtml } from "@/tools/markdown-to-html/meta";
 import { regexTester } from "@/tools/regex-tester/meta";
 import { urlEncodeDecode } from "@/tools/url-encode-decode/meta";
@@ -368,6 +369,7 @@ export const tools: readonly Tool[] = [
   jsonTreeViewer,
   jwtDecoder,
   uuidGenerator,
+  markdownToMedium,
   markdownToHtml,
   htmlEncodeDecode,
   urlSlugGenerator,

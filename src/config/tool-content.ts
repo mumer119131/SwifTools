@@ -124,6 +124,7 @@ import { lengthConverterContent } from "@/tools/length-converter/content";
 import { listRandomizerContent } from "@/tools/list-randomizer/content";
 import { loanCalculatorContent } from "@/tools/loan-calculator/content";
 import { loremIpsumGeneratorContent } from "@/tools/lorem-ipsum-generator/content";
+import { markdownToMediumContent } from "@/tools/markdown-to-medium/content";
 import { markdownToHtmlContent } from "@/tools/markdown-to-html/content";
 import { md5HashGeneratorContent } from "@/tools/md5-hash-generator/content";
 import { mealPlannerContent } from "@/tools/meal-planner/content";
@@ -360,6 +361,7 @@ export const contentBySlug: Record<string, ToolContent> = {
   "list-randomizer": listRandomizerContent,
   "loan-calculator": loanCalculatorContent,
   "lorem-ipsum-generator": loremIpsumGeneratorContent,
+  "markdown-to-medium": markdownToMediumContent,
   "markdown-to-html": markdownToHtmlContent,
   "md5-hash-generator": md5HashGeneratorContent,
   "meal-planner": mealPlannerContent,
