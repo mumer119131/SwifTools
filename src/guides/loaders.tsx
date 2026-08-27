@@ -2,6 +2,9 @@ import type { ComponentType } from "react";
 
 import ChemistryCalculationsGuide from "@/guides/chemistry-calculations/content";
 import ColourFormatsGuide from "@/guides/colour-formats/content";
+import CountingTextGuide from "@/guides/counting-text/content";
+import DataSizesGuide from "@/guides/data-sizes/content";
+import FormattingAndMinifyingGuide from "@/guides/formatting-and-minifying/content";
 import HouseholdRunningCostsGuide from "@/guides/household-running-costs/content";
 import KitchenConversionsGuide from "@/guides/kitchen-conversions/content";
 import MechanicsFormulasGuide from "@/guides/mechanics-formulas/content";
@@ -42,6 +45,9 @@ export const guideContent: Record<string, ComponentType> = {
   "household-running-costs": HouseholdRunningCostsGuide,
   "kitchen-conversions": KitchenConversionsGuide,
   "mechanics-formulas": MechanicsFormulasGuide,
+  "counting-text": CountingTextGuide,
+  "data-sizes": DataSizesGuide,
+  "formatting-and-minifying": FormattingAndMinifyingGuide,
   "colour-formats": ColourFormatsGuide,
   "metric-imperial": MetricImperialGuide,
   "measuring-a-room": MeasuringARoomGuide,

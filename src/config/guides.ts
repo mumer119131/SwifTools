@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Braces, ChefHat, CircuitBoard, Clock, Dices, FileDown, FileText, FlaskConical, ImageIcon, KeyRound, LayoutGrid, MessageSquare, Network, Palette, PiggyBank, Rocket, Regex, Ruler, Search, ShieldCheck, Scale } from "lucide-react";
+import { Braces, ChefHat, HardDrive, CircuitBoard, Clock, Dices, FileDown, FileText, FlaskConical, ImageIcon, KeyRound, LayoutGrid, MessageSquare, Network, Palette, PiggyBank, Rocket, Type, Regex, Ruler, Search, ShieldCheck, Scale } from "lucide-react";
 
 /**
  * The guides registry.
@@ -584,6 +584,92 @@ export const guides: Guide[] = [
       "subscription-tracker",
       "unit-price-calculator",
       "fuel-cost-calculator",
+    ],
+  },
+  {
+    slug: "data-sizes",
+    title: "Bytes, bits and drive sizes",
+    heading: "Why your 1TB drive says 931GB, and other size confusions",
+    description:
+      "Bits versus bytes, the 1000-versus-1024 split that eats 69GB of a terabyte, which convention applies where, and the hidden 33% Base64 adds.",
+    keywords: [
+      "why is my 1tb drive 931gb",
+      "mb vs mib",
+      "bits vs bytes",
+      "what is a kibibyte",
+      "megabits vs megabytes",
+      "why is my internet slower than advertised",
+      "how big is a gigabyte",
+    ],
+    icon: HardDrive,
+    published: "2026-08-25",
+    updated: "2026-08-25",
+    minutes: 8,
+    tools: [
+      "data-converter",
+      "compress-image",
+      "compress-pdf",
+      "image-to-base64",
+      "base64-encode-decode",
+    ],
+  },
+  {
+    slug: "formatting-and-minifying",
+    title: "Formatting and minifying",
+    heading: "Formatting and minifying: the same tool pointed both ways",
+    description:
+      "Why a formatter doubles as a syntax check, what minifying actually removes, why renaming variables is safe, and where it stops being safe.",
+    keywords: [
+      "what does minifying do",
+      "why minify javascript",
+      "formatting vs minifying",
+      "what is a source map",
+      "is minified code safe",
+      "does minifying replace gzip",
+      "why is my json invalid trailing comma",
+    ],
+    icon: Braces,
+    published: "2026-08-25",
+    updated: "2026-08-25",
+    minutes: 8,
+    tools: [
+      "js-formatter",
+      "js-minifier",
+      "css-formatter",
+      "css-minifier",
+      "html-formatter",
+      "sql-formatter",
+      "json-formatter",
+    ],
+  },
+  {
+    slug: "counting-text",
+    title: "Counting words and characters",
+    heading: "Why two tools disagree about how long your text is",
+    description:
+      "What counts as a word, why one emoji can be 1, 8 or 25 depending on how you ask, and the invisible characters that quietly break comparisons.",
+    keywords: [
+      "what counts as a word",
+      "why do character counts differ",
+      "how many characters is an emoji",
+      "smart quotes syntax error",
+      "non breaking space problem",
+      "crlf vs lf line endings",
+      "characters vs bytes",
+    ],
+    icon: Type,
+    published: "2026-08-25",
+    updated: "2026-08-25",
+    minutes: 9,
+    tools: [
+      "word-counter",
+      "character-counter",
+      "unicode-lookup",
+      "text-diff",
+      "remove-duplicate-lines",
+      "case-converter",
+      "strip-html",
+      "remove-line-breaks",
     ],
   },
 ];
