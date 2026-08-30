@@ -42,48 +42,60 @@ export default function AppsPage() {
 
             return (
               <article key={app.packageName} className="surface-card p-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="flex items-start gap-3">
-                    <Image
-                      src={app.icon}
-                      alt=""
-                      width={48}
-                      height={48}
-                      className="size-12 shrink-0 rounded-xl border border-border"
-                    />
-                    <div>
-                      <h2 className="text-[0.9375rem] font-medium text-foreground">{app.name}</h2>
-                      <p className="text-sm text-muted-foreground">{app.tagline}</p>
+                {/*
+                  One row: the icon, then a single column holding everything
+                  else. The previous version nested a flex-wrap inside a
+                  justify-between with no min-w-0, so a long name like
+                  "Compressor: Video, Image & PDF" could not shrink and shoved
+                  the title below its own icon.
+                */}
+                <div className="flex items-start gap-4">
+                  <Image
+                    src={app.icon}
+                    alt=""
+                    width={48}
+                    height={48}
+                    className="size-12 shrink-0 rounded-xl border border-border"
+                  />
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
+                      <div className="min-w-0">
+                        <h2 className="text-[0.9375rem] font-medium text-foreground">
+                          {app.name}
+                        </h2>
+                        <p className="mt-0.5 text-sm text-muted-foreground">{app.tagline}</p>
+                      </div>
+
+                      <a
+                        href={playStoreUrl(app)}
+                        target="_blank"
+                        rel="noopener"
+                        className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border px-4 text-sm text-foreground transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]"
+                      >
+                        Google Play
+                        <ArrowUpRight className="size-3.5" strokeWidth={1.75} />
+                      </a>
                     </div>
+
+                    <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                      {app.description}
+                    </p>
+
+                    {related.length > 0 ? (
+                      <p className="mt-4 border-t border-border pt-4 text-sm text-muted-foreground">
+                        On this site:{" "}
+                        {related.map((tool, index) => (
+                          <span key={tool.slug}>
+                            {index > 0 ? ", " : ""}
+                            <Link href={toolHref(tool)}>{tool.name}</Link>
+                          </span>
+                        ))}
+                        .
+                      </p>
+                    ) : null}
                   </div>
-
-                  <a
-                    href={playStoreUrl(app)}
-                    target="_blank"
-                    rel="noopener"
-                    className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border px-4 text-sm text-foreground transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]"
-                  >
-                    Google Play
-                    <ArrowUpRight className="size-3.5" strokeWidth={1.75} />
-                  </a>
                 </div>
-
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  {app.description}
-                </p>
-
-                {related.length > 0 ? (
-                  <p className="mt-4 border-t border-border pt-4 text-sm text-muted-foreground">
-                    On this site:{" "}
-                    {related.map((tool, index) => (
-                      <span key={tool.slug}>
-                        {index > 0 ? ", " : ""}
-                        <Link href={toolHref(tool)}>{tool.name}</Link>
-                      </span>
-                    ))}
-                    .
-                  </p>
-                ) : null}
               </article>
             );
           })}

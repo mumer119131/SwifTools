@@ -110,28 +110,28 @@ export function ToolShell({ tool, children }: ToolShellProps) {
               nothing for those.
             */}
             {app ? (
-              <aside className="mt-14 flex flex-col gap-4 rounded-lg border border-border bg-surface p-5 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-start gap-3">
-                  <Image
-                    src={app.icon}
-                    alt=""
-                    width={40}
-                    height={40}
-                    className="size-10 shrink-0 rounded-lg border border-border"
-                  />
-                  <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
+              <aside className="mt-14 flex items-start gap-4 rounded-lg border border-border bg-surface p-5">
+                <Image
+                  src={app.icon}
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="size-10 shrink-0 rounded-lg border border-border"
+                />
+                <div className="flex min-w-0 flex-1 flex-wrap items-center justify-between gap-x-4 gap-y-3">
+                  <p className="min-w-0 max-w-xl text-sm leading-relaxed text-muted-foreground">
                     {app.crossLink}
                   </p>
+                  <a
+                    href={playStoreUrl(app)}
+                    target="_blank"
+                    rel="noopener"
+                    className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border px-4 text-sm text-foreground transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]"
+                  >
+                    {app.name} on Google Play
+                    <ArrowUpRight className="size-3.5" strokeWidth={1.75} />
+                  </a>
                 </div>
-                <a
-                  href={playStoreUrl(app)}
-                  target="_blank"
-                  rel="noopener"
-                  className="inline-flex h-9 shrink-0 items-center gap-1.5 self-start rounded-full border border-border px-4 text-sm text-foreground transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] sm:self-auto"
-                >
-                  {app.name} on Google Play
-                  <ArrowUpRight className="size-3.5" strokeWidth={1.75} />
-                </a>
               </aside>
             ) : null}
 
