@@ -649,6 +649,16 @@ export const populatedCategories = categories.filter((category) =>
 
 const toolByPath = new Map(tools.map((tool) => [`${tool.category}/${tool.slug}`, tool]));
 
+/**
+ * Finds a tool by slug alone.
+ *
+ * Slugs are unique across categories, so this is unambiguous — `getTool` needs
+ * the category only because it keys the path map that routing uses.
+ */
+export function getToolBySlug(slug: string): Tool | undefined {
+  return tools.find((tool) => tool.slug === slug);
+}
+
 export function getTool(category: string, slug: string): Tool | undefined {
   return toolByPath.get(`${category}/${slug}`);
 }

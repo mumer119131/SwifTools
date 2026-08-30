@@ -1,7 +1,8 @@
-import { Lock, Server, Zap } from "lucide-react";
+import { Lock, Server, Smartphone, Zap } from "lucide-react";
 
 import { getCategory } from "@/config/categories";
 import { RecordVisit } from "@/components/shared/RecordVisit";
+import { appForTool, playStoreUrl } from "@/config/apps";
 import { getToolContent } from "@/config/tool-content";
 import { getRelatedTools, type Tool } from "@/config/tools";
 import { Breadcrumbs, type Crumb } from "@/components/shared/Breadcrumbs";
@@ -25,6 +26,7 @@ export function ToolShell({ tool, children }: ToolShellProps) {
   const related = getRelatedTools(tool);
   // Prose lives outside the registry so it never reaches the client bundle.
   const { steps, notes, faq } = getToolContent(tool.slug);
+  const app = appForTool(tool.slug);
   const Icon = tool.icon;
 
   const crumbs: Crumb[] = [
@@ -97,6 +99,30 @@ export function ToolShell({ tool, children }: ToolShellProps) {
                   ))}
                 </div>
               </section>
+            ) : null}
+
+            {/*
+              Only the handful of tools with a genuinely matching app get this,
+              and only where the app answers a limitation of the page itself —
+              the converter needs a network for rates, the app does not. A plug
+              on an unrelated tool would be an advert; appForTool returns
+              nothing for those.
+            */}
+            {app ? (
+              <aside className="mt-14 flex flex-col gap-3 rounded-lg border border-border bg-surface p-5 sm:flex-row sm:items-center sm:justify-between">
+                <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
+                  {app.crossLink}
+                </p>
+                <a
+                  href={playStoreUrl(app)}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex h-9 shrink-0 items-center gap-1.5 self-start rounded-full border border-border px-4 text-sm text-foreground transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] sm:self-auto"
+                >
+                  <Smartphone className="size-3.5" strokeWidth={1.75} />
+                  {app.name} on Google Play
+                </a>
+              </aside>
             ) : null}
 
             {steps?.length ? (

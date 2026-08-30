@@ -30,6 +30,7 @@ import { getToolContent } from "@/config/tool-content";
 import { buildToolMetadata } from "@/lib/seo";
 import { pageTitle } from "@/config/site";
 import { guides } from "@/config/guides";
+import { appForTool, playApps, playStoreUrl } from "@/config/apps";
 import { buildCategoryMetadata } from "@/lib/seo";
 
 let failures = 0;
@@ -202,6 +203,50 @@ if (noSteps.length > 0) {
 const totalNoteWords = needsContent.reduce(
   (sum, tool) => sum + (getToolContent(tool.slug).notes?.join(" ").split(/\s+/).length ?? 0),
   0,
+);
+
+/* --------------------------------------------- app links point somewhere real */
+
+/*
+ * The store links are hand-written package names, so a typo would produce a
+ * dead Play Store page that nothing else would catch. The cross-links matter
+ * more: a plug on an unrelated tool is an advert, so appForTool must stay
+ * silent everywhere except the pages where the app answers a real limitation.
+ */
+for (const app of playApps) {
+  if (!/^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$/.test(app.packageName)) {
+    fail(`${app.name}: "${app.packageName}" is not a valid Android package name`);
+  }
+  if (!playStoreUrl(app).startsWith("https://play.google.com/store/apps/details?id=")) {
+    fail(`${app.name}: store URL is malformed`);
+  }
+
+  for (const slug of app.relatedTools) {
+    if (!publishedTools.some((tool) => tool.slug === slug)) {
+      fail(`${app.name} points at "${slug}", which is not a live tool`);
+    }
+  }
+
+  // A cross-link with nowhere to appear is dead copy nobody will notice.
+  if (app.crossLink && app.relatedTools.length === 0) {
+    fail(`${app.name} has cross-link copy but no tools to show it on`);
+  }
+}
+
+const withCallout = publishedTools.filter((tool) => appForTool(tool.slug));
+const expected = playApps
+  .filter((app) => app.crossLink)
+  .flatMap((app) => app.relatedTools).length;
+
+if (withCallout.length !== expected) {
+  fail(`${withCallout.length} tools show an app callout, expected ${expected}`);
+}
+if (withCallout.length > 8) {
+  fail(`${withCallout.length} tools show an app callout — that is promotion, not help`);
+}
+
+console.log(
+  `  ok    ${playApps.length} apps link out cleanly, callouts on ${withCallout.length} tools`,
 );
 
 /* ------------------------------------------ titles survive Google's clipping */

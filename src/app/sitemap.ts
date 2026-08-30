@@ -112,7 +112,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       // Planned tools are listed but ranked below the ones that actually work.
       priority: tool.status === "live" ? 0.7 : 0.3,
     })),
-    ...["/about", "/contact", "/privacy", "/terms"].map((path) => ({
+    ...["/apps", "/about", "/contact", "/privacy", "/terms"].map((path) => ({
       url: absoluteUrl(path),
       lastModified,
       changeFrequency: "yearly" as const,
