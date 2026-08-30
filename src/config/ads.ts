@@ -53,6 +53,34 @@ export const adsConfig = {
  * not bid, because buyers cannot verify the inventory is legitimately yours.
  * The file must be served at the domain root as plain text.
  */
+/**
+ * The app-ads.txt body.
+ *
+ * Same records as ads.txt, but it authorises the Android apps rather than this
+ * site, and crawlers look for it at the root of whichever website each Play
+ * Store listing declares as the developer site — not at the app's own domain,
+ * which it does not have.
+ *
+ * So it is served here in case the listings ever point at this domain. While
+ * they point elsewhere this file is simply unread, which costs nothing; the
+ * alternative is changing the Play listing and silently breaking app demand
+ * until someone notices the 404.
+ */
+export function appAdsTxt(): string {
+  if (!adsConfig.enabled) {
+    return "# No advertising is configured for these apps.\n";
+  }
+
+  const publisherId = adsConfig.clientId.replace(/^ca-/, "");
+
+  return [
+    "# Authorised digital sellers for the apps published by this developer.",
+    "# https://iabtechlab.com/app-ads-txt/",
+    `google.com, ${publisherId}, DIRECT, ${GOOGLE_SELLER_ID}`,
+    "",
+  ].join("\n");
+}
+
 export function adsTxt(): string {
   if (!adsConfig.enabled) {
     return "# No advertising is configured for this site.\n";
