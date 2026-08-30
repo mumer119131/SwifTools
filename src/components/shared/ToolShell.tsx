@@ -1,4 +1,5 @@
-import { Lock, Server, Smartphone, Zap } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, Lock, Server, Zap } from "lucide-react";
 
 import { getCategory } from "@/config/categories";
 import { RecordVisit } from "@/components/shared/RecordVisit";
@@ -109,18 +110,27 @@ export function ToolShell({ tool, children }: ToolShellProps) {
               nothing for those.
             */}
             {app ? (
-              <aside className="mt-14 flex flex-col gap-3 rounded-lg border border-border bg-surface p-5 sm:flex-row sm:items-center sm:justify-between">
-                <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
-                  {app.crossLink}
-                </p>
+              <aside className="mt-14 flex flex-col gap-4 rounded-lg border border-border bg-surface p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-start gap-3">
+                  <Image
+                    src={app.icon}
+                    alt=""
+                    width={40}
+                    height={40}
+                    className="size-10 shrink-0 rounded-lg border border-border"
+                  />
+                  <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
+                    {app.crossLink}
+                  </p>
+                </div>
                 <a
                   href={playStoreUrl(app)}
                   target="_blank"
                   rel="noopener"
                   className="inline-flex h-9 shrink-0 items-center gap-1.5 self-start rounded-full border border-border px-4 text-sm text-foreground transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)] sm:self-auto"
                 >
-                  <Smartphone className="size-3.5" strokeWidth={1.75} />
                   {app.name} on Google Play
+                  <ArrowUpRight className="size-3.5" strokeWidth={1.75} />
                 </a>
               </aside>
             ) : null}

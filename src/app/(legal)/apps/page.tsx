@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, Smartphone } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
 
 import { JsonLdScript } from "@/components/shared/JsonLd";
 import { playApps, playStoreUrl } from "@/config/apps";
@@ -43,9 +44,13 @@ export default function AppsPage() {
               <article key={app.packageName} className="surface-card p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex items-start gap-3">
-                    <span className="grid size-10 shrink-0 place-items-center rounded-md border border-border bg-background">
-                      <Smartphone className="size-5 text-foreground" strokeWidth={1.75} />
-                    </span>
+                    <Image
+                      src={app.icon}
+                      alt=""
+                      width={48}
+                      height={48}
+                      className="size-12 shrink-0 rounded-xl border border-border"
+                    />
                     <div>
                       <h2 className="text-[0.9375rem] font-medium text-foreground">{app.name}</h2>
                       <p className="text-sm text-muted-foreground">{app.tagline}</p>

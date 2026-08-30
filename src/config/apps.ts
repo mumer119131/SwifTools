@@ -15,6 +15,8 @@
 export interface PlayApp {
   /** Play Store package name, which is also its store URL. */
   packageName: string;
+  /** Store icon, saved under public/apps rather than hotlinked from Google. */
+  icon: string;
   name: string;
   /** One line, shown under the name. */
   tagline: string;
@@ -28,39 +30,54 @@ export interface PlayApp {
 
 export const playApps: PlayApp[] = [
   {
+    packageName: "com.umerlabs.compressor",
+    icon: "/apps/compressor.png",
+    name: "Compressor: Video, Image & PDF",
+    tagline: "Shrink videos, photos and PDFs without uploading them.",
+    description:
+      "Pick a file, choose a size, and get a smaller version back. Compression runs on the phone itself, so nothing is uploaded and it works with no connection — the same principle this site is built on, applied to video, which a browser cannot realistically do.",
+    relatedTools: ["compress-image", "compress-pdf"],
+    crossLink:
+      "This handles images and PDFs. For video — which a browser cannot compress at any sensible speed — there is an Android app that does all three on-device, with nothing uploaded.",
+  },
+  {
     packageName: "com.umerlabs.currencyconverter",
+    icon: "/apps/currencyconverter.png",
     name: "Currency Converter Offline",
     tagline: "Convert currencies with no connection at all.",
     description:
-      "Rates are stored on the device, so conversions keep working on a plane, on a foreign SIM, or anywhere the signal has gone. The web version on this site fetches live rates and needs a connection to do it, which is exactly the gap this fills.",
+      "Rates are downloaded once and kept on the device, so conversions keep working at a foreign ATM, at a border, or anywhere the signal has gone. The web version fetches live rates and needs a network to be accurate, which is exactly the gap this fills.",
     relatedTools: ["currency-converter"],
     crossLink:
-      "This tool needs a connection to fetch today's rates. If you want conversions that keep working without one, there is an offline Android version.",
+      "This tool fetches today's rates, so it needs a connection. If you want conversions that keep working without one, there is an offline Android version.",
   },
   {
     packageName: "com.umerlabs.spinthewheel",
+    icon: "/apps/spinthewheel.png",
     name: "Spin The Wheel — Random Picker",
-    tagline: "A spinning wheel for decisions and draws.",
+    tagline: "Build a wheel, spin it, let it decide.",
     description:
-      "Put in the options, spin, and let it choose. Useful for picking a winner, settling an argument, or deciding what to eat, with your lists saved between spins rather than retyped each time.",
+      "Customisable wheels for whatever needs deciding — a restaurant, a name drawn at random, a class lottery, an argument settled. Wheels are saved, so a list you use often is not retyped every time.",
     relatedTools: ["wheel-spinner", "decision-maker", "random-name-picker", "list-randomizer"],
-    crossLink: "There is an Android version of this that keeps your lists between spins.",
-  },
-  {
-    packageName: "com.umerlabs.watersort",
-    name: "Water Sort — Color Puzzle",
-    tagline: "Pour the colours until each tube holds one.",
-    description:
-      "A colour-sorting puzzle: pour between tubes until every tube holds a single colour. Plays offline, one level at a time, with no timer to rush you.",
-    relatedTools: ["memory-game", "sudoku-generator"],
+    crossLink: "There is an Android version that saves your wheels between spins.",
   },
   {
     packageName: "com.umerlabs.fakecall",
+    icon: "/apps/fakecall.png",
     name: "Fake Call — Prank Call Dialer",
-    tagline: "Schedule a convincing incoming call.",
+    tagline: "Make your phone ring exactly when you need it to.",
     description:
-      "Sets up a realistic incoming call on a delay, so your phone rings when you want it to. Handy for stepping out of a conversation that has run long, and for the prank it is named after.",
+      "Schedules a realistic incoming call on a delay, so there is a way out of a meeting that will not end or a conversation that has run long. Also, as the name admits, a decent prank.",
     relatedTools: [],
+  },
+  {
+    packageName: "com.umerlabs.watersort",
+    icon: "/apps/watersort.png",
+    name: "Water Sort — Color Puzzle",
+    tagline: "Pour the colours until each tube holds one.",
+    description:
+      "Pour coloured water between tubes until every tube holds a single colour. Easy to learn and quietly absorbing, with no timer hurrying you along — the colours stack up fast enough on their own.",
+    relatedTools: ["memory-game", "sudoku-generator"],
   },
 ];
 

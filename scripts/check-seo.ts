@@ -14,6 +14,7 @@
  *   pnpm check:seo
  */
 
+import { existsSync } from "node:fs";
 import process from "node:process";
 
 import {
@@ -219,6 +220,12 @@ for (const app of playApps) {
   }
   if (!playStoreUrl(app).startsWith("https://play.google.com/store/apps/details?id=")) {
     fail(`${app.name}: store URL is malformed`);
+  }
+
+  // The icons are downloaded files, not hotlinks, so a rename would 404 in the
+  // page rather than falling back to anything.
+  if (!existsSync(`public${app.icon}`)) {
+    fail(`${app.name}: icon ${app.icon} is not in public/`);
   }
 
   for (const slug of app.relatedTools) {
