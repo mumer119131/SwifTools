@@ -28,6 +28,15 @@ export interface Guide {
   /** Roughly how long it takes to read, in minutes. */
   minutes: number;
   /**
+   * Shown on the homepage.
+   *
+   * The site otherwise opens on nothing but grids of tools, which buries two
+   * dozen written guides in the footer — a loss for anyone who would rather
+   * read the answer than operate a widget. Chosen for range rather than
+   * recency, so the homepage shows the site writes across subjects.
+   */
+  featured?: boolean;
+  /**
    * Tools this guide is the front door for.
    *
    * Rendered as a "tools mentioned" rail, and used to link the two directions:
@@ -39,6 +48,7 @@ export interface Guide {
 export const guides: Guide[] = [
   {
     slug: "image-formats",
+    featured: true,
     title: "Choosing an image format",
     heading: "PNG, JPG, WebP or AVIF: which should you use?",
     description:
@@ -534,6 +544,7 @@ export const guides: Guide[] = [
   },
   {
     slug: "kitchen-conversions",
+    featured: true,
     title: "Kitchen conversions",
     heading: "Cups, ovens and scaling: the conversions recipes get wrong",
     description:
@@ -588,6 +599,7 @@ export const guides: Guide[] = [
   },
   {
     slug: "data-sizes",
+    featured: true,
     title: "Bytes, bits and drive sizes",
     heading: "Why your 1TB drive says 931GB, and other size confusions",
     description:
@@ -673,6 +685,9 @@ export const guides: Guide[] = [
     ],
   },
 ];
+
+/** The handful shown on the homepage, in registry order. */
+export const featuredGuides = guides.filter((guide) => guide.featured);
 
 export function getGuide(slug: string): Guide | undefined {
   return guides.find((guide) => guide.slug === slug);

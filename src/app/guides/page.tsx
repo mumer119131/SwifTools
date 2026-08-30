@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight, Clock } from "lucide-react";
-
+import { GuideCard } from "@/components/shared/GuideCard";
 import { JsonLdScript } from "@/components/shared/JsonLd";
-import { guides, guideHref } from "@/config/guides";
+import { guideHref, guides } from "@/config/guides";
 import { absoluteUrl, siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Guides",
@@ -25,35 +22,9 @@ export default function GuidesPage() {
         </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {guides.map((guide) => {
-            const Icon = guide.icon;
-            return (
-              <Link
-                key={guide.slug}
-                href={guideHref(guide)}
-                className={cn(
-                  "surface-card surface-card-interactive group flex h-full flex-col gap-3 p-6",
-                  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]",
-                )}
-              >
-                <span className="grid size-10 place-items-center rounded-md border border-border bg-background">
-                  <Icon className="size-5 text-foreground" strokeWidth={1.75} />
-                </span>
-                <h2 className="text-[0.9375rem] font-medium text-foreground">{guide.title}</h2>
-                <p className="text-sm leading-relaxed text-muted-foreground">{guide.description}</p>
-                <span className="mt-auto flex items-center gap-3 pt-2 text-xs text-subtle-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <Clock className="size-3.5" strokeWidth={1.75} />
-                    {guide.minutes} min
-                  </span>
-                  <ArrowRight
-                    className="size-3.5 transition-transform group-hover:translate-x-0.5"
-                    strokeWidth={1.75}
-                  />
-                </span>
-              </Link>
-            );
-          })}
+          {guides.map((guide) => (
+            <GuideCard key={guide.slug} guide={guide} />
+          ))}
         </div>
       </div>
 

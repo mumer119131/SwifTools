@@ -9,6 +9,8 @@ import {
   publishedTools,
   toolCountByCategory,
 } from "@/config/tools";
+import { featuredGuides, guides } from "@/config/guides";
+import { GuideCard } from "@/components/shared/GuideCard";
 import { RecentTools } from "@/components/home/RecentTools";
 import { SearchTrigger } from "@/components/layout/SearchCommand";
 import { ToolCard } from "@/components/shared/ToolCard";
@@ -173,6 +175,40 @@ export default function HomePage() {
             {featured.map((tool, index) => (
               <Reveal key={`${tool.category}/${tool.slug}`} delay={stagger(index)}>
                 <ToolCard tool={tool} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {/* --------------------------------------------------------- Guides */}
+      {featuredGuides.length > 0 ? (
+        <section className="mx-auto w-full max-w-6xl px-5 pb-20 sm:px-6 lg:px-8 lg:pb-24">
+          <Reveal>
+            <header className="mb-10 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 className="font-display text-2xl text-foreground sm:text-3xl">
+                  Read up first
+                </h2>
+                <p className="mt-2 max-w-xl text-muted-foreground">
+                  The questions that come before the tool &mdash; which format, what size, why the
+                  numbers disagree. Answered properly, then pointed at something that does the job.
+                </p>
+              </div>
+              <Button asChild variant="outline" size="sm">
+                <Link href="/guides">
+                  All {guides.length} guides
+                  <ArrowRight strokeWidth={1.75} />
+                </Link>
+              </Button>
+            </header>
+          </Reveal>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredGuides.map((guide, index) => (
+              <Reveal key={guide.slug} delay={stagger(index)}>
+                {/* h3: this section's own heading is the h2. */}
+                <GuideCard guide={guide} as="h3" />
               </Reveal>
             ))}
           </div>

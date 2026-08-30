@@ -15,7 +15,7 @@ import { execSync } from "node:child_process";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import process from "node:process";
 
-import { guides, getGuide, guideHref } from "@/config/guides";
+import { featuredGuides, guides, getGuide, guideHref } from "@/config/guides";
 import { categories } from "@/config/categories";
 import { toolHref, tools } from "@/config/tools";
 
@@ -122,6 +122,24 @@ assert("no two guides target the same keyword", guideDupes.length === 0, guideDu
 
 const titles = guides.map((guide) => guide.title.toLowerCase());
 assert("guide titles are distinct", new Set(titles).size === titles.length);
+
+/* ------------------------------------------- the homepage surfaces writing */
+
+/*
+ * The site otherwise opens on nothing but grids of tools, with two dozen
+ * guides reachable only from the footer. The homepage band is what makes the
+ * writing visible, so it must never quietly empty: a filter that matches
+ * nothing renders nothing, and nobody would notice.
+ */
+assert("some guides are featured on the homepage", featuredGuides.length > 0);
+assert(
+  `the homepage band fits its grid (${featuredGuides.length} featured)`,
+  featuredGuides.length >= 2 && featuredGuides.length <= 6,
+);
+assert(
+  "every featured guide is a real guide",
+  featuredGuides.every((guide) => getGuide(guide.slug)?.slug === guide.slug),
+);
 
 /* ------------------------------------------------- prose stays server-side */
 
