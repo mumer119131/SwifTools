@@ -12,6 +12,32 @@
  * a page about something else is noise; a note about an offline version on the
  * converter that needs a network is an answer to the problem in front of you.
  */
+/**
+ * The facts a privacy policy actually turns on.
+ *
+ * Everything else in a policy for apps like these is identical boilerplate, so
+ * only the differences live here and the prose is generated from them. Adding
+ * an app means stating these facts, not writing a page.
+ *
+ * Every field is required on purpose. A policy is a statement to users and to
+ * Google about what the software does, and an optional field with a
+ * comfortable default is how one quietly ends up saying something untrue.
+ */
+export interface AppPrivacy {
+  /** When the policy last changed, in the words shown to readers. */
+  updated: string;
+  /** What the app is, in one sentence. */
+  summary: string;
+  /** What it keeps — all of it on the device. */
+  storedOnDevice: string[];
+  /** Device permissions and the reason for each. Empty if it needs none. */
+  permissions: { name: string; why: string }[];
+  /** Anything that reaches the network at all. Empty means nothing does. */
+  network: string[];
+  /** Whether the app shows ads. Material, and different across these apps. */
+  showsAds: boolean;
+}
+
 export interface PlayApp {
   /** Play Store package name, which is also its store URL. */
   packageName: string;
@@ -26,6 +52,8 @@ export interface PlayApp {
   relatedTools: string[];
   /** The single line shown on those tool pages. */
   crossLink?: string;
+  /** Facts the app's privacy policy is generated from. */
+  privacy: AppPrivacy;
 }
 
 export const playApps: PlayApp[] = [
@@ -39,6 +67,20 @@ export const playApps: PlayApp[] = [
     relatedTools: ["compress-image", "compress-pdf"],
     crossLink:
       "This handles images and PDFs. For video — which a browser cannot compress at any sensible speed — there is an Android app that does all three on-device, with nothing uploaded.",
+    privacy: {
+      updated: "June 2026",
+      summary:
+        "a utility for reducing the file size of videos, images and PDF documents, which works fully offline and needs no account, email or sign-in",
+      storedOnDevice: ["your compression settings and preferences"],
+      permissions: [
+        {
+          name: "Photos and media",
+          why: "to read the file you pick and to save the smaller version back",
+        },
+      ],
+      network: [],
+      showsAds: false,
+    },
   },
   {
     packageName: "com.umerlabs.currencyconverter",
@@ -50,6 +92,17 @@ export const playApps: PlayApp[] = [
     relatedTools: ["currency-converter"],
     crossLink:
       "This tool fetches today's rates, so it needs a connection. If you want conversions that keep working without one, there is an offline Android version.",
+    privacy: {
+      updated: "June 2026",
+      summary:
+        "a utility for converting between world currencies, which works fully offline once exchange rates have been cached and needs no account, email or sign-in",
+      storedOnDevice: ["your preferences", "your favourite currencies", "cached exchange rates"],
+      permissions: [],
+      network: [
+        "Daily exchange rates are downloaded so conversions stay accurate. Nothing about you is sent with that request, and your conversions are never uploaded.",
+      ],
+      showsAds: false,
+    },
   },
   {
     packageName: "com.umerlabs.spinthewheel",
@@ -60,6 +113,15 @@ export const playApps: PlayApp[] = [
       "Customisable wheels for whatever needs deciding — a restaurant, a name drawn at random, a class lottery, an argument settled. Wheels are saved, so a list you use often is not retyped every time.",
     relatedTools: ["wheel-spinner", "decision-maker", "random-name-picker", "list-randomizer"],
     crossLink: "There is an Android version that saves your wheels between spins.",
+    privacy: {
+      updated: "June 2026",
+      summary:
+        "a decision-maker and randomiser, which works fully offline and needs no account, email or sign-in",
+      storedOnDevice: ["your wheels", "your settings", "your spin history"],
+      permissions: [],
+      network: [],
+      showsAds: true,
+    },
   },
   {
     packageName: "com.umerlabs.fakecall",
@@ -69,6 +131,21 @@ export const playApps: PlayApp[] = [
     description:
       "Schedules a realistic incoming call on a delay, so there is a way out of a meeting that will not end or a conversation that has run long. Also, as the name admits, a decent prank.",
     relatedTools: [],
+    privacy: {
+      updated: "August 2026",
+      summary:
+        "a simulation tool for entertainment, built to collect as little as possible and to keep what it does keep on your device",
+      storedOnDevice: [
+        "caller names",
+        "chosen avatars and selected photos",
+        "ringtone choices and preferences",
+      ],
+      permissions: [
+        { name: "Notifications", why: "to display the incoming call you scheduled" },
+      ],
+      network: [],
+      showsAds: false,
+    },
   },
   {
     packageName: "com.umerlabs.watersort",
@@ -78,6 +155,14 @@ export const playApps: PlayApp[] = [
     description:
       "Pour coloured water between tubes until every tube holds a single colour. Easy to learn and quietly absorbing, with no timer hurrying you along — the colours stack up fast enough on their own.",
     relatedTools: ["memory-game", "sudoku-generator"],
+    privacy: {
+      updated: "August 2026",
+      summary: "a colour-sorting puzzle game, which works fully offline and needs no account",
+      storedOnDevice: ["your level progress and settings"],
+      permissions: [],
+      network: [],
+      showsAds: false,
+    },
   },
 ];
 

@@ -228,6 +228,18 @@ for (const app of playApps) {
     fail(`${app.name}: icon ${app.icon} is not in public/`);
   }
 
+  // A policy is a statement about what the software does, so the facts behind
+  // it must be present and specific rather than defaulted into existence.
+  const { privacy } = app;
+  if (!privacy.updated.trim() || !privacy.summary.trim()) {
+    fail(`${app.name}: privacy facts are incomplete`);
+  }
+  for (const permission of privacy.permissions) {
+    if (!permission.why.trim()) {
+      fail(`${app.name}: permission "${permission.name}" has no stated reason`);
+    }
+  }
+
   for (const slug of app.relatedTools) {
     if (!publishedTools.some((tool) => tool.slug === slug)) {
       fail(`${app.name} points at "${slug}", which is not a live tool`);
@@ -252,8 +264,15 @@ if (withCallout.length > 8) {
   fail(`${withCallout.length} tools show an app callout — that is promotion, not help`);
 }
 
+/*
+ * The generated policies are near-identical by design, which is exactly the
+ * duplicate content the unit pairs were held back for. Google Play needs the
+ * URL to load; search does not need five copies of it.
+ */
+const adSupported = playApps.filter((app) => app.privacy.showsAds);
 console.log(
-  `  ok    ${playApps.length} apps link out cleanly, callouts on ${withCallout.length} tools`,
+  `  ok    ${playApps.length} apps link out cleanly, callouts on ${withCallout.length} tools, ` +
+    `${adSupported.length} ad-supported`,
 );
 
 /* ------------------------------------------ titles survive Google's clipping */

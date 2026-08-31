@@ -83,15 +83,23 @@ export default function AppsPage() {
                     ) : null}
                   </p>
 
-                  <a
-                    href={playStoreUrl(app)}
-                    target="_blank"
-                    rel="noopener"
-                    className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border px-4 text-sm text-foreground transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]"
-                  >
-                    Google Play
-                    <ArrowUpRight className="size-3.5" strokeWidth={1.75} />
-                  </a>
+                  <span className="flex shrink-0 items-center gap-3">
+                    <Link
+                      href={`/apps/${app.packageName}/privacy`}
+                      className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
+                    >
+                      Privacy
+                    </Link>
+                    <a
+                      href={playStoreUrl(app)}
+                      target="_blank"
+                      rel="noopener"
+                      className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border px-4 text-sm text-foreground transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]"
+                    >
+                      Google Play
+                      <ArrowUpRight className="size-3.5" strokeWidth={1.75} />
+                    </a>
+                  </span>
                 </footer>
               </article>
             );
