@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { AlertTriangle, Download, Info, Plus, X } from "lucide-react";
+import { AlertTriangle, Download, Info, Plus, Sparkles, X } from "lucide-react";
 
+import { CopyButton } from "@/components/shared/CopyButton";
 import { FileDropzone } from "@/components/shared/FileDropzone";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +27,10 @@ import {
   SIZE_PRESETS,
   THEMES,
   checkSpec,
+  applyCaptions,
+  captionPrompt,
   drawPattern,
+  parseCaptions,
   renderSlide,
   type Layout,
   type PatternId,
@@ -72,6 +76,9 @@ export default function PlayStoreScreenshotTool() {
   const [headlineScale, setHeadlineScale] = React.useState(4.5);
   const [format, setFormat] = React.useState<"png" | "jpeg">("png");
   const [busy, setBusy] = React.useState(false);
+  /* The captions round trip: a prompt to take elsewhere, and the reply back. */
+  const [captionJson, setCaptionJson] = React.useState("");
+  const [captionNote, setCaptionNote] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
   const size = SIZE_PRESETS.find((entry) => entry.id === sizeId)!;
@@ -98,6 +105,22 @@ export default function PlayStoreScreenshotTool() {
 
   const warnings = checkSpec(size.width, size.height, slides.length, size.kind);
   const blocking = warnings.some((entry) => entry.level === "error");
+
+  function applyCaptionJson() {
+    const parsed = parseCaptions(captionJson);
+    if (!parsed.ok) {
+      setCaptionNote(parsed.error);
+      return;
+    }
+
+    const result = applyCaptions(slides, parsed.entries);
+    setSlides(result.slides);
+    setCaptionNote(
+      result.matched === 0
+        ? "Nothing matched — check the file names in the JSON."
+        : `Filled ${result.matched} of ${slides.length} slides.`,
+    );
+  }
 
   async function addPanorama(file: File | undefined) {
     if (!file) {
@@ -502,6 +525,57 @@ export default function PlayStoreScreenshotTool() {
       ) : null}
 
       {/* --------------------------------------------------------- slides */}
+      {slides.length > 0 ? (
+        <section className="surface-card space-y-4 p-5">
+          <div>
+            <h2 className="text-sm font-medium text-foreground">Write the captions with an AI</h2>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              Copy this prompt, take it to any assistant along with your{" "}
+              {slides.length} screenshot{slides.length === 1 ? "" : "s"}, and paste the reply back
+              below. Nothing is sent from this page &mdash; your images never leave your device.
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="ps-prompt">Prompt</Label>
+              <CopyButton value={captionPrompt(slides.map((slide) => slide.fileName))} />
+            </div>
+            <Textarea
+              id="ps-prompt"
+              readOnly
+              rows={5}
+              value={captionPrompt(slides.map((slide) => slide.fileName))}
+              className="font-mono text-xs"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="ps-json">Paste the reply</Label>
+            <Textarea
+              id="ps-json"
+              rows={4}
+              value={captionJson}
+              onChange={(event) => {
+                setCaptionJson(event.target.value);
+                setCaptionNote(null);
+              }}
+              placeholder={'{ "slides": [ { "file": "...", "headline": "...", "subtext": "..." } ] }'}
+              className="font-mono text-xs"
+            />
+            <div className="flex flex-wrap items-center gap-3">
+              <Button size="sm" onClick={applyCaptionJson} disabled={captionJson.trim() === ""}>
+                <Sparkles className="size-4" strokeWidth={1.75} />
+                Fill the captions
+              </Button>
+              {captionNote ? (
+                <span className="text-sm text-muted-foreground">{captionNote}</span>
+              ) : null}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {slides.length > 0 ? (
         <div className="space-y-4">
           {slides.map((slide, index) => (

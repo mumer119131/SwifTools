@@ -487,6 +487,144 @@ export interface Slide {
   fileName: string;
 }
 
+/* ------------------------------------------------------ captions from an AI */
+
+export interface CaptionEntry {
+  /** The screenshot this belongs to, matched by file name. */
+  file: string;
+  headline: string;
+  subtext: string;
+}
+
+/**
+ * The instructions a user hands to an assistant along with their screenshots.
+ *
+ * Written to be pasted somewhere else entirely — this tool has no model behind
+ * it and never sends your images anywhere. The value is that writing eight
+ * captions that read well at thumbnail size is genuinely tedious, and a model
+ * looking at the screenshots can draft them.
+ *
+ * The file names are listed because the reply is matched back by name: a user
+ * who reorders slides afterwards would otherwise get captions on the wrong
+ * screenshots, silently.
+ */
+export function captionPrompt(fileNames: string[]): string {
+  const list = fileNames.map((name, index) => `${index + 1}. ${name}`).join("\n");
+
+  return `I am writing the store listing for my mobile app. I have attached ${fileNames.length} screenshot${fileNames.length === 1 ? "" : "s"}, in this order:
+
+${list}
+
+For each screenshot, look at what it actually shows and write:
+- "headline": three to five words naming the benefit, not the feature. It is displayed large and must read at thumbnail size.
+- "subtext": one short sentence, under about 90 characters, saying what it does for the user.
+
+Write plainly. No exclamation marks, no "revolutionary", no feature lists, no emoji. Vary the openings so the set does not read as a template.
+
+Reply with JSON only — no explanation, no code fence — in exactly this shape, using the file names above:
+
+{
+  "slides": [
+    { "file": "${fileNames[0] ?? "screenshot.png"}", "headline": "...", "subtext": "..." }
+  ]
+}`;
+}
+
+/**
+ * Reads whatever came back.
+ *
+ * Deliberately forgiving about packaging and strict about shape. Assistants
+ * routinely wrap JSON in a code fence or add a sentence before it, and a
+ * round trip that fails on those would send people back to typing by hand —
+ * so the object is extracted from whatever surrounds it. What it must not do
+ * is guess at content, which is why entries missing a headline are rejected
+ * rather than filled in with something plausible.
+ */
+export function parseCaptions(
+  raw: string,
+): { ok: true; entries: CaptionEntry[] } | { ok: false; error: string } {
+  const trimmed = raw.trim();
+  if (trimmed === "") return { ok: false, error: "Paste the JSON your assistant replied with." };
+
+  // A fenced block, a bare object, or an object with prose either side.
+  const fenced = /```(?:json)?\s*([\s\S]*?)```/i.exec(trimmed);
+  const body = fenced ? fenced[1] : trimmed;
+  const start = body.search(/[[{]/);
+  const end = Math.max(body.lastIndexOf("}"), body.lastIndexOf("]"));
+  if (start === -1 || end === -1 || end < start) {
+    return { ok: false, error: "That does not contain any JSON." };
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(body.slice(start, end + 1));
+  } catch {
+    return { ok: false, error: "That JSON could not be parsed — check it copied completely." };
+  }
+
+  // Either the documented shape or a bare array, since models offer both.
+  const list = Array.isArray(parsed)
+    ? parsed
+    : (parsed as { slides?: unknown }).slides;
+
+  if (!Array.isArray(list) || list.length === 0) {
+    return { ok: false, error: 'Expected a "slides" array with at least one entry.' };
+  }
+
+  const entries: CaptionEntry[] = [];
+  for (const row of list) {
+    if (typeof row !== "object" || row === null) {
+      return { ok: false, error: "Every entry has to be an object." };
+    }
+
+    const { file, headline, subtext } = row as Record<string, unknown>;
+    if (typeof headline !== "string" || headline.trim() === "") {
+      return { ok: false, error: "Every entry needs a non-empty headline." };
+    }
+
+    entries.push({
+      file: typeof file === "string" ? file : "",
+      headline: headline.trim(),
+      subtext: typeof subtext === "string" ? subtext.trim() : "",
+    });
+  }
+
+  return { ok: true, entries };
+}
+
+/**
+ * Puts the captions onto the slides.
+ *
+ * Matched by file name first so reordering slides after asking cannot put a
+ * caption on the wrong screenshot. Position is the fallback for entries whose
+ * name does not match anything — a model that renamed or abbreviated them
+ * should still be usable rather than silently dropping everything.
+ */
+export function applyCaptions<T extends { fileName: string; headline: string; subtext: string }>(
+  slides: T[],
+  entries: CaptionEntry[],
+): { slides: T[]; matched: number } {
+  const byName = new Map<string, CaptionEntry>();
+  for (const entry of entries) {
+    if (entry.file) byName.set(entry.file.toLowerCase(), entry);
+  }
+
+  const unclaimed = entries.filter((entry) => !entry.file || !byName.has(entry.file.toLowerCase()));
+  let fallback = 0;
+  let matched = 0;
+
+  const next = slides.map((slide) => {
+    const found = byName.get(slide.fileName.toLowerCase()) ?? unclaimed[fallback];
+    if (!found) return slide;
+    if (found === unclaimed[fallback]) fallback += 1;
+
+    matched += 1;
+    return { ...slide, headline: found.headline, subtext: found.subtext };
+  });
+
+  return { slides: next, matched };
+}
+
 export interface RenderOptions {
   theme: Theme;
   layout: Layout;

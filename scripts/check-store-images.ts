@@ -17,7 +17,10 @@ import {
   LAYOUTS,
   PATTERNS,
   PLAY_SPECS,
+  applyCaptions,
+  captionPrompt,
   panoramaSlice,
+  parseCaptions,
   SIZE_PRESETS,
   THEMES,
   checkSpec,
@@ -517,6 +520,71 @@ assert("screenshots are actually drawn", drawImageCalls > 0);
   // One slide is simply a cover-fit, not a special case.
   const single = panoramaSlice(2000, 1000, W, H, 0, 1);
   assert("a single slide covers the frame", single.sw > 0 && single.sh > 0);
+}
+
+/* ------------------------------------------------ the caption round trip */
+
+/*
+ * The user takes a prompt elsewhere and pastes a reply back. Both halves have
+ * to hold: a prompt that omits the file names produces captions that cannot be
+ * matched, and a parser that only accepts immaculate JSON sends people back to
+ * typing eight captions by hand — assistants wrap output in fences and add a
+ * sentence of preamble as a matter of course.
+ */
+{
+  const names = ["home.png", "stats.png", "settings.png"];
+  const prompt = captionPrompt(names);
+
+  assert("the prompt lists every file, in order", names.every((n, i) => prompt.includes(`${i + 1}. ${n}`)));
+  assert("the prompt's example uses a real file name", prompt.includes(`"file": "${names[0]}"`));
+  assert("the prompt states the headline length rule", /three to five words/i.test(prompt));
+  assert("the prompt asks for JSON only", /JSON only/i.test(prompt));
+
+  const good = '{"slides":[{"file":"home.png","headline":"See it all","subtext":"One screen."}]}';
+  for (const [label, raw] of [
+    ["a bare object", good],
+    ["a fenced block", "```json\n" + good + "\n```"],
+    ["prose either side", "Sure!\n" + good + "\nHope that helps."],
+    ["a bare array", '[{"file":"home.png","headline":"See it all","subtext":"x"}]'],
+    ["a missing subtext", '{"slides":[{"file":"a.png","headline":"Just a headline"}]}'],
+  ] as [string, string][]) {
+    assert(`accepts ${label}`, parseCaptions(raw).ok);
+  }
+
+  for (const [label, raw] of [
+    ["nothing", ""],
+    ["prose with no JSON", "I could not read those images."],
+    ["an empty list", '{"slides":[]}'],
+    ["an entry with no headline", '{"slides":[{"file":"a.png","subtext":"x"}]}'],
+  ] as [string, string][]) {
+    assert(`rejects ${label}`, !parseCaptions(raw).ok);
+  }
+
+  // Matching by name, because slides can be reordered after asking.
+  const slides = [
+    { fileName: "a.png", headline: "", subtext: "" },
+    { fileName: "b.png", headline: "", subtext: "" },
+  ];
+  const named = applyCaptions(slides, [
+    { file: "b.png", headline: "B", subtext: "" },
+    { file: "a.png", headline: "A", subtext: "" },
+  ]);
+  assert(
+    "captions follow the file name, not the order they arrived in",
+    named.slides[0].headline === "A" && named.slides[1].headline === "B",
+  );
+
+  const positional = applyCaptions(slides, [
+    { file: "", headline: "first", subtext: "" },
+    { file: "", headline: "second", subtext: "" },
+  ]);
+  assert(
+    "unnamed entries fall back to position",
+    positional.slides[0].headline === "first" && positional.slides[1].headline === "second",
+  );
+
+  const partial = applyCaptions(slides, [{ file: "a.png", headline: "A", subtext: "" }]);
+  assert("a short reply leaves the rest alone", partial.slides[1].headline === "" && partial.matched === 1);
 }
 
 /* ------------------------------------------- the island is opt-in */
