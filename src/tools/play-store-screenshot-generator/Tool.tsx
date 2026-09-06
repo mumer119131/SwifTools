@@ -59,6 +59,12 @@ export default function PlayStoreScreenshotTool() {
   const [layout, setLayout] = React.useState<Layout>("text-top");
   const [fontId, setFontId] = React.useState("system");
   const [showFrame, setShowFrame] = React.useState(true);
+  /* Off by default: the island is an iPhone detail, and most listings here are
+     Android. Someone who wants it can say so. */
+  const [showIsland, setShowIsland] = React.useState(false);
+  /* One wide image cut across the whole set, drawn instead of the gradient. */
+  const [panoramaImage, setPanoramaImage] = React.useState<HTMLImageElement | null>(null);
+  const [panoramaName, setPanoramaName] = React.useState("");
   const [pattern, setPattern] = React.useState<PatternId>("mesh");
   const [patternIntensity, setPatternIntensity] = React.useState(70);
   const [grain, setGrain] = React.useState(false);
@@ -79,6 +85,10 @@ export default function PlayStoreScreenshotTool() {
     height: size.height,
     fontStack,
     showFrame,
+    showIsland,
+    // Spread across however many slides exist, so the picture stays whole as
+    // slides are added or removed.
+    panorama: panoramaImage ? { image: panoramaImage, total: Math.max(1, slides.length) } : null,
     tilt,
     headlineScale,
     pattern,
@@ -88,6 +98,21 @@ export default function PlayStoreScreenshotTool() {
 
   const warnings = checkSpec(size.width, size.height, slides.length, size.kind);
   const blocking = warnings.some((entry) => entry.level === "error");
+
+  async function addPanorama(file: File | undefined) {
+    if (!file) {
+      setPanoramaImage(null);
+      setPanoramaName("");
+      return;
+    }
+
+    try {
+      setPanoramaImage(await loadImage(file));
+      setPanoramaName(file.name);
+    } catch {
+      setError("That image could not be read.");
+    }
+  }
 
   async function addFiles(next: File[]) {
     setFiles(next);
@@ -398,9 +423,44 @@ export default function PlayStoreScreenshotTool() {
             <Switch id="ps-frame" checked={showFrame} onCheckedChange={setShowFrame} />
             <Label htmlFor="ps-frame">Draw a phone frame</Label>
           </div>
+          {showFrame ? (
+            <div className="flex items-center gap-3 pl-6">
+              <Switch id="ps-island" checked={showIsland} onCheckedChange={setShowIsland} />
+              <Label htmlFor="ps-island">Dynamic Island pill</Label>
+            </div>
+          ) : null}
           <div className="flex items-center gap-3">
             <Switch id="ps-grain" checked={grain} onCheckedChange={setGrain} />
             <Label htmlFor="ps-grain">Add film grain</Label>
+          </div>
+
+          <div className="space-y-2 border-t border-border pt-5">
+            <Label htmlFor="ps-panorama">Panorama background</Label>
+            <FieldHint>
+              One wide image cut across all {Math.max(1, slides.length)} slides, so the store
+              carousel reads as a single picture. Replaces the gradient.
+            </FieldHint>
+            <input
+              id="ps-panorama"
+              type="file"
+              accept="image/*"
+              onChange={(event) => void addPanorama(event.target.files?.[0])}
+              className="block w-full text-sm text-muted-foreground file:mr-3 file:h-9 file:rounded-full file:border file:border-border file:bg-surface file:px-4 file:text-sm file:text-foreground hover:file:border-border-strong"
+            />
+            {panoramaName ? (
+              <div className="flex items-center gap-3">
+                <span className="min-w-0 truncate text-sm text-muted-foreground">
+                  {panoramaName}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => void addPanorama(undefined)}
+                  className="shrink-0 text-sm text-foreground underline underline-offset-4"
+                >
+                  Remove
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
 

@@ -432,6 +432,52 @@ export const FONT_STACKS: { id: string; label: string; stack: string }[] = [
 
 /* ---------------------------------------------------------------- drawing */
 
+/** One slice of a panorama, in source-image coordinates. */
+export interface PanoramaSlice {
+  sx: number;
+  sy: number;
+  sw: number;
+  sh: number;
+}
+
+/**
+ * Which part of a wide image belongs on slide `index` of `total`.
+ *
+ * The Play Store shows screenshots side by side, so a single wide image cut
+ * across several of them reads as one continuous picture as the carousel
+ * scrolls. That only works if the cuts are exact: the whole panorama is scaled
+ * once to cover the full strip of `total` slides, and each slide takes its
+ * exact share of that. Fitting each slide independently would leave a visible
+ * jump at every seam, because each would pick its own scale.
+ *
+ * Returns source coordinates, so the caller draws with a single drawImage and
+ * the browser does the resampling.
+ */
+export function panoramaSlice(
+  imageWidth: number,
+  imageHeight: number,
+  slideWidth: number,
+  slideHeight: number,
+  index: number,
+  total: number,
+): PanoramaSlice {
+  const stripWidth = slideWidth * total;
+
+  // Cover the whole strip: never leave a gap, crop the overflow instead.
+  const scale = Math.max(stripWidth / imageWidth, slideHeight / imageHeight);
+
+  // Centre whatever the cover left over, so the crop is even at both ends.
+  const offsetX = (imageWidth * scale - stripWidth) / 2;
+  const offsetY = (imageHeight * scale - slideHeight) / 2;
+
+  return {
+    sx: (offsetX + index * slideWidth) / scale,
+    sy: offsetY / scale,
+    sw: slideWidth / scale,
+    sh: slideHeight / scale,
+  };
+}
+
 export interface Slide {
   id: string;
   headline: string;
@@ -449,6 +495,20 @@ export interface RenderOptions {
   fontStack: string;
   /** Draw a phone bezel around the screenshot. */
   showFrame: boolean;
+  /**
+   * Draw the dynamic-island pill on the frame.
+   *
+   * Separate from showFrame because the island dates a mockup to one range of
+   * iPhones, and an Android listing showing one is quietly wrong.
+   */
+  showIsland: boolean;
+  /**
+   * A wide image cut across the whole set, drawn instead of the gradient.
+   *
+   * Null on every slide or present on all of them; a set where only some
+   * slides carry it would break the continuity that is the entire point.
+   */
+  panorama: { image: HTMLImageElement; total: number } | null;
   /** Degrees, positive tilts clockwise. */
   tilt: number;
   /** Headline size as a percentage of canvas height. */
@@ -597,7 +657,7 @@ function drawDevice(
 
   // A dynamic-island pill, only where the screenshot is tall enough for a
   // phone frame to be plausible.
-  if (options.showFrame && finalScreenH / finalScreenW > 1.6) {
+  if (options.showFrame && options.showIsland && finalScreenH / finalScreenW > 1.6) {
     const pillW = finalScreenW * 0.28;
     const pillH = finalScreenW * 0.075;
     context.fillStyle = options.theme.bezel;
@@ -628,6 +688,39 @@ export function renderSlide(
    * starts fully transparent — so skipping this produces a PNG the Play
    * Console silently refuses to accept.
    */
+  if (options.panorama) {
+    /*
+     * Filled opaquely first: a panorama with an alpha channel would otherwise
+     * leave transparency behind, and Play refuses screenshots that carry one.
+     */
+    context.fillStyle = theme.background[0];
+    context.fillRect(0, 0, width, height);
+
+    const { image, total } = options.panorama;
+    const slice = panoramaSlice(
+      image.naturalWidth || image.width,
+      image.naturalHeight || image.height,
+      width,
+      height,
+      options.index,
+      total,
+    );
+    context.drawImage(image, slice.sx, slice.sy, slice.sw, slice.sh, 0, 0, width, height);
+
+    /*
+     * A scrim behind the caption. A photograph can be any brightness, and
+     * white text over a pale sky is the one failure that makes the whole set
+     * unusable — so the text side is darkened just enough to hold contrast.
+     */
+    if (options.layout === "text-top" || options.layout === "text-bottom") {
+      const top = options.layout === "text-top";
+      const scrim = context.createLinearGradient(0, top ? 0 : height, 0, top ? height * 0.55 : height * 0.45);
+      scrim.addColorStop(0, `rgba(0, 0, 0, 0.55)`);
+      scrim.addColorStop(1, "rgba(0, 0, 0, 0)");
+      context.fillStyle = scrim;
+      context.fillRect(0, 0, width, height);
+    }
+  } else {
   const radians = (theme.angle * Math.PI) / 180;
   const gradient = context.createLinearGradient(
     width / 2 - (Math.cos(radians) * width) / 2,
@@ -653,6 +746,7 @@ export function renderSlide(
     glow.addColorStop(1, "rgba(0,0,0,0)");
     context.fillStyle = glow;
     context.fillRect(0, 0, width, height);
+  }
   }
 
   /*

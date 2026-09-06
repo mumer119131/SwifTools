@@ -17,6 +17,7 @@ import {
   LAYOUTS,
   PATTERNS,
   PLAY_SPECS,
+  panoramaSlice,
   SIZE_PRESETS,
   THEMES,
   checkSpec,
@@ -212,6 +213,8 @@ for (const preset of SIZE_PRESETS) {
             height: preset.height,
             fontStack: "sans-serif",
             showFrame,
+            showIsland: false,
+            panorama: null,
             tilt: showFrame ? -6 : 0,
             headlineScale: 4.5,
             index: 0,
@@ -449,6 +452,109 @@ assert("screenshots are actually drawn", drawImageCalls > 0);
   assert(`noise spans ${values.size} distinct values`, values.size > 100);
 }
 
+/* ------------------------------------------------ the panorama is seamless */
+
+/*
+ * A wide image cut across several slides only reads as one picture if the cuts
+ * meet exactly. Each slide is rendered on its own canvas, so the temptation is
+ * to fit each one independently — which gives every slide its own scale and a
+ * visible jump at every seam. These assert the property that matters rather
+ * than the arithmetic that produces it.
+ */
+{
+  const W = 1080;
+  const H = 1920;
+
+  for (const [iw, ih, label] of [
+    [4000, 1200, "wide and short"],
+    [800, 3000, "narrow and tall"],
+    [4320, 1920, "exactly the strip ratio"],
+    [200, 150, "smaller than one slide"],
+  ] as [number, number, string][]) {
+    for (const total of [2, 3, 5, 8]) {
+      const slices = Array.from({ length: total }, (_, i) =>
+        panoramaSlice(iw, ih, W, H, i, total),
+      );
+
+      const seams = slices
+        .slice(0, -1)
+        .filter((slice, i) => Math.abs(slice.sx + slice.sw - slices[i + 1].sx) > 1e-9);
+      assert(
+        `${label} across ${total}: every seam meets exactly`,
+        seams.length === 0,
+        `${seams.length} gaps`,
+      );
+
+      assert(
+        `${label} across ${total}: slices are equal width`,
+        new Set(slices.map((slice) => slice.sw.toFixed(6))).size === 1,
+      );
+      assert(
+        `${label} across ${total}: the vertical crop never shifts`,
+        new Set(slices.map((slice) => `${slice.sy.toFixed(6)}/${slice.sh.toFixed(6)}`)).size === 1,
+      );
+
+      // Reading outside the source is what produces transparent edges, and
+      // Play refuses a screenshot carrying an alpha channel.
+      const outside = slices.filter(
+        (slice) =>
+          slice.sx < -1e-6 ||
+          slice.sy < -1e-6 ||
+          slice.sx + slice.sw > iw + 1e-6 ||
+          slice.sy + slice.sh > ih + 1e-6,
+      );
+      assert(`${label} across ${total}: stays inside the source`, outside.length === 0);
+
+      assert(
+        `${label} across ${total}: every coordinate is finite`,
+        slices.every((slice) =>
+          [slice.sx, slice.sy, slice.sw, slice.sh].every((n) => Number.isFinite(n) && n >= 0),
+        ),
+      );
+    }
+  }
+
+  // One slide is simply a cover-fit, not a special case.
+  const single = panoramaSlice(2000, 1000, W, H, 0, 1);
+  assert("a single slide covers the frame", single.sw > 0 && single.sh > 0);
+}
+
+/* ------------------------------------------- the island is opt-in */
+
+/*
+ * The dynamic island dates a mockup to one range of iPhones, so an Android
+ * listing showing one is quietly wrong. It used to be drawn whenever a frame
+ * was, with no way to refuse it.
+ */
+{
+  const base = {
+    theme: THEMES[1],
+    layout: "text-top" as const,
+    width: 1080,
+    height: 1920,
+    fontStack: "sans-serif",
+    tilt: 0,
+    headlineScale: 4.5,
+    index: 0,
+    pattern: "mesh" as const,
+    patternIntensity: 70,
+    grain: false,
+    panorama: null,
+  };
+  const tall = { ...slideWithImage, image: fakeImage(1080, 2400) };
+
+  const draw = (showFrame: boolean, showIsland: boolean) => {
+    const { canvas, calls } = makeStubCanvas();
+    renderSlide(canvas, tall, { ...base, showFrame, showIsland });
+    return calls.filter((call) => call.method === "fill").length;
+  };
+
+  const withIsland = draw(true, true);
+  const withoutIsland = draw(true, false);
+  assert("the island adds a fill when asked for", withIsland > withoutIsland);
+  assert("and nothing is drawn for it when not", draw(false, true) <= draw(false, false));
+}
+
 /* -------------------------------------------- extreme screenshot shapes */
 
 for (const [w, h, label] of [
@@ -469,6 +575,8 @@ for (const [w, h, label] of [
       height: 1920,
       fontStack: "sans-serif",
       showFrame: true,
+      showIsland: false,
+      panorama: null,
       tilt: 0,
       headlineScale: 4.5,
       index: 0,
