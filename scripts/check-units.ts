@@ -12,6 +12,8 @@
 
 import process from "node:process";
 
+import { UNIT_NOTES, missingNotes } from "@/lib/unit-notes";
+
 import {
   convertPair,
   getPair,
@@ -172,6 +174,54 @@ for (const pair of unitPairs) {
   }
 }
 console.log("  ok    every pair round-trips through its reverse");
+
+/* ------------------------------------------ every unit carries its own note */
+
+/*
+ * The pair pages are composed from a note on each of their two units, so a unit
+ * with none silently produces a thinner page than its neighbours — which is the
+ * exact condition that got these pages held back from the index once already.
+ */
+{
+  const used = new Set<string>();
+  for (const pair of unitPairs) {
+    used.add(pair.fromId);
+    used.add(pair.toId);
+  }
+
+  const missing = missingNotes([...used]);
+  if (missing.length > 0) {
+    failures += 1;
+    console.error(`  FAIL  ${missing.length} units have no note: ${missing.join(", ")}`);
+  } else {
+    console.log(`  ok    all ${used.size} units used in pairs have a note`);
+  }
+
+  // A note too short to say anything is the same problem wearing a disguise.
+  const thin = [...used].filter((id) => (UNIT_NOTES[id] ?? "").split(/\s+/).length < 12);
+  if (thin.length > 0) {
+    failures += 1;
+    console.error(`  FAIL  notes too short to be worth reading: ${thin.join(", ")}`);
+  } else {
+    console.log("  ok    no note is a placeholder");
+  }
+
+  // Two units sharing a note would put identical prose on unrelated pages.
+  const seen = new Map<string, string>();
+  const dupes: string[] = [];
+  for (const id of used) {
+    const note = UNIT_NOTES[id];
+    const first = seen.get(note);
+    if (first) dupes.push(`${first}/${id}`);
+    else seen.set(note, id);
+  }
+  if (dupes.length > 0) {
+    failures += 1;
+    console.error(`  FAIL  units sharing identical notes: ${dupes.join(", ")}`);
+  } else {
+    console.log("  ok    every note is written for its own unit");
+  }
+}
 
 const total = conversions.length + temperatures.length;
 console.log(
