@@ -601,19 +601,24 @@ export const publishedTools = tools.filter((tool) => tool.status === "live");
 /**
  * Whether the generated unit pair pages are offered to search engines.
  *
- * Turned off while AdSense reviews the site. The 110 pair pages are built from
- * one template with the unit names substituted, so two pages on entirely
- * different subjects share about 86% of their words against 26% for a real
- * tool page — and at 31% of the sitemap that is a third of the site reading as
- * near-duplicate generated content, which is what "insufficient content" in a
- * review means.
+ * These were held back for two weeks on the theory that 110 near-duplicate
+ * pages — 58 words of their own prose each, sharing 86% of their vocabulary —
+ * were what AdSense meant by "insufficient content". The experiment ran and
+ * answered clearly: AdSense declined a second time with them already hidden,
+ * so they were not the reason, and daily impressions fell from roughly 2,000
+ * to zero about nine days after the change shipped.
  *
- * They stay live, linked and usable; they are simply not offered for indexing.
- * Turn this back on once each pair carries content that is genuinely its own —
- * worked examples, where the units come from — rather than more substitution,
- * which would make the duplication worse rather than better.
+ * That second number was the surprise. Removing 31% of the pages should have
+ * cost about 31% of impressions; it cost all of them, because these pages were
+ * the only ones ranking for anything. Exact-match queries like "psi to kpa"
+ * were the site's entire search visibility, while the real tool pages compete
+ * for head terms they cannot win yet.
+ *
+ * So they are back on. Deep impressions can climb; zero cannot. The duplication
+ * is still real and still worth fixing with genuine per-pair content — but
+ * fixing it by hiding the only pages that rank was the wrong trade.
  */
-export const INDEX_UNIT_PAIRS = false;
+export const INDEX_UNIT_PAIRS = true;
 
 const unitPairSlugs = new Set(unitPairTools.map((tool) => tool.slug));
 
